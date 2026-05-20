@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://creepy_main"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Notes" type="Node2D" parent="World"]
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="Ui" type="CanvasLayer" parent="."]
