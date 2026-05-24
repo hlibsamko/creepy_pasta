@@ -1,25 +1,25 @@
-extends Node2D
+extends Node3D
 
 const PORT := 24567
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const SPAWNS := [
-	Vector2(180, 180),
-	Vector2(720, 180),
-	Vector2(180, 460),
-	Vector2(720, 460),
-	Vector2(450, 320),
+	Vector3(-5.5, 0.2, -4.5),
+	Vector3(5.5, 0.2, -4.5),
+	Vector3(-5.5, 0.2, 4.5),
+	Vector3(5.5, 0.2, 4.5),
+	Vector3(0.0, 0.2, 0.0),
 ]
 const PLAYER_COLORS := [
-	Color(0.95, 0.92, 0.70),
-	Color(0.62, 0.90, 1.00),
-	Color(0.95, 0.62, 0.70),
-	Color(0.68, 1.00, 0.74),
-	Color(0.84, 0.70, 1.00),
+	Color(0.95, 0.88, 0.55),
+	Color(0.45, 0.85, 1.00),
+	Color(0.95, 0.45, 0.58),
+	Color(0.55, 1.00, 0.62),
+	Color(0.72, 0.58, 1.00),
 ]
 
-@onready var world: Node2D = $World
-@onready var notes: Node2D = $World/Notes
-@onready var players: Node2D = $Players
+@onready var world: Node3D = $World
+@onready var notes: Node3D = $World/Notes
+@onready var players: Node3D = $Players
 @onready var ui_layer: CanvasLayer = $Ui
 
 var menu: Control
@@ -43,73 +43,111 @@ func _ready() -> void:
 	_update_hud()
 
 
-func _build_world() -> void:
-	var background := ColorRect.new()
-	background.color = Color(0.035, 0.035, 0.042)
-	background.size = Vector2(960, 640)
-	background.position = Vector2.ZERO
-	world.add_child(background)
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		if started:
+			menu.show()
 
-	for rect in [
-		Rect2(80, 70, 800, 28),
-		Rect2(80, 540, 800, 28),
-		Rect2(80, 70, 28, 498),
-		Rect2(852, 70, 28, 498),
-		Rect2(280, 205, 390, 24),
-		Rect2(200, 390, 210, 24),
-		Rect2(560, 390, 190, 24),
-	]:
-		_add_wall(rect)
+
+func _build_world() -> void:
+	var environment := WorldEnvironment.new()
+	var env := Environment.new()
+	env.background_mode = Environment.BG_COLOR
+	env.background_color = Color(0.01, 0.01, 0.014)
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	env.ambient_light_color = Color(0.035, 0.035, 0.045)
+	env.ambient_light_energy = 0.4
+	environment.environment = env
+	world.add_child(environment)
+
+	_add_box("Floor", Vector3(0, -0.1, 0), Vector3(16, 0.2, 12), Color(0.08, 0.075, 0.07), true)
+	_add_box("Ceiling", Vector3(0, 3.2, 0), Vector3(16, 0.25, 12), Color(0.05, 0.048, 0.052), true)
+	_add_box("NorthWall", Vector3(0, 1.55, -6), Vector3(16, 3.1, 0.25), Color(0.12, 0.11, 0.105), true)
+	_add_box("SouthWall", Vector3(0, 1.55, 6), Vector3(16, 3.1, 0.25), Color(0.12, 0.11, 0.105), true)
+	_add_box("WestWall", Vector3(-8, 1.55, 0), Vector3(0.25, 3.1, 12), Color(0.11, 0.105, 0.12), true)
+	_add_box("EastWall", Vector3(8, 1.55, 0), Vector3(0.25, 3.1, 12), Color(0.11, 0.105, 0.12), true)
+
+	_add_box("BrokenShelf", Vector3(-2.8, 0.65, -1.2), Vector3(3.4, 1.3, 0.35), Color(0.16, 0.10, 0.07), true)
+	_add_box("LongTable", Vector3(2.8, 0.45, 1.6), Vector3(3.0, 0.9, 1.0), Color(0.12, 0.08, 0.055), true)
+	_add_box("RitualMark", Vector3(0, 0.01, 0), Vector3(1.8, 0.02, 1.8), Color(0.25, 0.02, 0.025), false)
+
+	var moon := DirectionalLight3D.new()
+	moon.name = "ColdMoonLeak"
+	moon.light_energy = 0.45
+	moon.rotation_degrees = Vector3(-55, 28, 0)
+	world.add_child(moon)
 
 	for data in [
-		["note_1", Vector2(158, 142), "The door remembers every name."],
-		["note_2", Vector2(796, 140), "Do not split up after midnight."],
-		["note_3", Vector2(450, 486), "If the screen flickers, stay still."],
+		["note_1", Vector3(-6.5, 0.55, -5.0), "The walls are listening."],
+		["note_2", Vector3(6.4, 0.55, -5.0), "Do not look behind the shelf."],
+		["note_3", Vector3(0.0, 0.55, 4.9), "Three notes open the way."],
 	]:
 		_add_note(data[0], data[1], data[2])
 
 
-func _add_wall(rect: Rect2) -> void:
-	var body := StaticBody2D.new()
-	body.position = rect.position
-	world.add_child(body)
+func _add_box(box_name: String, box_position: Vector3, size: Vector3, color: Color, solid: bool) -> void:
+	var parent: Node3D = world
+	if solid:
+		var body := StaticBody3D.new()
+		body.name = box_name
+		body.position = box_position
+		world.add_child(body)
+		parent = body
 
-	var shape := CollisionShape2D.new()
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = rect.size
-	shape.shape = rectangle
-	shape.position = rect.size * 0.5
-	body.add_child(shape)
+		var collision := CollisionShape3D.new()
+		var shape := BoxShape3D.new()
+		shape.size = size
+		collision.shape = shape
+		body.add_child(collision)
 
-	var visual := ColorRect.new()
-	visual.color = Color(0.13, 0.12, 0.13)
-	visual.size = rect.size
-	body.add_child(visual)
+	var mesh_instance := MeshInstance3D.new()
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	mesh_instance.mesh = mesh
+	mesh_instance.name = "%sMesh" % box_name
+	if not solid:
+		mesh_instance.position = box_position
+
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = 0.9
+	mesh_instance.set_surface_override_material(0, material)
+	parent.add_child(mesh_instance)
 
 
-func _add_note(note_id: String, note_position: Vector2, text: String) -> void:
-	var area := Area2D.new()
+func _add_note(note_id: String, note_position: Vector3, text: String) -> void:
+	var area := Area3D.new()
 	area.name = note_id
 	area.position = note_position
 	area.set_meta("text", text)
 	area.body_entered.connect(_on_note_body_entered.bind(area))
 	notes.add_child(area)
 
-	var shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = 18.0
-	shape.shape = circle
-	area.add_child(shape)
+	var collision := CollisionShape3D.new()
+	var shape := SphereShape3D.new()
+	shape.radius = 0.55
+	collision.shape = shape
+	area.add_child(collision)
 
-	var label := Label.new()
-	label.text = "?"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.position = Vector2(-10, -16)
-	label.size = Vector2(20, 28)
-	label.add_theme_font_size_override("font_size", 22)
-	label.add_theme_color_override("font_color", Color(0.92, 0.84, 0.55))
-	area.add_child(label)
+	var mesh_instance := MeshInstance3D.new()
+	var mesh := SphereMesh.new()
+	mesh.radius = 0.18
+	mesh.height = 0.36
+	mesh_instance.mesh = mesh
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.95, 0.82, 0.35)
+	material.emission_enabled = true
+	material.emission = Color(0.95, 0.75, 0.20)
+	material.emission_energy_multiplier = 1.6
+	mesh_instance.set_surface_override_material(0, material)
+	area.add_child(mesh_instance)
+
+	var light := OmniLight3D.new()
+	light.light_color = Color(1.0, 0.74, 0.30)
+	light.light_energy = 0.45
+	light.omni_range = 2.0
+	area.add_child(light)
 	total_notes += 1
 
 
@@ -120,7 +158,7 @@ func _build_ui() -> void:
 	ui_layer.add_child(menu)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(360, 230)
+	panel.custom_minimum_size = Vector2(380, 238)
 	panel.position = Vector2(32, 32)
 	menu.add_child(panel)
 
@@ -129,7 +167,7 @@ func _build_ui() -> void:
 	panel.add_child(box)
 
 	var title := Label.new()
-	title.text = "Creepy Pasta"
+	title.text = "Creepy Pasta 3D"
 	title.add_theme_font_size_override("font_size", 28)
 	box.add_child(title)
 
@@ -204,6 +242,7 @@ func _start_game() -> void:
 
 	started = true
 	menu.hide()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_update_hud()
 
 
@@ -218,13 +257,18 @@ func _on_connection_failed() -> void:
 
 func _on_server_disconnected() -> void:
 	started = false
-	players.get_children().map(func(child): child.queue_free())
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	for child in players.get_children():
+		child.queue_free()
 	menu.show()
 	status_label.text = "Server disconnected."
 
 
 func _on_peer_connected(peer_id: int) -> void:
 	if multiplayer.is_server():
+		for player in players.get_children():
+			var existing_id := int(player.name)
+			_spawn_player_remote.rpc_id(peer_id, existing_id, player.global_position, player.player_color)
 		_spawn_player(peer_id)
 
 
@@ -246,12 +290,13 @@ func _spawn_player(peer_id: int) -> void:
 
 	var spawn_index := players.get_child_count() % SPAWNS.size()
 	var color: Color = PLAYER_COLORS[spawn_index % PLAYER_COLORS.size()]
-	_spawn_player_remote.rpc(peer_id, SPAWNS[spawn_index], color)
+	if multiplayer.has_multiplayer_peer():
+		_spawn_player_remote.rpc(peer_id, SPAWNS[spawn_index], color)
 	_spawn_player_remote(peer_id, SPAWNS[spawn_index], color)
 
 
 @rpc("authority", "call_remote", "reliable")
-func _spawn_player_remote(peer_id: int, spawn_position: Vector2, color: Color) -> void:
+func _spawn_player_remote(peer_id: int, spawn_position: Vector3, color: Color) -> void:
 	if players.has_node(str(peer_id)):
 		return
 
@@ -263,11 +308,12 @@ func _spawn_player_remote(peer_id: int, spawn_position: Vector2, color: Color) -
 	players.add_child(player)
 
 
-func _on_note_body_entered(body: Node2D, area: Area2D) -> void:
+func _on_note_body_entered(body: Node3D, area: Area3D) -> void:
 	if not body.has_method("is_multiplayer_authority") or not body.is_multiplayer_authority():
 		return
 
-	_collect_note.rpc(area.name, str(area.get_meta("text")))
+	if multiplayer.has_multiplayer_peer():
+		_collect_note.rpc(area.name, str(area.get_meta("text")))
 	_collect_note(area.name, str(area.get_meta("text")))
 
 
@@ -283,7 +329,7 @@ func _collect_note(note_id: String, note_text: String) -> void:
 
 
 func _update_hud(last_note := "") -> void:
-	var text := "WASD to move. Notes: %s/%s" % [collected_notes, total_notes]
+	var text := "WASD + mouse. Esc frees cursor. Notes: %s/%s" % [collected_notes, total_notes]
 	if last_note != "":
 		text += " | %s" % last_note
 	hud_label.text = text
