@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://creepy_game_ui"]
+
+[ext_resource type="Script" path="res://scripts/game_ui.gd" id="1_ui"]
+
+[node name="GameUi" type="CanvasLayer"]
+script = ExtResource("1_ui")
+
+[node name="Menu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Menu"]
+custom_minimum_size = Vector2(380, 238)
+layout_mode = 0
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 412.0
+offset_bottom = 270.0
+
+[node name="Margin" type="MarginContainer" parent="Menu/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="Box" type="VBoxContainer" parent="Menu/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Menu/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Creepy Pasta 3D"
+
+[node name="StatusLabel" type="Label" parent="Menu/Panel/Margin/Box"]
+layout_mode = 2
+text = "Host a game or join a friend's IP."
+autowrap_mode = 3
+
+[node name="IpEdit" type="LineEdit" parent="Menu/Panel/Margin/Box"]
+layout_mode = 2
+text = "127.0.0.1"
+placeholder_text = "127.0.0.1"
+
+[node name="Buttons" type="HBoxContainer" parent="Menu/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HostButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
+layout_mode = 2
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
+layout_mode = 2
+text = "Join"
+
+[node name="OfflineButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
+layout_mode = 2
+text = "Offline"
+
+[node name="HudLabel" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 590.0
+offset_right = 760.0
+offset_bottom = 616.0
+theme_override_colors/font_color = Color(0.9, 0.9, 0.82, 1)
+theme_override_font_sizes/font_size = 18

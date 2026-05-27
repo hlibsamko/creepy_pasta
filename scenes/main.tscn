@@ -1,14 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://creepy_main_3d"]
+[gd_scene load_steps=5 format=3 uid="uid://creepy_main_3d"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/network_manager.gd" id="2_network"]
+[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="3_level"]
+[ext_resource type="PackedScene" path="res://scenes/game_ui.tscn" id="4_ui"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_main")
 
-[node name="World" type="Node3D" parent="."]
+[node name="NetworkManager" type="Node" parent="."]
+script = ExtResource("2_network")
 
-[node name="Notes" type="Node3D" parent="World"]
+[node name="Level" parent="." instance=ExtResource("3_level")]
 
 [node name="Players" type="Node3D" parent="."]
 
-[node name="Ui" type="CanvasLayer" parent="."]
+[node name="Ui" parent="." instance=ExtResource("4_ui")]

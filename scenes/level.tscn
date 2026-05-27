@@ -1,0 +1,185 @@
+[gd_scene load_steps=28 format=3 uid="uid://creepy_level"]
+
+[ext_resource type="PackedScene" path="res://scenes/note.tscn" id="1_note"]
+
+[sub_resource type="Environment" id="Environment_level"]
+background_mode = 1
+background_color = Color(0.01, 0.01, 0.014, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.035, 0.035, 0.045, 1)
+ambient_light_energy = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.08, 0.075, 0.07, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_ceiling"]
+albedo_color = Color(0.05, 0.048, 0.052, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall_a"]
+albedo_color = Color(0.12, 0.11, 0.105, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall_b"]
+albedo_color = Color(0.11, 0.105, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood_dark"]
+albedo_color = Color(0.16, 0.1, 0.07, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.12, 0.08, 0.055, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_ritual"]
+albedo_color = Color(0.25, 0.02, 0.025, 1)
+roughness = 0.9
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(16, 0.2, 12)
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+size = Vector3(16, 0.2, 12)
+
+[sub_resource type="BoxShape3D" id="Shape_ceiling"]
+size = Vector3(16, 0.25, 12)
+
+[sub_resource type="BoxMesh" id="Mesh_ceiling"]
+size = Vector3(16, 0.25, 12)
+
+[sub_resource type="BoxShape3D" id="Shape_wall_ns"]
+size = Vector3(16, 3.1, 0.25)
+
+[sub_resource type="BoxMesh" id="Mesh_wall_ns"]
+size = Vector3(16, 3.1, 0.25)
+
+[sub_resource type="BoxShape3D" id="Shape_wall_ew"]
+size = Vector3(0.25, 3.1, 12)
+
+[sub_resource type="BoxMesh" id="Mesh_wall_ew"]
+size = Vector3(0.25, 3.1, 12)
+
+[sub_resource type="BoxShape3D" id="Shape_shelf"]
+size = Vector3(3.4, 1.3, 0.35)
+
+[sub_resource type="BoxMesh" id="Mesh_shelf"]
+size = Vector3(3.4, 1.3, 0.35)
+
+[sub_resource type="BoxShape3D" id="Shape_table"]
+size = Vector3(3, 0.9, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_table"]
+size = Vector3(3, 0.9, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_ritual"]
+size = Vector3(1.8, 0.02, 1.8)
+
+[node name="Level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_level")
+
+[node name="ColdMoonLeak" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.882948, -0.383022, -0.27216, 0, 0.579228, -0.815165, 0.469472, 0.719846, 0.511793, 0, 0, 0)
+light_energy = 0.45
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("Shape_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("Mesh_floor")
+surface_material_override/0 = SubResource("Mat_floor")
+
+[node name="Ceiling" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ceiling"]
+shape = SubResource("Shape_ceiling")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ceiling"]
+mesh = SubResource("Mesh_ceiling")
+surface_material_override/0 = SubResource("Mat_ceiling")
+
+[node name="NorthWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthWall"]
+shape = SubResource("Shape_wall_ns")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NorthWall"]
+mesh = SubResource("Mesh_wall_ns")
+surface_material_override/0 = SubResource("Mat_wall_a")
+
+[node name="SouthWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SouthWall"]
+shape = SubResource("Shape_wall_ns")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SouthWall"]
+mesh = SubResource("Mesh_wall_ns")
+surface_material_override/0 = SubResource("Mat_wall_a")
+
+[node name="WestWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.55, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WestWall"]
+shape = SubResource("Shape_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WestWall"]
+mesh = SubResource("Mesh_wall_ew")
+surface_material_override/0 = SubResource("Mat_wall_b")
+
+[node name="EastWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.55, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EastWall"]
+shape = SubResource("Shape_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EastWall"]
+mesh = SubResource("Mesh_wall_ew")
+surface_material_override/0 = SubResource("Mat_wall_b")
+
+[node name="BrokenShelf" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.65, -1.2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BrokenShelf"]
+shape = SubResource("Shape_shelf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BrokenShelf"]
+mesh = SubResource("Mesh_shelf")
+surface_material_override/0 = SubResource("Mat_wood_dark")
+
+[node name="LongTable" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.45, 1.6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LongTable"]
+shape = SubResource("Shape_table")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LongTable"]
+mesh = SubResource("Mesh_table")
+surface_material_override/0 = SubResource("Mat_wood")
+
+[node name="RitualMark" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("Mesh_ritual")
+surface_material_override/0 = SubResource("Mat_ritual")
+
+[node name="Notes" type="Node3D" parent="."]
+
+[node name="Note1" parent="Notes" instance=ExtResource("1_note")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0.55, -5)
+note_text = "The walls are listening."
+
+[node name="Note2" parent="Notes" instance=ExtResource("1_note")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4, 0.55, -5)
+note_text = "Do not look behind the shelf."
+
+[node name="Note3" parent="Notes" instance=ExtResource("1_note")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 4.9)
+note_text = "Three notes open the way."
