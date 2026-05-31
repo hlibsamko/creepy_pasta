@@ -208,7 +208,7 @@ func _spawn_player_remote(peer_id: int, spawn_position: Vector3, color: Color) -
 	player.name = str(peer_id)
 	player.player_id = peer_id
 	player.player_color = color
-	player.global_position = spawn_position
+	player.position = spawn_position
 	players.add_child(player)
 
 

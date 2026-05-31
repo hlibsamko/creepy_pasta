@@ -15,7 +15,7 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if collected_once:
 		return
-	if not body.has_method("is_multiplayer_authority") or not body.is_multiplayer_authority():
+	if not body.has_method("has_control") or not body.has_control():
 		return
 
 	collected_once = true

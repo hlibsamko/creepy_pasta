@@ -16,11 +16,11 @@ var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as floa
 func _ready() -> void:
 	set_multiplayer_authority(player_id)
 	_apply_color()
-	camera.current = is_multiplayer_authority()
+	camera.current = has_control()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_multiplayer_authority():
+	if not has_control():
 		return
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -30,7 +30,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not is_multiplayer_authority():
+	if not has_control():
 		return
 
 	if not is_on_floor():
@@ -42,20 +42,27 @@ func _physics_process(delta: float) -> void:
 	velocity.z = direction.z * SPEED
 	move_and_slide()
 
-	_sync_state.rpc(global_position, rotation.y, head.rotation.x)
+	if multiplayer.has_multiplayer_peer():
+		_sync_state.rpc(global_position, rotation.y, head.rotation.x)
+
+
+func has_control() -> bool:
+	if multiplayer.has_multiplayer_peer():
+		return is_multiplayer_authority()
+	return player_id == 1
 
 
 func _apply_color() -> void:
 	var material := body_mesh.get_active_material(0)
 	if material is StandardMaterial3D:
-		var duplicate := material.duplicate() as StandardMaterial3D
-		duplicate.albedo_color = player_color
-		body_mesh.set_surface_override_material(0, duplicate)
+		var material_copy := material.duplicate() as StandardMaterial3D
+		material_copy.albedo_color = player_color
+		body_mesh.set_surface_override_material(0, material_copy)
 
 
 @rpc("any_peer", "call_remote", "unreliable")
 func _sync_state(new_position: Vector3, yaw: float, pitch: float) -> void:
-	if is_multiplayer_authority():
+	if has_control():
 		return
 
 	global_position = global_position.lerp(new_position, 0.35)
