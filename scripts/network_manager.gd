@@ -33,3 +33,9 @@ func join(ip_address: String) -> Error:
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
 	return error
+
+
+func close() -> void:
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer = null

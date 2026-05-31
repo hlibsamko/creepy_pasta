@@ -1,6 +1,7 @@
 extends Node3D
 
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
+const LEVEL_SCENE := preload("res://scenes/level.tscn")
 const SPAWNS := [
 	Vector3(-5.5, 0.2, -4.5),
 	Vector3(5.5, 0.2, -4.5),
@@ -17,6 +18,7 @@ const PLAYER_COLORS := [
 ]
 
 @onready var network: Node = $NetworkManager
+@onready var level: Node3D = $Level
 @onready var notes: Node3D = $Level/Notes
 @onready var players: Node3D = $Players
 @onready var ui: CanvasLayer = $Ui
@@ -35,9 +37,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		if started:
-			ui.show_menu()
+		_toggle_pause_menu()
 
 
 func _connect_network() -> void:
@@ -55,11 +55,22 @@ func _connect_ui() -> void:
 
 
 func _connect_notes() -> void:
+	total_notes = 0
 	for note in notes.get_children():
 		if not note.has_signal("collected"):
 			continue
 		total_notes += 1
 		note.collected.connect(_on_note_collected)
+
+
+func _toggle_pause_menu() -> void:
+	if not started:
+		return
+
+	if ui.is_menu_visible():
+		_resume_game()
+	else:
+		_pause_game()
 
 
 func _host_game() -> void:
@@ -83,6 +94,7 @@ func _join_game(ip_address: String) -> void:
 
 
 func _start_offline() -> void:
+	_reset_session()
 	_start_game()
 	_spawn_player(1)
 
@@ -97,6 +109,46 @@ func _start_game() -> void:
 	_update_hud()
 
 
+func _pause_game() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	ui.show_menu()
+
+
+func _resume_game() -> void:
+	ui.hide_menu()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _reset_session() -> void:
+	if multiplayer.has_multiplayer_peer():
+		network.close()
+
+	started = false
+	collected_notes = 0
+	_clear_players()
+	_reload_level()
+	_update_hud()
+
+
+func _clear_players() -> void:
+	for child in players.get_children():
+		players.remove_child(child)
+		child.queue_free()
+
+
+func _reload_level() -> void:
+	if level:
+		remove_child(level)
+		level.queue_free()
+
+	level = LEVEL_SCENE.instantiate()
+	level.name = "Level"
+	add_child(level)
+	move_child(level, players.get_index())
+	notes = level.get_node("Notes")
+	_connect_notes()
+
+
 func _on_connected_to_server() -> void:
 	_start_game()
 	_request_spawn.rpc_id(1, multiplayer.get_unique_id())
@@ -109,8 +161,7 @@ func _on_connection_failed() -> void:
 func _on_server_disconnected() -> void:
 	started = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	for child in players.get_children():
-		child.queue_free()
+	_clear_players()
 	ui.show_menu()
 	ui.set_status("Server disconnected.")
 

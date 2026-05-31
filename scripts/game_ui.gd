@@ -28,6 +28,10 @@ func hide_menu() -> void:
 	menu.hide()
 
 
+func is_menu_visible() -> bool:
+	return menu.visible
+
+
 func set_status(text: String) -> void:
 	status_label.text = text
 
