@@ -70,3 +70,153 @@ offset_right = 760.0
 offset_bottom = 616.0
 theme_override_colors/font_color = Color(0.9, 0.9, 0.82, 1)
 theme_override_font_sizes/font_size = 18
+
+[node name="PuzzlePanel" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="PuzzlePanel"]
+custom_minimum_size = Vector2(480, 340)
+layout_mode = 0
+offset_left = 336.0
+offset_top = 154.0
+offset_right = 816.0
+offset_bottom = 494.0
+
+[node name="Margin" type="MarginContainer" parent="PuzzlePanel/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="Box" type="VBoxContainer" parent="PuzzlePanel/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PuzzleTitle" type="Label" parent="PuzzlePanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Fragment Lock"
+
+[node name="PuzzleText" type="Label" parent="PuzzlePanel/Panel/Margin/Box"]
+layout_mode = 2
+text = "Connect the matching colored dots to pick up this fragment."
+autowrap_mode = 3
+
+[node name="Dots" type="HBoxContainer" parent="PuzzlePanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_constants/separation = 120
+alignment = 1
+
+[node name="LeftDots" type="VBoxContainer" parent="PuzzlePanel/Panel/Margin/Box/Dots"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="RedLeft" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/LeftDots"]
+custom_minimum_size = Vector2(58, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+self_modulate = Color(1, 0.22, 0.18, 1)
+text = "●"
+
+[node name="BlueLeft" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/LeftDots"]
+custom_minimum_size = Vector2(58, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+self_modulate = Color(0.28, 0.55, 1, 1)
+text = "●"
+
+[node name="GreenLeft" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/LeftDots"]
+custom_minimum_size = Vector2(58, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+self_modulate = Color(0.25, 0.95, 0.45, 1)
+text = "●"
+
+[node name="RightDots" type="VBoxContainer" parent="PuzzlePanel/Panel/Margin/Box/Dots"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BlueRight" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/RightDots"]
+custom_minimum_size = Vector2(58, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+self_modulate = Color(0.28, 0.55, 1, 1)
+text = "●"
+
+[node name="GreenRight" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/RightDots"]
+custom_minimum_size = Vector2(58, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+self_modulate = Color(0.25, 0.95, 0.45, 1)
+text = "●"
+
+[node name="RedRight" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/RightDots"]
+custom_minimum_size = Vector2(58, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+self_modulate = Color(1, 0.22, 0.18, 1)
+text = "●"
+
+[node name="PuzzleProgress" type="Label" parent="PuzzlePanel/Panel/Margin/Box"]
+layout_mode = 2
+text = "Pairs connected: 0/3"
+
+[node name="PuzzleButtons" type="HBoxContainer" parent="PuzzlePanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResetPuzzleButton" type="Button" parent="PuzzlePanel/Panel/Margin/Box/PuzzleButtons"]
+layout_mode = 2
+text = "Reset"
+
+[node name="ClosePuzzleButton" type="Button" parent="PuzzlePanel/Panel/Margin/Box/PuzzleButtons"]
+layout_mode = 2
+text = "Close"
+
+[node name="DeathPanel" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="DeathPanel"]
+custom_minimum_size = Vector2(520, 210)
+layout_mode = 0
+offset_left = 316.0
+offset_top = 219.0
+offset_right = 836.0
+offset_bottom = 429.0
+
+[node name="Margin" type="MarginContainer" parent="DeathPanel/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Box" type="VBoxContainer" parent="DeathPanel/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DeathTitle" type="Label" parent="DeathPanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.1, 0.08, 1)
+theme_override_font_sizes/font_size = 42
+text = "YOU DIED"
+horizontal_alignment = 1
+
+[node name="DeathReason" type="Label" parent="DeathPanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Corridor monster killed you"
+horizontal_alignment = 1

@@ -1,0 +1,168 @@
+[gd_scene format=3 uid="uid://c3jsnj2kk07dj"]
+
+[ext_resource type="Script" uid="uid://dhkx2agoergve" path="res://scripts/level_exit.gd" id="1_exit"]
+[ext_resource type="Script" uid="uid://cffodd3g7fn10" path="res://scripts/corridor_monster.gd" id="2_monster"]
+[ext_resource type="Texture2D" uid="uid://c67cvpbl8luxt" path="res://images/corridor_monster.png" id="3_monster_photo"]
+
+[sub_resource type="Environment" id="Environment_corridor"]
+background_mode = 1
+background_color = Color(0.002, 0.002, 0.004, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.018, 0.018, 0.024, 1)
+ambient_light_energy = 0.28
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(5, 0.2, 72)
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+size = Vector3(5, 0.2, 72)
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.035, 0.036, 0.04, 1)
+roughness = 0.94
+
+[sub_resource type="BoxShape3D" id="Shape_wall_long"]
+size = Vector3(0.25, 3.2, 72)
+
+[sub_resource type="BoxMesh" id="Mesh_wall_long"]
+size = Vector3(0.25, 3.2, 72)
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall"]
+albedo_color = Color(0.045, 0.043, 0.048, 1)
+roughness = 0.92
+
+[sub_resource type="BoxShape3D" id="Shape_wall_end"]
+size = Vector3(5, 3.2, 0.25)
+
+[sub_resource type="BoxMesh" id="Mesh_wall_end"]
+size = Vector3(5, 3.2, 0.25)
+
+[sub_resource type="BoxShape3D" id="Shape_monster"]
+size = Vector3(1, 1.4, 3.2)
+
+[sub_resource type="BoxShape3D" id="Shape_monster_kill_zone"]
+size = Vector3(1.35, 1.7, 3.55)
+
+[sub_resource type="BoxShape3D" id="Shape_exit"]
+size = Vector3(2, 2.3, 1.2)
+
+[sub_resource type="BoxMesh" id="Mesh_exit_door"]
+size = Vector3(2, 2.3, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="Mat_exit_door"]
+albedo_color = Color(0.05, 0.045, 0.04, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="Mesh_exit_glow"]
+size = Vector3(1.9, 2.15, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_exit_glow"]
+albedo_color = Color(0.23, 0.23, 0.18, 1)
+emission_enabled = true
+emission = Color(1, 0.77, 0.35, 1)
+emission_energy_multiplier = 1.3
+
+[node name="Corridor" type="Node3D" unique_id=136761285]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=55825505]
+environment = SubResource("Environment_corridor")
+
+[node name="DimLightA" type="OmniLight3D" parent="." unique_id=1316255091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 2.3, -20)
+light_color = Color(0.75, 0.78, 1, 1)
+light_energy = 0.75
+omni_range = 8.0
+
+[node name="DimLightB" type="OmniLight3D" parent="." unique_id=1957008098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 2.2, 4)
+light_color = Color(0.9, 0.55, 0.35, 1)
+light_energy = 0.45
+omni_range = 6.0
+
+[node name="ExitLight" type="OmniLight3D" parent="." unique_id=861048213]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 33)
+light_color = Color(1, 0.75, 0.35, 1)
+light_energy = 0.95
+omni_range = 7.0
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1384806282]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=498639083]
+shape = SubResource("Shape_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=348316422]
+mesh = SubResource("Mesh_floor")
+surface_material_override/0 = SubResource("Mat_floor")
+
+[node name="LeftWall" type="StaticBody3D" parent="." unique_id=643895805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.55, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftWall" unique_id=75965000]
+shape = SubResource("Shape_wall_long")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LeftWall" unique_id=1709725295]
+mesh = SubResource("Mesh_wall_long")
+surface_material_override/0 = SubResource("Mat_wall")
+
+[node name="RightWall" type="StaticBody3D" parent="." unique_id=1294715916]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.55, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightWall" unique_id=225478994]
+shape = SubResource("Shape_wall_long")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RightWall" unique_id=1518645656]
+mesh = SubResource("Mesh_wall_long")
+surface_material_override/0 = SubResource("Mat_wall")
+
+[node name="BackWall" type="StaticBody3D" parent="." unique_id=1606701210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -36)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BackWall" unique_id=2028975768]
+shape = SubResource("Shape_wall_end")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BackWall" unique_id=1335524726]
+mesh = SubResource("Mesh_wall_end")
+surface_material_override/0 = SubResource("Mat_wall")
+
+[node name="Monsters" type="Node3D" parent="." unique_id=1600099524]
+
+[node name="CorridorMonster" type="CharacterBody3D" parent="Monsters" unique_id=278489653]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -34.5)
+script = ExtResource("2_monster")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Monsters/CorridorMonster" unique_id=631145858]
+shape = SubResource("Shape_monster")
+
+[node name="KillZone" type="Area3D" parent="Monsters/CorridorMonster" unique_id=1182995707]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Monsters/CorridorMonster/KillZone" unique_id=247136648]
+shape = SubResource("Shape_monster_kill_zone")
+
+[node name="PhotoSprite" type="Sprite3D" parent="Monsters/CorridorMonster" unique_id=1442437962]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1.3251953, 1.6300011)
+billboard = 1
+texture = ExtResource("3_monster_photo")
+
+[node name="LevelExit" type="Area3D" parent="." unique_id=720366234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 34.5)
+script = ExtResource("1_exit")
+closed = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelExit" unique_id=2015147696]
+shape = SubResource("Shape_exit")
+
+[node name="Door" type="MeshInstance3D" parent="LevelExit" unique_id=1157682661]
+mesh = SubResource("Mesh_exit_door")
+surface_material_override/0 = SubResource("Mat_exit_door")
+
+[node name="Glow" type="MeshInstance3D" parent="LevelExit" unique_id=1395210869]
+mesh = SubResource("Mesh_exit_glow")
+surface_material_override/0 = SubResource("Mat_exit_glow")
+
+[node name="PortalLight" type="OmniLight3D" parent="LevelExit/Glow" unique_id=75943942]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
+light_color = Color(1, 0.75, 0.35, 1)
+omni_range = 4.0
+
+[node name="Notes" type="Node3D" parent="." unique_id=753989612]

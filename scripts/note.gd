@@ -2,8 +2,10 @@ class_name CollectibleNote
 extends Area3D
 
 signal collected(note_id: String, note_text: String)
+signal puzzle_requested(note_id: String, note_text: String)
 
 @export_multiline var note_text := ""
+@export var requires_puzzle := false
 
 var collected_once := false
 
@@ -19,4 +21,12 @@ func _on_body_entered(body: Node3D) -> void:
 		return
 
 	collected_once = true
+	if requires_puzzle:
+		puzzle_requested.emit(name, note_text)
+		return
+
 	collected.emit(name, note_text)
+
+
+func reset_collection_attempt() -> void:
+	collected_once = false

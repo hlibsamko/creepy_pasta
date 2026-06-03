@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
-const SPEED := 4.6
+const WALK_SPEED := 4.6
+const SPRINT_SPEED := 5.1
 const MOUSE_SENSITIVITY := 0.0025
 
 @export var player_id := 1
@@ -11,16 +12,18 @@ const MOUSE_SENSITIVITY := 0.0025
 @onready var body_mesh: MeshInstance3D = $BodyMesh
 
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
+var controls_enabled := true
 
 
 func _ready() -> void:
+	add_to_group("players")
 	set_multiplayer_authority(player_id)
 	_apply_color()
 	camera.current = has_control()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not has_control():
+	if not controls_enabled or not has_control():
 		return
 
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -30,7 +33,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not has_control():
+	if not controls_enabled or not has_control():
+		velocity.x = 0.0
+		velocity.z = 0.0
 		return
 
 	if not is_on_floor():
@@ -38,8 +43,9 @@ func _physics_process(delta: float) -> void:
 
 	var input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction := (global_basis * Vector3(input.x, 0.0, input.y)).normalized()
-	velocity.x = direction.x * SPEED
-	velocity.z = direction.z * SPEED
+	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else WALK_SPEED
+	velocity.x = direction.x * speed
+	velocity.z = direction.z * speed
 	move_and_slide()
 
 	if multiplayer.has_multiplayer_peer():
@@ -50,6 +56,10 @@ func has_control() -> bool:
 	if multiplayer.has_multiplayer_peer():
 		return is_multiplayer_authority()
 	return player_id == 1
+
+
+func set_controls_enabled(enabled: bool) -> void:
+	controls_enabled = enabled
 
 
 func _apply_color() -> void:
