@@ -21,6 +21,10 @@ signal note_puzzle_cancelled(note_id: String)
 @onready var close_puzzle_button: Button = $PuzzlePanel/Panel/Margin/Box/PuzzleButtons/ClosePuzzleButton
 @onready var death_panel: Control = $DeathPanel
 @onready var death_reason_label: Label = $DeathPanel/Panel/Margin/Box/DeathReason
+@onready var dialogue_panel: Control = $DialoguePanel
+@onready var dialogue_speaker: Label = $DialoguePanel/Panel/Margin/Box/Speaker
+@onready var dialogue_body: RichTextLabel = $DialoguePanel/Panel/Margin/Box/Body
+@onready var dialogue_hint: Label = $DialoguePanel/Panel/Margin/Box/Hint
 
 @onready var left_dots: Array[Button] = [
 	$PuzzlePanel/Panel/Margin/Box/Dots/LeftDots/RedLeft,
@@ -54,6 +58,7 @@ func _ready() -> void:
 		_connect_puzzle_dot(dot, "right")
 	puzzle_panel.hide()
 	death_panel.hide()
+	dialogue_panel.hide()
 
 
 func show_menu() -> void:
@@ -81,6 +86,21 @@ func show_death(reason: String) -> void:
 
 func hide_death() -> void:
 	death_panel.hide()
+
+
+func show_dialogue(speaker: String, text: String, page_index: int, page_count: int) -> void:
+	dialogue_speaker.text = speaker
+	dialogue_body.text = _format_dialogue_text(text)
+	dialogue_hint.text = "Ctrl: next (%s/%s)" % [page_index + 1, page_count]
+	dialogue_panel.show()
+
+
+func hide_dialogue() -> void:
+	dialogue_panel.hide()
+
+
+func is_dialogue_visible() -> bool:
+	return dialogue_panel.visible
 
 
 func update_hud(collected_notes: int, total_notes: int, last_note := "") -> void:
@@ -230,3 +250,7 @@ func _reset_puzzle() -> void:
 func _cancel_puzzle() -> void:
 	puzzle_panel.hide()
 	note_puzzle_cancelled.emit(active_note_id)
+
+
+func _format_dialogue_text(text: String) -> String:
+	return text.replace("**The Corridor Monster**", "[b]The Corridor Monster[/b]")

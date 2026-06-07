@@ -31,6 +31,10 @@ var collected_notes := 0
 var total_notes := 0
 var started := false
 var current_level_scene: PackedScene = LEVEL_SCENE
+var nearby_dialogue_npc: DialogueNpc
+var active_dialogue_npc: DialogueNpc
+var active_dialogue_pages: Array[String] = []
+var active_dialogue_index := 0
 
 
 func _ready() -> void:
@@ -41,6 +45,15 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if ui.is_dialogue_visible():
+		if event.is_action_pressed("dialogue_next"):
+			_advance_dialogue()
+		elif event.is_action_pressed("ui_cancel"):
+			_end_dialogue()
+		return
+	if event.is_action_pressed("interact") and nearby_dialogue_npc:
+		_start_dialogue(nearby_dialogue_npc)
+		return
 	if event.is_action_pressed("ui_cancel"):
 		_toggle_pause_menu()
 
@@ -65,6 +78,7 @@ func _connect_level_interactables() -> void:
 	_connect_notes()
 	_connect_level_exit()
 	_connect_monsters()
+	_connect_dialogue_npcs()
 
 
 func _connect_notes() -> void:
@@ -91,6 +105,17 @@ func _connect_monsters() -> void:
 	for monster in monsters.get_children():
 		if monster.has_signal("killed_player"):
 			monster.killed_player.connect(_on_player_killed)
+
+
+func _connect_dialogue_npcs() -> void:
+	var dialogue_npcs := level.get_node_or_null("DialogueNpcs")
+	if not dialogue_npcs:
+		return
+	for npc in dialogue_npcs.get_children():
+		if npc.has_signal("player_entered"):
+			npc.player_entered.connect(_on_dialogue_npc_entered)
+		if npc.has_signal("player_exited"):
+			npc.player_exited.connect(_on_dialogue_npc_exited)
 
 
 func _toggle_pause_menu() -> void:
@@ -332,6 +357,67 @@ func _on_player_killed(reason: String) -> void:
 			if monster.has_method("stop_chase"):
 				monster.stop_chase()
 	ui.show_death(reason)
+
+
+func _on_dialogue_npc_entered(npc: DialogueNpc) -> void:
+	nearby_dialogue_npc = npc
+	ui.set_extra_hint("Press Q to talk")
+	_update_hud()
+
+
+func _on_dialogue_npc_exited(npc: DialogueNpc) -> void:
+	if nearby_dialogue_npc == npc:
+		nearby_dialogue_npc = null
+	if active_dialogue_npc == npc:
+		_end_dialogue()
+	_update_level_hint()
+	_update_hud()
+
+
+func _start_dialogue(npc: DialogueNpc) -> void:
+	active_dialogue_pages = npc.get_dialogue_pages()
+	if active_dialogue_pages.is_empty():
+		return
+
+	active_dialogue_npc = npc
+	active_dialogue_index = 0
+	_set_player_controls(false)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_show_current_dialogue_page()
+
+
+func _advance_dialogue() -> void:
+	active_dialogue_index += 1
+	if active_dialogue_index >= active_dialogue_pages.size():
+		_end_dialogue()
+		return
+
+	_show_current_dialogue_page()
+
+
+func _show_current_dialogue_page() -> void:
+	ui.show_dialogue(
+		active_dialogue_npc.speaker_name,
+		active_dialogue_pages[active_dialogue_index],
+		active_dialogue_index,
+		active_dialogue_pages.size()
+	)
+
+
+func _end_dialogue() -> void:
+	ui.hide_dialogue()
+	active_dialogue_npc = null
+	active_dialogue_pages.clear()
+	active_dialogue_index = 0
+	_set_player_controls(true)
+	if started:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _set_player_controls(enabled: bool) -> void:
+	for player in players.get_children():
+		if player.has_method("set_controls_enabled"):
+			player.set_controls_enabled(enabled)
 
 
 func _spawn_current_players() -> void:
