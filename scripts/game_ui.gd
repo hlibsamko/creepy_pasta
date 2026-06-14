@@ -59,6 +59,15 @@ func _ready() -> void:
 	puzzle_panel.hide()
 	death_panel.hide()
 	dialogue_panel.hide()
+	if OS.has_feature("web"):
+		host_button.disabled = true
+		host_button.tooltip_text = "Browser builds can join WebSocket servers, but cannot host ENet games."
+		status_label.text = "Join the online server or play offline."
+
+
+func set_join_address(address: String) -> void:
+	ip_edit.text = address
+	ip_edit.placeholder_text = address
 
 
 func show_menu() -> void:

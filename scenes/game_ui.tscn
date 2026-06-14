@@ -39,13 +39,13 @@ text = "Creepy Pasta 3D"
 
 [node name="StatusLabel" type="Label" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2
-text = "Host a game or join a friend's IP."
+text = "Host locally, join a server, or play offline."
 autowrap_mode = 3
 
 [node name="IpEdit" type="LineEdit" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2
-text = "127.0.0.1"
-placeholder_text = "127.0.0.1"
+text = "ws://127.0.0.1:24567"
+placeholder_text = "ws://127.0.0.1:24567"
 
 [node name="Buttons" type="HBoxContainer" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2

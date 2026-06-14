@@ -1,0 +1,16 @@
+[Unit]
+Description=Creepy Pasta Godot Dedicated Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/creepy-pasta-server
+ExecStart=/home/ubuntu/creepy-pasta-server/creepy_pasta_server.x86_64 --headless --server
+Restart=always
+RestartSec=5
+Environment=GODOT_HEADLESS=1
+
+[Install]
+WantedBy=multi-user.target

@@ -41,6 +41,10 @@ func _ready() -> void:
 	_connect_network()
 	_connect_ui()
 	_connect_level_interactables()
+	ui.set_join_address(network.get_join_hint())
+	if network.is_dedicated_server():
+		_start_dedicated_server()
+		return
 	_update_hud()
 
 
@@ -136,7 +140,7 @@ func _host_game() -> void:
 
 	_start_game()
 	_spawn_player(multiplayer.get_unique_id())
-	ui.set_status("Hosting on port %s. Share your IP with friends." % network.port)
+	ui.set_status("Hosting %s on port %s. Share your address with friends." % [network.get_transport_name(), network.port])
 
 
 func _join_game(ip_address: String) -> void:
@@ -152,6 +156,19 @@ func _start_offline() -> void:
 	_reset_session()
 	_start_game()
 	_spawn_player(1)
+
+
+func _start_dedicated_server() -> void:
+	var error: Error = network.host_websocket()
+	if error != OK:
+		push_error("Dedicated server failed: %s" % error)
+		get_tree().quit(1)
+		return
+
+	started = true
+	ui.hide_menu()
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	print("Dedicated WebSocket server listening on port %s" % network.port)
 
 
 func _start_game() -> void:
