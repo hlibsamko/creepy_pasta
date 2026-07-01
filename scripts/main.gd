@@ -35,6 +35,7 @@ var nearby_dialogue_npc: DialogueNpc
 var active_dialogue_npc: DialogueNpc
 var active_dialogue_pages: Array[String] = []
 var active_dialogue_index := 0
+var level_transitioning := false
 
 
 func _ready() -> void:
@@ -337,17 +338,42 @@ func _open_level_exit() -> void:
 
 
 func _on_level_exit_entered() -> void:
-	if multiplayer.has_multiplayer_peer():
-		_enter_next_level.rpc()
-	_enter_next_level()
+	if level_transitioning:
+		return
+
+	if not multiplayer.has_multiplayer_peer():
+		_begin_next_level_transition()
+		return
+
+	if multiplayer.is_server():
+		_begin_next_level_transition.rpc()
+		_begin_next_level_transition()
+	else:
+		_request_next_level_transition.rpc_id(1)
 
 
 @rpc("any_peer", "call_remote", "reliable")
+func _request_next_level_transition() -> void:
+	if multiplayer.is_server():
+		_begin_next_level_transition.rpc()
+		_begin_next_level_transition()
+
+
+@rpc("authority", "call_remote", "reliable")
+func _begin_next_level_transition() -> void:
+	if level_transitioning:
+		return
+
+	level_transitioning = true
+	_set_player_controls(false)
+	call_deferred("_enter_next_level")
+
+
 func _enter_next_level() -> void:
 	collected_notes = 0
-	_clear_players()
 	_load_level_scene(_get_next_level_scene())
-	_spawn_current_players()
+	_move_current_players_to_spawns()
+	level_transitioning = false
 	ui.set_status("You entered the next place.")
 	_update_hud("You entered the next place.")
 
@@ -447,6 +473,41 @@ func _spawn_current_players() -> void:
 	_spawn_player(multiplayer.get_unique_id())
 	for peer_id in multiplayer.get_peers():
 		_spawn_player(peer_id)
+
+
+func _move_current_players_to_spawns() -> void:
+	var spawn_positions := _get_spawn_positions()
+	if not multiplayer.has_multiplayer_peer():
+		_move_player_to_spawn(1, spawn_positions[0])
+		return
+	if not multiplayer.is_server():
+		return
+
+	var spawn_index := 0
+	_move_player_to_spawn(multiplayer.get_unique_id(), spawn_positions[spawn_index % spawn_positions.size()])
+	spawn_index += 1
+	for peer_id in multiplayer.get_peers():
+		_move_player_to_spawn(peer_id, spawn_positions[spawn_index % spawn_positions.size()])
+		spawn_index += 1
+
+
+func _move_player_to_spawn(peer_id: int, spawn_position: Vector3) -> void:
+	if multiplayer.has_multiplayer_peer():
+		_move_player_to_spawn_remote.rpc(peer_id, spawn_position)
+	_move_player_to_spawn_remote(peer_id, spawn_position)
+
+
+@rpc("authority", "call_remote", "reliable")
+func _move_player_to_spawn_remote(peer_id: int, spawn_position: Vector3) -> void:
+	var player := players.get_node_or_null(str(peer_id))
+	if not player:
+		return
+
+	player.global_position = spawn_position
+	if player is CharacterBody3D:
+		player.velocity = Vector3.ZERO
+	if player.has_method("set_controls_enabled"):
+		player.set_controls_enabled(true)
 
 
 func _load_level_scene(scene: PackedScene) -> void:
