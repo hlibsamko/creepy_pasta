@@ -35,6 +35,12 @@ ubuntu@138.2.166.64
 TCP 24567
 ```
 
+Current test domain:
+
+```text
+creepy-pasta.duckdns.org -> 138.2.166.64
+```
+
 The lightweight production path is a native binary plus systemd, not Docker:
 
 ```bash
@@ -50,7 +56,7 @@ sudo iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 24567 -j ACC
 sudo netfilter-persistent save
 ```
 
-Oracle Cloud Console still needs the subnet ingress rule:
+Oracle Cloud Console still needs subnet ingress rules. For the dedicated Godot server:
 
 ```text
 Networking -> Virtual cloud networks -> creepy-pasta-vcn
@@ -64,7 +70,25 @@ Add Ingress Rule:
   Description: Creepy Pasta Godot WebSocket server
 ```
 
-Keep the existing SSH rule for TCP `22`. Add TCP `80` and `443` only when a domain/reverse proxy is configured for WSS.
+Keep the existing SSH rule for TCP `22`.
+
+For the browser site and HTTPS/WSS, add two more ingress rules:
+
+```text
+Source CIDR: 0.0.0.0/0
+IP Protocol: TCP
+Destination Port Range: 80
+Stateless: No
+Description: HTTP for Caddy/Let's Encrypt
+```
+
+```text
+Source CIDR: 0.0.0.0/0
+IP Protocol: TCP
+Destination Port Range: 443
+Stateless: No
+Description: HTTPS/WSS for browser game
+```
 
 For a browser client hosted on HTTPS, use `wss://`. The simplest production setup is Caddy in front of the Godot server:
 
@@ -74,10 +98,16 @@ creepy-pasta.example.com {
 }
 ```
 
-With that proxy, players join:
+With that proxy, players open the game site:
 
 ```text
-wss://creepy-pasta.example.com
+https://creepy-pasta.duckdns.org
+```
+
+The browser client then joins the server through:
+
+```text
+wss://creepy-pasta.duckdns.org
 ```
 
 ## Godot web export
@@ -87,4 +117,34 @@ wss://creepy-pasta.example.com
 3. Export the web build as `index.html`.
 4. Upload the generated `.html`, `.js`, `.pck`, `.wasm`, and related files to itch.io, Cloudflare Pages, or another static host.
 
-Before exporting for public play, set the `NetworkManager.server_url` value in `scenes/main.tscn` to the production `wss://` address.
+Before exporting for public play, set the `NetworkManager.server_url` value in `scenes/main.tscn` to the production `wss://` address. Current value:
+
+```text
+wss://creepy-pasta.duckdns.org
+```
+
+## Local website copy
+
+The local browser-site build folder is outside the Godot project:
+
+```text
+D:\Codex_projects\my-website
+```
+
+Build it with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\build_web_site.ps1
+```
+
+Deploy only the browser site to Oracle:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_web_oracle.ps1
+```
+
+Deploy both Web client and dedicated server from the same project state:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_full_oracle.ps1
+```

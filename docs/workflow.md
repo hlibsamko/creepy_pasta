@@ -7,16 +7,29 @@ This file is the source of truth for how we change, test, deploy, and explain th
 - GitHub repo: `https://github.com/hlibsamko/creepy_pasta.git`
 - Main branch: `main`
 - Oracle dedicated server: `138.2.166.64`
+- Temporary domain: `creepy-pasta.duckdns.org`
 - Game server port: `24567`
-- Player join address: `ws://138.2.166.64:24567`
+- Browser site: `https://creepy-pasta.duckdns.org`
+- Browser WebSocket address: `wss://creepy-pasta.duckdns.org`
+- Direct test join address: `ws://138.2.166.64:24567`
 - Remote server directory: `/home/ubuntu/creepy-pasta-server`
+- Remote web directory: `/var/www/creepy-pasta`
+- Local web build directory: `D:\Codex_projects\my-website`
 - systemd service: `creepy-pasta-server`
+- web service: `caddy`
 - Dedicated server export preset: `Linux Dedicated Server`
+- Web export preset: `Web`
 
-Players using the Oracle server should not press `Host`. Every player joins the same address:
+Players using the Oracle server should not press `Host`. Desktop players can join this direct test address:
 
 ```text
 ws://138.2.166.64:24567
+```
+
+Browser players should open:
+
+```text
+https://creepy-pasta.duckdns.org
 ```
 
 ## Core Rule
@@ -32,6 +45,8 @@ Any change touching multiplayer behavior requires thinking about both sides. Thi
 - `player.tscn`, `main.tscn`, or any scene/script used by the dedicated server
 
 If one of those changes happens, rebuild and redeploy the Oracle dedicated server before telling the user it is fixed.
+
+If a browser build is involved, rebuild and redeploy the Web client too. The Web client and dedicated server should come from the same commit/project state.
 
 ## Fix Workflow
 
@@ -73,11 +88,40 @@ $c.Close()
 8. Commit and push the code change to GitHub.
 9. Tell the user exactly what changed, what was deployed, and the join address if relevant.
 
+## Browser Website Workflow
+
+Build the local website copy:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\build_web_site.ps1
+```
+
+This writes the current Web export to:
+
+```text
+D:\Codex_projects\my-website
+```
+
+Deploy the website to Oracle/Caddy:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_web_oracle.ps1
+```
+
+Deploy both the website and dedicated server:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_full_oracle.ps1
+```
+
+Oracle Cloud Console must allow inbound TCP `80`, `443`, and `24567`. Ubuntu iptables alone is not enough; the Oracle VCN security list or NSG must also allow those ports.
+
 ## Do Not Claim Fixed Until
 
 - The local project starts headless without script errors.
 - The Oracle service is `active (running)` after redeploy when multiplayer/server code changed.
 - Port `24567` is reachable from the local machine.
+- For browser deploys, Caddy is `active (running)` and `https://creepy-pasta.duckdns.org` loads.
 - The GitHub branch contains the code matching the deployed server.
 
 ## Common Failure Signals
@@ -93,4 +137,3 @@ RPC packets are targeting player nodes that do not exist on that peer. Check spa
 `Removing a CollisionObject node during a physics callback is not allowed`
 
 Do not remove/change scenes directly from physics callbacks. Use `call_deferred`.
-

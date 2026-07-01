@@ -12,7 +12,7 @@ $output = Join-Path $buildDir "creepy_pasta_server.x86_64"
 New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
 
 & $GodotExe --headless --path $projectRoot --export-release $Preset $output
-if ($LASTEXITCODE -ne 0) {
+if ($null -ne $LASTEXITCODE -and $LASTEXITCODE -ne 0) {
     throw "Godot export failed with exit code $LASTEXITCODE"
 }
 
