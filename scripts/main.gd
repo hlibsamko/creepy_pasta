@@ -470,7 +470,8 @@ func _spawn_current_players() -> void:
 	if not multiplayer.is_server():
 		return
 
-	_spawn_player(multiplayer.get_unique_id())
+	if not network.is_dedicated_server():
+		_spawn_player(multiplayer.get_unique_id())
 	for peer_id in multiplayer.get_peers():
 		_spawn_player(peer_id)
 
@@ -484,8 +485,9 @@ func _move_current_players_to_spawns() -> void:
 		return
 
 	var spawn_index := 0
-	_move_player_to_spawn(multiplayer.get_unique_id(), spawn_positions[spawn_index % spawn_positions.size()])
-	spawn_index += 1
+	if not network.is_dedicated_server():
+		_move_player_to_spawn(multiplayer.get_unique_id(), spawn_positions[spawn_index % spawn_positions.size()])
+		spawn_index += 1
 	for peer_id in multiplayer.get_peers():
 		_move_player_to_spawn(peer_id, spawn_positions[spawn_index % spawn_positions.size()])
 		spawn_index += 1
