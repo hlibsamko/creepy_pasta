@@ -3,7 +3,7 @@ param(
     [string]$User = "ubuntu",
     [string]$KeyPath = "D:\Soft\oracle-server\ssh-key-2026-06-07.key",
     [string]$SiteDir = "D:\Codex_projects\creepy-website",
-    [string]$Domain = "creepy-pasta.138.2.166.64.sslip.io",
+    [string]$Domain = "creepy-pasta.duckdns.org",
     [string]$RemoteSiteDir = "/var/www/creepy-pasta"
 )
 

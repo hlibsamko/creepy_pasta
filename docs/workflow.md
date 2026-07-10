@@ -7,10 +7,10 @@ This file is the source of truth for how we change, test, deploy, and explain th
 - GitHub repo: `https://github.com/hlibsamko/creepy_pasta.git`
 - Main branch: `main`
 - Oracle dedicated server: `138.2.166.64`
-- Temporary domain: `creepy-pasta.138.2.166.64.sslip.io`
+- Current domain: `creepy-pasta.duckdns.org`
 - Game server port: `24567`
-- Browser site: `https://creepy-pasta.138.2.166.64.sslip.io`
-- Browser WebSocket address: `wss://creepy-pasta.138.2.166.64.sslip.io`
+- Browser site: `https://creepy-pasta.duckdns.org`
+- Browser WebSocket address: `wss://creepy-pasta.duckdns.org`
 - Direct test join address: `ws://138.2.166.64:24567`
 - Remote server directory: `/home/ubuntu/creepy-pasta-server`
 - Remote web directory: `/var/www/creepy-pasta`
@@ -29,7 +29,7 @@ ws://138.2.166.64:24567
 Browser players should open:
 
 ```text
-https://creepy-pasta.138.2.166.64.sslip.io
+https://creepy-pasta.duckdns.org
 ```
 
 ## Core Rule
@@ -121,7 +121,7 @@ Oracle Cloud Console must allow inbound TCP `80`, `443`, and `24567`. Ubuntu ipt
 - The local project starts headless without script errors.
 - The Oracle service is `active (running)` after redeploy when multiplayer/server code changed.
 - Port `24567` is reachable from the local machine.
-- For browser deploys, Caddy is `active (running)` and `https://creepy-pasta.138.2.166.64.sslip.io` loads.
+- For browser deploys, Caddy is `active (running)` and `https://creepy-pasta.duckdns.org` loads.
 - The GitHub branch contains the code matching the deployed server.
 
 ## Common Failure Signals

@@ -38,7 +38,7 @@ TCP 24567
 Current test domain:
 
 ```text
-creepy-pasta.138.2.166.64.sslip.io -> 138.2.166.64
+creepy-pasta.duckdns.org -> 138.2.166.64
 ```
 
 The lightweight production path is a native binary plus systemd, not Docker:
@@ -101,13 +101,13 @@ creepy-pasta.example.com {
 With that proxy, players open the game site:
 
 ```text
-https://creepy-pasta.138.2.166.64.sslip.io
+https://creepy-pasta.duckdns.org
 ```
 
 The browser client then joins the server through:
 
 ```text
-wss://creepy-pasta.138.2.166.64.sslip.io
+wss://creepy-pasta.duckdns.org
 ```
 
 ## Godot web export
@@ -120,7 +120,7 @@ wss://creepy-pasta.138.2.166.64.sslip.io
 Before exporting for public play, set the `NetworkManager.server_url` value in `scenes/main.tscn` to the production `wss://` address. Current value:
 
 ```text
-wss://creepy-pasta.138.2.166.64.sslip.io
+wss://creepy-pasta.duckdns.org
 ```
 
 ## Local website copy

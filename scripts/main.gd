@@ -50,6 +50,10 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _should_capture_game_input(event):
+		_capture_game_input()
+		return
+
 	if ui.is_dialogue_visible():
 		if event.is_action_pressed("dialogue_next"):
 			_advance_dialogue()
@@ -179,7 +183,7 @@ func _start_game() -> void:
 	started = true
 	ui.hide_death()
 	ui.hide_menu()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_capture_game_input(not OS.has_feature("web"))
 	_update_hud()
 
 
@@ -190,7 +194,7 @@ func _pause_game() -> void:
 
 func _resume_game() -> void:
 	ui.hide_menu()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_capture_game_input(not OS.has_feature("web"))
 
 
 func _reset_session() -> void:
@@ -303,7 +307,7 @@ func _on_note_puzzle_requested(note_id: String, note_text: String) -> void:
 
 func _on_note_puzzle_completed(note_id: String, note_text: String) -> void:
 	if started:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		_capture_game_input(not OS.has_feature("web"))
 	_on_note_collected(note_id, note_text)
 
 
@@ -312,7 +316,7 @@ func _on_note_puzzle_cancelled(note_id: String) -> void:
 	if note and note.has_method("reset_collection_attempt"):
 		note.reset_collection_attempt()
 	if started:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		_capture_game_input(not OS.has_feature("web"))
 
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -454,13 +458,29 @@ func _end_dialogue() -> void:
 	active_dialogue_index = 0
 	_set_player_controls(true)
 	if started:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		_capture_game_input(not OS.has_feature("web"))
 
 
 func _set_player_controls(enabled: bool) -> void:
 	for player in players.get_children():
 		if player.has_method("set_controls_enabled"):
 			player.set_controls_enabled(enabled)
+
+
+func _capture_game_input(capture_mouse := true) -> void:
+	get_viewport().gui_release_focus()
+	if capture_mouse:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _should_capture_game_input(event: InputEvent) -> bool:
+	if not OS.has_feature("web"):
+		return false
+	if not started or ui.is_menu_visible():
+		return false
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		return false
+	return event is InputEventMouseButton and event.pressed
 
 
 func _spawn_current_players() -> void:
