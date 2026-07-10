@@ -10,7 +10,7 @@ script = ExtResource("1_main")
 
 [node name="NetworkManager" type="Node" parent="."]
 script = ExtResource("2_network")
-server_url = "wss://creepy-pasta.duckdns.org"
+server_url = "wss://creepy-pasta.138.2.166.64.sslip.io"
 
 [node name="Level" parent="." instance=ExtResource("3_level")]
 

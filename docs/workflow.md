@@ -7,14 +7,14 @@ This file is the source of truth for how we change, test, deploy, and explain th
 - GitHub repo: `https://github.com/hlibsamko/creepy_pasta.git`
 - Main branch: `main`
 - Oracle dedicated server: `138.2.166.64`
-- Temporary domain: `creepy-pasta.duckdns.org`
+- Temporary domain: `creepy-pasta.138.2.166.64.sslip.io`
 - Game server port: `24567`
-- Browser site: `https://creepy-pasta.duckdns.org`
-- Browser WebSocket address: `wss://creepy-pasta.duckdns.org`
+- Browser site: `https://creepy-pasta.138.2.166.64.sslip.io`
+- Browser WebSocket address: `wss://creepy-pasta.138.2.166.64.sslip.io`
 - Direct test join address: `ws://138.2.166.64:24567`
 - Remote server directory: `/home/ubuntu/creepy-pasta-server`
 - Remote web directory: `/var/www/creepy-pasta`
-- Local web build directory: `D:\Codex_projects\my-website`
+- Local web build directory: `D:\Codex_projects\creepy-website`
 - systemd service: `creepy-pasta-server`
 - web service: `caddy`
 - Dedicated server export preset: `Linux Dedicated Server`
@@ -29,7 +29,7 @@ ws://138.2.166.64:24567
 Browser players should open:
 
 ```text
-https://creepy-pasta.duckdns.org
+https://creepy-pasta.138.2.166.64.sslip.io
 ```
 
 ## Core Rule
@@ -99,7 +99,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\build_web_site.ps1
 This writes the current Web export to:
 
 ```text
-D:\Codex_projects\my-website
+D:\Codex_projects\creepy-website
 ```
 
 Deploy the website to Oracle/Caddy:
@@ -121,7 +121,7 @@ Oracle Cloud Console must allow inbound TCP `80`, `443`, and `24567`. Ubuntu ipt
 - The local project starts headless without script errors.
 - The Oracle service is `active (running)` after redeploy when multiplayer/server code changed.
 - Port `24567` is reachable from the local machine.
-- For browser deploys, Caddy is `active (running)` and `https://creepy-pasta.duckdns.org` loads.
+- For browser deploys, Caddy is `active (running)` and `https://creepy-pasta.138.2.166.64.sslip.io` loads.
 - The GitHub branch contains the code matching the deployed server.
 
 ## Common Failure Signals

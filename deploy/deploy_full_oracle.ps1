@@ -1,6 +1,6 @@
 param(
     [string]$GodotExe = "D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe",
-    [string]$SiteDir = "D:\Codex_projects\my-website"
+    [string]$SiteDir = "D:\Codex_projects\creepy-website"
 )
 
 $ErrorActionPreference = "Stop"

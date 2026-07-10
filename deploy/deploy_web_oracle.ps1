@@ -2,8 +2,8 @@ param(
     [string]$HostName = "138.2.166.64",
     [string]$User = "ubuntu",
     [string]$KeyPath = "D:\Soft\oracle-server\ssh-key-2026-06-07.key",
-    [string]$SiteDir = "D:\Codex_projects\my-website",
-    [string]$Domain = "creepy-pasta.duckdns.org",
+    [string]$SiteDir = "D:\Codex_projects\creepy-website",
+    [string]$Domain = "creepy-pasta.138.2.166.64.sslip.io",
     [string]$RemoteSiteDir = "/var/www/creepy-pasta"
 )
 
@@ -25,8 +25,8 @@ scp -i $KeyPath $archive "$remote`:/tmp/creepy-pasta-site.tar.gz"
 
 ssh -i $KeyPath $remote @"
 set -eu
-sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl gpg
 if ! command -v caddy >/dev/null 2>&1; then
+    sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl gpg
     curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
     curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list >/dev/null
     sudo chmod o+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg
@@ -37,7 +37,7 @@ fi
 
 sudo mkdir -p '$RemoteSiteDir'
 sudo rm -rf '$RemoteSiteDir'/*
-sudo tar -xzf /tmp/creepy-pasta-site.tar.gz -C '$RemoteSiteDir'
+sudo tar --warning=no-timestamp -xzf /tmp/creepy-pasta-site.tar.gz -C '$RemoteSiteDir'
 sudo chown -R www-data:www-data '$RemoteSiteDir'
 
 sudo tee /etc/caddy/Caddyfile >/dev/null <<'CADDYFILE'
@@ -55,6 +55,7 @@ $Domain {
 }
 CADDYFILE
 
+sudo caddy fmt --overwrite /etc/caddy/Caddyfile
 sudo iptables -C INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
 sudo iptables -C INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
 if command -v netfilter-persistent >/dev/null 2>&1; then
