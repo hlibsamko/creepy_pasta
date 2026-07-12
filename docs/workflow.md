@@ -48,24 +48,40 @@ If one of those changes happens, rebuild and redeploy the Oracle dedicated serve
 
 If a browser build is involved, rebuild and redeploy the Web client too. The Web client and dedicated server should come from the same commit/project state.
 
+Current session sync contract includes level path, current-level collected note IDs, session collected-note count, level-exit open state, pressure plate states keyed by level-relative node path, and note-gated monster activation states keyed by level-relative node path. Changes to any of these fields require rebuilding both the Web client and dedicated server together.
+
 ## Fix Workflow
 
 1. Inspect the bug and identify whether it affects client only, server only, or both.
 2. If multiplayer is involved, assume both client and dedicated server may be affected until proven otherwise.
 3. Make the smallest code change that fixes the issue.
-4. Run a local Godot parse/startup check:
+4. Run the standard local smoke suite:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\local_smoke.ps1
+```
+
+Use `-Exports` when the change should also prove Linux dedicated export and Web export:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\local_smoke.ps1 -Exports
+```
+
+`local_smoke.ps1` treats Godot script/load error text as failure even if the process exits with code `0`.
+
+5. For a faster single parse/startup check:
 
 ```powershell
 & 'D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe' --headless --path . --quit-after 2
 ```
 
-5. If the change affects multiplayer or RPC, build the Linux dedicated server:
+6. If the change affects multiplayer or RPC, build the Linux dedicated server:
 
 ```powershell
 & 'D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe' --headless --path . --export-release 'Linux Dedicated Server' 'build\server\creepy_pasta_server.x86_64'
 ```
 
-6. Deploy to Oracle. If replacing the running binary directly fails, upload to a temporary file, stop the service, move it into place, and restart:
+7. Deploy to Oracle. If replacing the running binary directly fails, upload to a temporary file, stop the service, move it into place, and restart:
 
 ```powershell
 $key='D:\Soft\oracle-server\ssh-key-2026-06-07.key'
@@ -74,7 +90,7 @@ scp -i $key .\build\server\creepy_pasta_server.x86_64 "$hostName`:/home/ubuntu/c
 ssh -i $key $hostName "set -eu; sudo systemctl stop creepy-pasta-server; mv /home/ubuntu/creepy-pasta-server/creepy_pasta_server.x86_64.new /home/ubuntu/creepy-pasta-server/creepy_pasta_server.x86_64; chmod +x /home/ubuntu/creepy-pasta-server/creepy_pasta_server.x86_64; sudo systemctl start creepy-pasta-server; sleep 2; sudo systemctl --no-pager --full status creepy-pasta-server; ss -tulpen | grep 24567"
 ```
 
-7. Verify Oracle TCP connectivity:
+8. Verify Oracle TCP connectivity:
 
 ```powershell
 $c = [Net.Sockets.TcpClient]::new()
@@ -85,8 +101,8 @@ $c.Close()
 'TCP 138.2.166.64:24567 OK'
 ```
 
-8. Commit and push the code change to GitHub.
-9. Tell the user exactly what changed, what was deployed, and the join address if relevant.
+9. Commit and push the code change to GitHub.
+10. Tell the user exactly what changed, what was deployed, and the join address if relevant.
 
 ## Browser Website Workflow
 
@@ -112,6 +128,21 @@ Deploy both the website and dedicated server:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_full_oracle.ps1
+```
+
+The Web deploy script writes Caddy cache headers. `index.html` is served with no-cache headers so players pick up the latest build entrypoint. Godot export assets such as `.wasm`, `.pck`, `.js`, worklets, and icons are served with long immutable caching to reduce reload cost.
+
+The deploy scripts keep one rollback point on the Oracle VM:
+
+- `deploy_server.ps1` copies the previously running binary to `/home/ubuntu/creepy-pasta-server/creepy_pasta_server.x86_64.bak` before replacing it.
+- `deploy_web_oracle.ps1` archives the previous web directory to `/tmp/creepy-pasta-site-previous.tar.gz` before replacing it.
+
+Rollback commands:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\rollback_oracle.ps1 -Server
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\rollback_oracle.ps1 -Web
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\rollback_oracle.ps1 -Server -Web
 ```
 
 Oracle Cloud Console must allow inbound TCP `80`, `443`, and `24567`. Ubuntu iptables alone is not enough; the Oracle VCN security list or NSG must also allow those ports.

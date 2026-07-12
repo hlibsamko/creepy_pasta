@@ -14,12 +14,12 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Menu"]
-custom_minimum_size = Vector2(380, 238)
+custom_minimum_size = Vector2(430, 278)
 layout_mode = 0
 offset_left = 32.0
 offset_top = 32.0
-offset_right = 412.0
-offset_bottom = 270.0
+offset_right = 462.0
+offset_bottom = 310.0
 
 [node name="Margin" type="MarginContainer" parent="Menu/Panel"]
 layout_mode = 2
@@ -42,13 +42,20 @@ layout_mode = 2
 text = "Host locally, join a server, or play offline."
 autowrap_mode = 3
 
+[node name="VersionLabel" type="Label" parent="Menu/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.62, 0.56, 1)
+theme_override_font_sizes/font_size = 12
+text = "v0.2.0-local"
+
 [node name="IpEdit" type="LineEdit" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2
 text = "ws://127.0.0.1:24567"
 placeholder_text = "ws://127.0.0.1:24567"
 
-[node name="Buttons" type="HBoxContainer" parent="Menu/Panel/Margin/Box"]
+[node name="Buttons" type="GridContainer" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2
+columns = 3
 theme_override_constants/separation = 8
 
 [node name="HostButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
@@ -63,6 +70,14 @@ text = "Join"
 layout_mode = 2
 text = "Offline"
 
+[node name="ReconnectButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
+layout_mode = 2
+text = "Reconnect"
+
+[node name="FullscreenButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
+layout_mode = 2
+text = "Fullscreen"
+
 [node name="HudLabel" type="Label" parent="."]
 offset_left = 24.0
 offset_top = 590.0
@@ -70,6 +85,51 @@ offset_right = 760.0
 offset_bottom = 616.0
 theme_override_colors/font_color = Color(0.9, 0.9, 0.82, 1)
 theme_override_font_sizes/font_size = 18
+
+[node name="ObjectiveLabel" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 548.0
+offset_right = 860.0
+offset_bottom = 578.0
+theme_override_colors/font_color = Color(0.92, 0.86, 0.62, 1)
+theme_override_font_sizes/font_size = 20
+text = "Objective"
+autowrap_mode = 3
+
+[node name="PointerHint" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -22.0
+offset_right = 170.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.76, 1)
+theme_override_font_sizes/font_size = 18
+text = "Click to control the camera"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelBanner" type="Label" parent="."]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -280.0
+offset_top = 92.0
+offset_right = 280.0
+offset_bottom = 138.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.96, 0.9, 0.62, 1)
+theme_override_font_sizes/font_size = 28
+text = "Room 1: The Wrong Copy"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PuzzlePanel" type="Control" parent="."]
 visible = false
@@ -123,21 +183,21 @@ custom_minimum_size = Vector2(58, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 self_modulate = Color(1, 0.22, 0.18, 1)
-text = "●"
+text = "o"
 
 [node name="BlueLeft" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/LeftDots"]
 custom_minimum_size = Vector2(58, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 self_modulate = Color(0.28, 0.55, 1, 1)
-text = "●"
+text = "o"
 
 [node name="GreenLeft" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/LeftDots"]
 custom_minimum_size = Vector2(58, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 self_modulate = Color(0.25, 0.95, 0.45, 1)
-text = "●"
+text = "o"
 
 [node name="RightDots" type="VBoxContainer" parent="PuzzlePanel/Panel/Margin/Box/Dots"]
 layout_mode = 2
@@ -148,21 +208,21 @@ custom_minimum_size = Vector2(58, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 self_modulate = Color(0.28, 0.55, 1, 1)
-text = "●"
+text = "o"
 
 [node name="GreenRight" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/RightDots"]
 custom_minimum_size = Vector2(58, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 self_modulate = Color(0.25, 0.95, 0.45, 1)
-text = "●"
+text = "o"
 
 [node name="RedRight" type="Button" parent="PuzzlePanel/Panel/Margin/Box/Dots/RightDots"]
 custom_minimum_size = Vector2(58, 46)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 self_modulate = Color(1, 0.22, 0.18, 1)
-text = "●"
+text = "o"
 
 [node name="PuzzleProgress" type="Label" parent="PuzzlePanel/Panel/Margin/Box"]
 layout_mode = 2
@@ -220,6 +280,78 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Corridor monster killed you"
 horizontal_alignment = 1
+
+[node name="DeathButtons" type="HBoxContainer" parent="DeathPanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="RetryButton" type="Button" parent="DeathPanel/Panel/Margin/Box/DeathButtons"]
+custom_minimum_size = Vector2(132, 38)
+layout_mode = 2
+text = "Restart"
+
+[node name="MenuButton" type="Button" parent="DeathPanel/Panel/Margin/Box/DeathButtons"]
+custom_minimum_size = Vector2(132, 38)
+layout_mode = 2
+text = "Menu"
+
+[node name="VictoryPanel" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="VictoryPanel"]
+custom_minimum_size = Vector2(620, 240)
+layout_mode = 0
+offset_left = 266.0
+offset_top = 204.0
+offset_right = 886.0
+offset_bottom = 444.0
+
+[node name="Margin" type="MarginContainer" parent="VictoryPanel/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Box" type="VBoxContainer" parent="VictoryPanel/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="VictoryTitle" type="Label" parent="VictoryPanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.86, 0.48, 1)
+theme_override_font_sizes/font_size = 40
+text = "YOU ESCAPED"
+horizontal_alignment = 1
+
+[node name="VictoryText" type="Label" parent="VictoryPanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "The last room lets you leave, but it keeps the shape of your shadow."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="VictoryButtons" type="HBoxContainer" parent="VictoryPanel/Panel/Margin/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="RetryButton" type="Button" parent="VictoryPanel/Panel/Margin/Box/VictoryButtons"]
+custom_minimum_size = Vector2(132, 38)
+layout_mode = 2
+text = "Restart"
+
+[node name="MenuButton" type="Button" parent="VictoryPanel/Panel/Margin/Box/VictoryButtons"]
+custom_minimum_size = Vector2(132, 38)
+layout_mode = 2
+text = "Menu"
 
 [node name="DialoguePanel" type="Control" parent="."]
 visible = false

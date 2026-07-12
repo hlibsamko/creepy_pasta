@@ -110,6 +110,8 @@ The browser client then joins the server through:
 wss://creepy-pasta.duckdns.org
 ```
 
+The deployed Caddy config should keep `index.html` uncached and cache Godot asset files aggressively. This prevents stale HTML from pointing at an old build while keeping `.wasm` and `.pck` reloads cheap.
+
 ## Godot web export
 
 1. Use the Web export preset.
@@ -147,4 +149,12 @@ Deploy both Web client and dedicated server from the same project state:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_full_oracle.ps1
+```
+
+The deploy scripts keep a single previous-version rollback point on the Oracle VM. Use these only after a bad deploy:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\rollback_oracle.ps1 -Server
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\rollback_oracle.ps1 -Web
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\rollback_oracle.ps1 -Server -Web
 ```

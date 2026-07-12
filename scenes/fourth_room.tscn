@@ -1,4 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://creepy_fourth_room"]
+[gd_scene load_steps=24 format=3 uid="uid://creepy_fourth_room"]
+
+[ext_resource type="Script" path="res://scripts/level_exit.gd" id="1_exit"]
+[ext_resource type="Script" path="res://scripts/watcher_monster.gd" id="2_watcher"]
+[ext_resource type="PackedScene" path="res://scenes/note.tscn" id="3_note"]
 
 [sub_resource type="Environment" id="Environment_fourth"]
 background_mode = 1
@@ -32,6 +36,43 @@ size = Vector3(0.25, 3.1, 10)
 
 [sub_resource type="BoxMesh" id="Mesh_wall_ew"]
 size = Vector3(0.25, 3.1, 10)
+
+[sub_resource type="BoxShape3D" id="Shape_exit"]
+size = Vector3(2, 2.3, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_exit_door"]
+size = Vector3(2, 2.3, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="Mat_exit_door"]
+albedo_color = Color(0.08, 0.065, 0.09, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_exit_glow"]
+size = Vector3(1.9, 2.15, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_exit_glow"]
+albedo_color = Color(0.45, 0.3, 0.65, 1)
+emission_enabled = true
+emission = Color(0.9, 0.55, 1, 1)
+emission_energy_multiplier = 1.55
+
+[sub_resource type="CapsuleMesh" id="Mesh_watcher"]
+radius = 0.35
+height = 2.2
+
+[sub_resource type="StandardMaterial3D" id="Mat_watcher"]
+albedo_color = Color(0.025, 0.018, 0.035, 1)
+roughness = 0.96
+
+[sub_resource type="SphereMesh" id="Mesh_watcher_eye"]
+radius = 0.12
+height = 0.24
+
+[sub_resource type="StandardMaterial3D" id="Mat_watcher_eye"]
+albedo_color = Color(0.55, 0.35, 0.9, 1)
+emission_enabled = true
+emission = Color(0.9, 0.55, 1, 1)
+emission_energy_multiplier = 1.2
 
 [node name="FourthRoom" type="Node3D"]
 
@@ -95,3 +136,49 @@ mesh = SubResource("Mesh_wall_ew")
 surface_material_override/0 = SubResource("Mat_wall")
 
 [node name="Notes" type="Node3D" parent="."]
+
+[node name="WatcherWarning" parent="Notes" instance=ExtResource("3_note")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.55, 2.8)
+note_text = "It only moves inside your attention. Look away before it learns your face."
+
+[node name="Monsters" type="Node3D" parent="."]
+
+[node name="WatcherMonster" type="Node3D" parent="Monsters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0, 1.1, -2.7)
+script = ExtResource("2_watcher")
+
+[node name="Body" type="MeshInstance3D" parent="Monsters/WatcherMonster"]
+mesh = SubResource("Mesh_watcher")
+surface_material_override/0 = SubResource("Mat_watcher")
+
+[node name="Eye" type="MeshInstance3D" parent="Monsters/WatcherMonster"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0.26)
+mesh = SubResource("Mesh_watcher_eye")
+surface_material_override/0 = SubResource("Mat_watcher_eye")
+
+[node name="EyeLight" type="OmniLight3D" parent="Monsters/WatcherMonster/Eye"]
+light_color = Color(0.9, 0.55, 1, 1)
+light_energy = 0.45
+omni_range = 2.5
+
+[node name="LevelExit" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -4.55)
+script = ExtResource("1_exit")
+closed = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelExit"]
+shape = SubResource("Shape_exit")
+
+[node name="Door" type="MeshInstance3D" parent="LevelExit"]
+mesh = SubResource("Mesh_exit_door")
+surface_material_override/0 = SubResource("Mat_exit_door")
+
+[node name="Glow" type="MeshInstance3D" parent="LevelExit"]
+mesh = SubResource("Mesh_exit_glow")
+surface_material_override/0 = SubResource("Mat_exit_glow")
+
+[node name="PortalLight" type="OmniLight3D" parent="LevelExit/Glow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.5)
+light_color = Color(0.9, 0.55, 1, 1)
+light_energy = 1.2
+omni_range = 4.0

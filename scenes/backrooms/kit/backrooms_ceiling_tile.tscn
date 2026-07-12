@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://backrooms_ceiling_tile"]
+
+[sub_resource type="BoxMesh" id="Mesh_ceiling"]
+size = Vector3(4, 0.14, 4)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ceiling"]
+albedo_color = Color(0.42, 0.39, 0.29, 1)
+roughness = 0.97
+
+[node name="BackroomsCeilingTile" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.12, 0)
+mesh = SubResource("Mesh_ceiling")
+surface_material_override/0 = SubResource("Mat_ceiling")

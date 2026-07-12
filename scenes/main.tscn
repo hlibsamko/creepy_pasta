@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://creepy_main_3d"]
+[gd_scene load_steps=7 format=3 uid="uid://creepy_main_3d"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/network_manager.gd" id="2_network"]
 [ext_resource type="PackedScene" path="res://scenes/level.tscn" id="3_level"]
 [ext_resource type="PackedScene" path="res://scenes/game_ui.tscn" id="4_ui"]
+[ext_resource type="Script" path="res://scripts/day_night_cycle.gd" id="5_day_night"]
+[ext_resource type="Script" path="res://scripts/audio_cues.gd" id="6_audio_cues"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_main")
@@ -11,6 +13,12 @@ script = ExtResource("1_main")
 [node name="NetworkManager" type="Node" parent="."]
 script = ExtResource("2_network")
 server_url = "wss://creepy-pasta.duckdns.org"
+
+[node name="DayNightCycle" type="Node" parent="."]
+script = ExtResource("5_day_night")
+
+[node name="AudioCues" type="Node" parent="."]
+script = ExtResource("6_audio_cues")
 
 [node name="Level" parent="." instance=ExtResource("3_level")]
 

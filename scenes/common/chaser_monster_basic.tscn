@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=3 uid="uid://chaser_monster_basic"]
+
+[ext_resource type="Script" path="res://scripts/corridor_monster.gd" id="1_monster"]
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(0.85, 1.7, 0.85)
+
+[sub_resource type="BoxShape3D" id="Shape_kill_zone"]
+size = Vector3(1.5, 1.8, 1.5)
+
+[sub_resource type="CapsuleMesh" id="Mesh_body"]
+radius = 0.34
+height = 1.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_body"]
+albedo_color = Color(0.08, 0.055, 0.045, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+radius = 0.09
+height = 0.18
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+albedo_color = Color(1, 0.25, 0.12, 1)
+emission_enabled = true
+emission = Color(1, 0.18, 0.08, 1)
+emission_energy_multiplier = 1.4
+
+[node name="ChaserMonster" type="CharacterBody3D"]
+script = ExtResource("1_monster")
+move_speed = 3.8
+kill_distance = 0.95
+start_delay = 4.0
+death_reason = "Something in the yellow rooms caught you"
+sprint_hearing_range = 22.0
+sprint_speed_bonus = 1.45
+notes_required_to_activate = 1
+patrol_radius = 4.0
+patrol_wait_time = 1.6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_body")
+
+[node name="KillZone" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
+shape = SubResource("Shape_kill_zone")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+mesh = SubResource("Mesh_body")
+surface_material_override/0 = SubResource("Mat_body")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.35, -0.32)
+mesh = SubResource("Mesh_eye")
+surface_material_override/0 = SubResource("Mat_eye")
+
+[node name="EyeRight" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.35, -0.32)
+mesh = SubResource("Mesh_eye")
+surface_material_override/0 = SubResource("Mat_eye")
+
+[node name="Glow" type="OmniLight3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, -0.35)
+light_color = Color(1, 0.18, 0.08, 1)
+light_energy = 0.35
+omni_range = 2.2

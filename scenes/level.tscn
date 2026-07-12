@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://scenes/note.tscn" id="1_note"]
 [ext_resource type="Script" path="res://scripts/level_exit.gd" id="2_exit"]
+[ext_resource type="Script" path="res://scripts/dialogue_npc.gd" id="3_dialogue"]
 
 [sub_resource type="Environment" id="Environment_level"]
 background_mode = 1
@@ -76,6 +77,16 @@ size = Vector3(1.8, 0.02, 1.8)
 [sub_resource type="StandardMaterial3D" id="Mat_ritual"]
 albedo_color = Color(0.25, 0.02, 0.025, 1)
 roughness = 0.9
+
+[sub_resource type="SphereShape3D" id="Shape_radio_trigger"]
+radius = 1.35
+
+[sub_resource type="BoxMesh" id="Mesh_radio"]
+size = Vector3(0.8, 0.45, 0.35)
+
+[sub_resource type="StandardMaterial3D" id="Mat_radio"]
+albedo_color = Color(0.08, 0.075, 0.06, 1)
+roughness = 0.86
 
 [sub_resource type="BoxShape3D" id="Shape_exit"]
 size = Vector3(2.2, 2.3, 1)
@@ -189,6 +200,21 @@ surface_material_override/0 = SubResource("Mat_wood")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
 mesh = SubResource("Mesh_ritual")
 surface_material_override/0 = SubResource("Mat_ritual")
+
+[node name="DialogueNpcs" type="Node3D" parent="."]
+
+[node name="EntryRadio" type="Area3D" parent="DialogueNpcs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0.55, -3.4)
+script = ExtResource("3_dialogue")
+speaker_name = "Broken Radio"
+dialogue_text = "If you can hear this, you are inside the wrong copy of the room.\n\nFind the three fragments. Each one remembers a piece of the exit.\n\nWhen the doorway starts glowing, leave together. Do not wait for the walls to answer."
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueNpcs/EntryRadio"]
+shape = SubResource("Shape_radio_trigger")
+
+[node name="RadioMesh" type="MeshInstance3D" parent="DialogueNpcs/EntryRadio"]
+mesh = SubResource("Mesh_radio")
+surface_material_override/0 = SubResource("Mat_radio")
 
 [node name="LevelExit" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 5.35)

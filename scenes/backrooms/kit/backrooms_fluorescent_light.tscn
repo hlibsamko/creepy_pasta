@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://backrooms_fluorescent_light"]
+
+[ext_resource type="Script" path="res://scripts/light_flicker.gd" id="1_flicker"]
+
+[sub_resource type="BoxMesh" id="Mesh_panel"]
+size = Vector3(2.3, 0.08, 0.34)
+
+[sub_resource type="StandardMaterial3D" id="Mat_panel"]
+albedo_color = Color(0.78, 0.83, 0.72, 1)
+emission_enabled = true
+emission = Color(0.82, 0.92, 0.72, 1)
+emission_energy_multiplier = 1.25
+
+[node name="BackroomsFluorescentLight" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.02, 0)
+
+[node name="Panel" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_panel")
+surface_material_override/0 = SubResource("Mat_panel")
+
+[node name="Light" type="OmniLight3D" parent="."]
+light_color = Color(0.86, 0.94, 0.74, 1)
+light_energy = 1.35
+omni_range = 6.0
+script = ExtResource("1_flicker")
+intensity = 0.16
+speed = 6.0
+pulse_chance = 0.035

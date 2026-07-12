@@ -36,6 +36,9 @@ if ! command -v caddy >/dev/null 2>&1; then
 fi
 
 sudo mkdir -p '$RemoteSiteDir'
+if [ -d '$RemoteSiteDir' ] && [ "`$(find '$RemoteSiteDir' -mindepth 1 -maxdepth 1 | head -n 1)" ]; then
+    sudo tar -czf /tmp/creepy-pasta-site-previous.tar.gz -C '$RemoteSiteDir' .
+fi
 sudo rm -rf '$RemoteSiteDir'/*
 sudo tar --warning=no-timestamp -xzf /tmp/creepy-pasta-site.tar.gz -C '$RemoteSiteDir'
 sudo chown -R www-data:www-data '$RemoteSiteDir'
@@ -44,6 +47,14 @@ sudo tee /etc/caddy/Caddyfile >/dev/null <<'CADDYFILE'
 $Domain {
     root * $RemoteSiteDir
     encode zstd gzip
+
+    @html path / /index.html
+    header @html Cache-Control "no-cache, no-store, must-revalidate"
+    header @html Pragma "no-cache"
+    header @html Expires "0"
+
+    @godot_assets path *.js *.wasm *.pck *.worklet.js *.png *.ico
+    header @godot_assets Cache-Control "public, max-age=31536000, immutable"
 
     @websocket {
         header Connection *Upgrade*

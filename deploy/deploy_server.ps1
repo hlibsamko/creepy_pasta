@@ -21,12 +21,14 @@ scp -i $KeyPath $service "$User@$HostName`:/tmp/creepy-pasta-server.service"
 
 ssh -i $KeyPath "$User@$HostName" @"
 set -eu
-chmod +x '$RemoteDir/creepy_pasta_server.x86_64'
 sudo iptables -C INPUT -p tcp -m state --state NEW -m tcp --dport 24567 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 24567 -j ACCEPT
 if command -v netfilter-persistent >/dev/null 2>&1; then
     sudo netfilter-persistent save
 fi
 sudo systemctl stop creepy-pasta-server 2>/dev/null || true
+if [ -f '$RemoteDir/creepy_pasta_server.x86_64' ]; then
+    cp '$RemoteDir/creepy_pasta_server.x86_64' '$RemoteDir/creepy_pasta_server.x86_64.bak'
+fi
 mv '$RemoteDir/creepy_pasta_server.x86_64.new' '$RemoteDir/creepy_pasta_server.x86_64'
 chmod +x '$RemoteDir/creepy_pasta_server.x86_64'
 sudo mv /tmp/creepy-pasta-server.service /etc/systemd/system/creepy-pasta-server.service

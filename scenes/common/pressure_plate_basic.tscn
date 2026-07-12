@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://pressure_plate_basic"]
+
+[ext_resource type="Script" path="res://scripts/pressure_plate.gd" id="1_plate"]
+
+[sub_resource type="BoxShape3D" id="Shape_plate"]
+size = Vector3(2.2, 0.24, 2.2)
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+size = Vector3(2.2, 0.08, 2.2)
+
+[sub_resource type="StandardMaterial3D" id="Mat_plate"]
+albedo_color = Color(0.2, 0.16, 0.23, 1)
+emission_enabled = true
+emission = Color(0.34, 0.22, 0.48, 1)
+emission_energy_multiplier = 0.45
+roughness = 0.9
+
+[node name="PressurePlate" type="Area3D"]
+script = ExtResource("1_plate")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_plate")
+
+[node name="Plate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("Mesh_plate")
+surface_material_override/0 = SubResource("Mat_plate")

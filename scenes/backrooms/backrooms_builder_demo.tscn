@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://backrooms_builder_demo"]
+
+[ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
+
+[sub_resource type="Environment" id="Environment_backrooms"]
+background_mode = 1
+background_color = Color(0.035, 0.032, 0.022, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.42, 0.38, 0.25, 1)
+ambient_light_energy = 0.52
+
+[node name="BackroomsBuilderDemo" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_backrooms")
+
+[node name="BackroomsBuilder" type="Node3D" parent="."]
+script = ExtResource("1_builder")
+layout = "############\n#S....L....#\n#.####.###.#\n#....#B..#.#\n###L.#.#C..#\n#....#.#L###\n#.##N..#P..#\n#..WL.B..E.#\n############"
+
+[node name="Notes" type="Node3D" parent="."]
