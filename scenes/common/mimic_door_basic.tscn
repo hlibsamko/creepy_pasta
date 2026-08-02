@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/mimic_door.gd" id="1_mimic"]
+
+[sub_resource type="BoxShape3D" id="Shape_trigger"]
+size = Vector3(2.0, 2.3, 0.9)
+
+[sub_resource type="BoxMesh" id="Mesh_door"]
+size = Vector3(2.15, 2.45, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="Mat_door"]
+albedo_color = Color(0.055, 0.045, 0.065, 1)
+roughness = 0.86
+
+[sub_resource type="BoxMesh" id="Mesh_glow"]
+size = Vector3(1.94, 2.2, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_glow"]
+albedo_color = Color(0.36, 0.23, 0.52, 1)
+emission_enabled = true
+emission = Color(0.82, 0.45, 1, 1)
+emission_energy_multiplier = 1.35
+
+[sub_resource type="BoxMesh" id="Mesh_seam"]
+size = Vector3(1.6, 0.025, 0.035)
+
+[sub_resource type="StandardMaterial3D" id="Mat_seam"]
+albedo_color = Color(0.2, 0.015, 0.025, 1)
+emission_enabled = true
+emission = Color(0.8, 0.04, 0.08, 1)
+emission_energy_multiplier = 0.8
+
+[node name="MimicDoor" type="Area3D"]
+script = ExtResource("1_mimic")
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_trigger")
+
+[node name="Door" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_door")
+surface_material_override/0 = SubResource("Mat_door")
+
+[node name="Glow" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13)
+mesh = SubResource("Mesh_glow")
+surface_material_override/0 = SubResource("Mat_glow")
+
+[node name="FalseSeam" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.02, -0.19)
+mesh = SubResource("Mesh_seam")
+surface_material_override/0 = SubResource("Mat_seam")
+
+[node name="TellLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.45)
+light_color = Color(0.82, 0.45, 1, 1)
+light_energy = 1.25
+omni_range = 3.4

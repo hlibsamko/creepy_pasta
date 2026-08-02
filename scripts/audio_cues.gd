@@ -33,24 +33,27 @@ func play_ambience(level_path: String) -> void:
 	if not _audio_enabled() or not ambience_player:
 		return
 
-	var base_frequency := 58.0
-	var color_frequency := 91.0
-	if "next_place" in level_path:
-		base_frequency = 66.0
-		color_frequency = 123.0
-	elif "backrooms" in level_path:
-		base_frequency = 49.0
-		color_frequency = 97.0
-	elif "corridor" in level_path:
-		base_frequency = 42.0
-		color_frequency = 75.0
-	elif "fourth_room" in level_path:
-		base_frequency = 72.0
-		color_frequency = 144.0
+	var profile := _get_ambience_profile(level_path)
 
 	ambience_player.stop()
-	ambience_player.stream = _create_ambience_stream(base_frequency, color_frequency)
+	ambience_player.stream = _create_ambience_stream(profile.x, profile.y)
 	ambience_player.play()
+
+
+func _get_ambience_profile(level_path: String) -> Vector2:
+	if "unlit_evidence_demo" in level_path:
+		return Vector2(50.0, 150.0)
+	if "endless_house_builder_demo" in level_path:
+		return Vector2(54.0, 83.0)
+	if "next_place" in level_path:
+		return Vector2(66.0, 123.0)
+	if "backrooms" in level_path:
+		return Vector2(49.0, 97.0)
+	if "corridor" in level_path:
+		return Vector2(42.0, 75.0)
+	if "fourth_room" in level_path:
+		return Vector2(72.0, 144.0)
+	return Vector2(58.0, 91.0)
 
 
 func play_note_pickup() -> void:
@@ -63,6 +66,11 @@ func play_exit_open() -> void:
 	_play_tone(440.0, 0.35, 0.36, 0.09)
 
 
+func play_exit_close() -> void:
+	_play_tone(180.0, 0.18, 0.42)
+	_play_tone(95.0, 0.32, 0.34, 0.07)
+
+
 func play_victory() -> void:
 	_play_tone(330.0, 0.16, 0.42)
 	_play_tone(495.0, 0.22, 0.38, 0.08)
@@ -72,6 +80,16 @@ func play_victory() -> void:
 func play_threat() -> void:
 	_play_tone(92.0, 0.28, 0.5)
 	_play_tone(61.0, 0.42, 0.38, 0.08)
+
+
+func play_power_outage() -> void:
+	_play_tone(118.0, 0.16, 0.38)
+	_play_tone(52.0, 0.34, 0.46, 0.07)
+
+
+func play_power_restore() -> void:
+	_play_tone(74.0, 0.12, 0.28)
+	_play_tone(148.0, 0.2, 0.32, 0.06)
 
 
 func _play_tone(frequency: float, duration: float, amplitude: float, delay := 0.0) -> void:
@@ -123,12 +141,11 @@ func _create_ambience_stream(base_frequency: float, color_frequency: float) -> A
 
 	for sample_index in range(sample_count):
 		var time: float = float(sample_index) / float(MIX_RATE)
-		var loop_progress: float = float(sample_index) / max(float(sample_count - 1), 1.0)
-		var loop_envelope: float = sin(loop_progress * PI)
 		var low: float = sin(TAU * base_frequency * time) * 0.48
-		var color: float = sin(TAU * color_frequency * time + sin(time * 0.7) * 0.6) * 0.22
-		var tremble: float = sin(TAU * 0.31 * time) * 0.12
-		var value: float = (low + color + tremble) * 0.18 * loop_envelope
+		var modulation: float = sin(TAU * 0.125 * time) * 0.6
+		var color: float = sin(TAU * color_frequency * time + modulation) * 0.22
+		var tremble: float = sin(TAU * 0.25 * time) * 0.12
+		var value: float = (low + color + tremble) * 0.18
 		data.encode_s16(sample_index * 2, int(clamp(value, -1.0, 1.0) * 32767.0))
 
 	var stream := AudioStreamWAV.new()
@@ -136,6 +153,9 @@ func _create_ambience_stream(base_frequency: float, color_frequency: float) -> A
 	stream.mix_rate = MIX_RATE
 	stream.stereo = false
 	stream.data = data
+	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	stream.loop_begin = 0
+	stream.loop_end = sample_count
 	return stream
 
 

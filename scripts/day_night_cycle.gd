@@ -75,6 +75,11 @@ func _cache_level_lighting() -> void:
 			"energy": light.light_energy,
 			"color": light.light_color,
 		}
+		light.tree_exiting.connect(_on_cached_light_exiting.bind(light), CONNECT_ONE_SHOT)
+
+
+func _on_cached_light_exiting(light: Light3D) -> void:
+	light_defaults.erase(light)
 
 
 func _apply_cycle() -> void:
@@ -90,9 +95,10 @@ func _apply_cycle() -> void:
 		environment.background_color = base_background_color.lerp(tint, 0.08 + night_factor * 0.1)
 
 	for light_key in light_defaults.keys():
-		var light := light_key as Light3D
-		if not is_instance_valid(light):
+		if not is_instance_valid(light_key):
+			light_defaults.erase(light_key)
 			continue
+		var light := light_key as Light3D
 		var defaults: Dictionary = light_defaults[light]
 		light.light_energy = float(defaults["energy"]) * light_multiplier
 		light.light_color = (defaults["color"] as Color).lerp(tint, 0.16 + night_factor * 0.12)

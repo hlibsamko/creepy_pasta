@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/door_draft_cue.gd" id="1_draft"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_draft"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.62, 0.9, 0.9, 0.72)
+emission_enabled = true
+emission = Color(0.28, 0.72, 0.72, 1)
+emission_energy_multiplier = 1.1
+
+[sub_resource type="BoxMesh" id="Mesh_stream"]
+material = SubResource("Mat_draft")
+size = Vector3(0.08, 0.035, 1.1)
+
+[node name="DoorDraftCue" type="Node3D"]
+script = ExtResource("1_draft")
+
+[node name="StreamLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.42, -1.0, 0.82)
+mesh = SubResource("Mesh_stream")
+
+[node name="StreamCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, -1.03, 1.0)
+scale = Vector3(0.8, 0.8, 1.25)
+mesh = SubResource("Mesh_stream")
+
+[node name="StreamRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.42, -0.98, 0.72)
+scale = Vector3(1.0, 1.0, 0.82)
+mesh = SubResource("Mesh_stream")

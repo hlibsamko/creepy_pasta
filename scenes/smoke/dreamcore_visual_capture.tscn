@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/branches/dreamcore/dreamcore_schoolhouse.tscn" id="1_branch"]
+[ext_resource type="Script" path="res://scripts/branch_visual_capture.gd" id="2_capture"]
+
+[node name="DreamcoreVisualCapture" type="Node3D"]
+script = ExtResource("2_capture")
+
+[node name="Branch" parent="." instance=ExtResource("1_branch")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 78.0
+
+[node name="Flashlight" type="SpotLight3D" parent="Camera3D"]
+light_color = Color(1, 0.94, 0.82, 1)
+light_energy = 2.2
+spot_range = 16.0
+spot_angle = 36.0
+

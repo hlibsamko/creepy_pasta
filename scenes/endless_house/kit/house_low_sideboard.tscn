@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="BoxShape3D" id="Shape_sideboard"]
+size = Vector3(2.8, 1.12, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_body"]
+size = Vector3(2.8, 1.05, 0.68)
+
+[sub_resource type="StandardMaterial3D" id="Mat_body"]
+albedo_color = Color(0.19, 0.075, 0.09, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_top"]
+size = Vector3(2.92, 0.1, 0.78)
+
+[sub_resource type="StandardMaterial3D" id="Mat_top"]
+albedo_color = Color(0.055, 0.065, 0.07, 1)
+roughness = 0.82
+
+[node name="HouseLowSideboard" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_sideboard")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_body")
+surface_material_override/0 = SubResource("Mat_body")
+
+[node name="Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
+mesh = SubResource("Mesh_top")
+surface_material_override/0 = SubResource("Mat_top")

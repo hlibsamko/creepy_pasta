@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/hud_visual_capture.gd" id="1_capture"]
+[ext_resource type="PackedScene" path="res://scenes/game_ui.tscn" id="2_ui"]
+
+[node name="HudVisualCapture" type="Node"]
+script = ExtResource("1_capture")
+
+[node name="Ui" parent="." instance=ExtResource("2_ui")]

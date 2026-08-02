@@ -5,10 +5,6 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-& (Join-Path $PSScriptRoot "build_web_site.ps1") -GodotExe $GodotExe -SiteDir $SiteDir
-& $GodotExe --headless --path (Resolve-Path (Join-Path $PSScriptRoot "..")) --export-release "Linux Dedicated Server" "build\server\creepy_pasta_server.x86_64"
-if ($null -ne $LASTEXITCODE -and $LASTEXITCODE -ne 0) {
-    throw "Godot dedicated server export failed with exit code $LASTEXITCODE"
-}
+& (Join-Path $PSScriptRoot "local_smoke.ps1") -GodotPath $GodotExe -SiteDir $SiteDir -Exports
 & (Join-Path $PSScriptRoot "deploy_server.ps1")
 & (Join-Path $PSScriptRoot "deploy_web_oracle.ps1") -SiteDir $SiteDir

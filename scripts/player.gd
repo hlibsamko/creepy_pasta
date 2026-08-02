@@ -2,17 +2,27 @@ extends CharacterBody3D
 
 const WALK_SPEED := 4.6
 const SPRINT_SPEED := 5.1
+const JUMP_VELOCITY := 5.2
 const MOUSE_SENSITIVITY := 0.0025
 const FOOTSTEP_MIX_RATE := 22050
 const WALK_STEP_INTERVAL := 0.48
 const SPRINT_STEP_INTERVAL := 0.34
+const REMOTE_SYNC_SPEED_MULTIPLIER := 1.15
+const REMOTE_SYNC_HORIZONTAL_BUDGET_INITIAL := 0.8
+const REMOTE_SYNC_HORIZONTAL_BUDGET_MAX := 3.2
+const REMOTE_SYNC_VERTICAL_SPEED := 18.0
+const REMOTE_SYNC_VERTICAL_BUDGET_INITIAL := 1.2
+const REMOTE_SYNC_VERTICAL_BUDGET_MAX := 4.0
+const REMOTE_SYNC_MAX_ELAPSED := 0.5
 
 @export var player_id := 1
 @export var player_color := Color(0.85, 0.82, 0.62)
+@export var session_id := ""
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 @onready var body_mesh: MeshInstance3D = $BodyMesh
+@onready var collision_shape: CollisionShape3D = $CollisionShape3D
 
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
 var controls_enabled := true
@@ -22,6 +32,11 @@ var footstep_player: AudioStreamPlayer
 var walk_step_stream: AudioStreamWAV
 var sprint_step_stream: AudioStreamWAV
 var footstep_rng := RandomNumberGenerator.new()
+var active_session_filter := ""
+var remote_sync_position := Vector3.ZERO
+var remote_sync_horizontal_budget := REMOTE_SYNC_HORIZONTAL_BUDGET_INITIAL
+var remote_sync_vertical_budget := REMOTE_SYNC_VERTICAL_BUDGET_INITIAL
+var last_remote_sync_msec := 0
 
 
 func _ready() -> void:
@@ -30,6 +45,8 @@ func _ready() -> void:
 	_apply_color()
 	camera.current = has_control()
 	_setup_footsteps()
+	_apply_session_visibility()
+	reset_remote_sync_tracking()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -48,7 +65,12 @@ func _physics_process(delta: float) -> void:
 		velocity.z = 0.0
 		return
 
-	if not is_on_floor():
+	if is_on_floor():
+		if Input.is_action_just_pressed("jump"):
+			velocity.y = JUMP_VELOCITY
+		elif velocity.y < 0.0:
+			velocity.y = 0.0
+	else:
 		velocity.y -= gravity * delta
 
 	var input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -60,11 +82,13 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_update_footsteps(delta, direction.length())
 
-	if multiplayer.has_multiplayer_peer():
+	if is_inside_tree() and multiplayer and multiplayer.has_multiplayer_peer():
 		_sync_state.rpc(global_position, rotation.y, head.rotation.x)
 
 
 func has_control() -> bool:
+	if not is_inside_tree() or not multiplayer:
+		return false
 	if multiplayer.has_multiplayer_peer():
 		return is_multiplayer_authority()
 	return player_id == 1
@@ -74,6 +98,26 @@ func set_controls_enabled(enabled: bool) -> void:
 	controls_enabled = enabled
 	if not enabled:
 		step_timer = 0.0
+
+
+func set_active_session(session_filter: String) -> void:
+	active_session_filter = session_filter
+	_apply_session_visibility()
+
+
+func reset_remote_sync_tracking() -> void:
+	remote_sync_position = global_position
+	remote_sync_horizontal_budget = REMOTE_SYNC_HORIZONTAL_BUDGET_INITIAL
+	remote_sync_vertical_budget = REMOTE_SYNC_VERTICAL_BUDGET_INITIAL
+	last_remote_sync_msec = Time.get_ticks_msec()
+
+
+func _apply_session_visibility() -> void:
+	if not is_node_ready():
+		return
+	var belongs_to_active_session := session_id == "" or session_id == active_session_filter
+	visible = belongs_to_active_session
+	collision_shape.disabled = not belongs_to_active_session
 
 
 func _apply_color() -> void:
@@ -140,9 +184,73 @@ func _audio_enabled() -> bool:
 
 @rpc("any_peer", "call_remote", "unreliable")
 func _sync_state(new_position: Vector3, yaw: float, pitch: float) -> void:
+	if not is_inside_tree():
+		return
 	if has_control():
 		return
+	var sender_id := multiplayer.get_remote_sender_id()
+	if not _is_remote_sync_sender_valid(sender_id):
+		return
+	var now_msec := Time.get_ticks_msec()
+	var elapsed := clampf(
+		float(now_msec - last_remote_sync_msec) / 1000.0,
+		1.0 / 120.0,
+		REMOTE_SYNC_MAX_ELAPSED
+	)
+	last_remote_sync_msec = now_msec
+	if not _try_accept_remote_sync_position(new_position, elapsed):
+		return
+	if not is_finite(yaw) or not is_finite(pitch):
+		return
 
+	if multiplayer.is_server():
+		global_position = new_position
+		rotation.y = yaw
+		head.rotation.x = clampf(pitch, deg_to_rad(-82), deg_to_rad(82))
+		return
 	global_position = global_position.lerp(new_position, 0.35)
 	rotation.y = lerp_angle(rotation.y, yaw, 0.35)
-	head.rotation.x = lerp_angle(head.rotation.x, pitch, 0.35)
+	head.rotation.x = lerp_angle(
+		head.rotation.x,
+		clampf(pitch, deg_to_rad(-82), deg_to_rad(82)),
+		0.35
+	)
+
+
+func _is_remote_sync_sender_valid(sender_id: int) -> bool:
+	return sender_id == player_id
+
+
+func _try_accept_remote_sync_position(new_position: Vector3, elapsed: float) -> bool:
+	if not new_position.is_finite():
+		return false
+	var safe_elapsed := clampf(elapsed, 0.0, REMOTE_SYNC_MAX_ELAPSED)
+	remote_sync_horizontal_budget = minf(
+		remote_sync_horizontal_budget
+			+ SPRINT_SPEED * REMOTE_SYNC_SPEED_MULTIPLIER * safe_elapsed,
+		REMOTE_SYNC_HORIZONTAL_BUDGET_MAX
+	)
+	remote_sync_vertical_budget = minf(
+		remote_sync_vertical_budget + REMOTE_SYNC_VERTICAL_SPEED * safe_elapsed,
+		REMOTE_SYNC_VERTICAL_BUDGET_MAX
+	)
+	var horizontal_distance := Vector2(
+		new_position.x - remote_sync_position.x,
+		new_position.z - remote_sync_position.z
+	).length()
+	var vertical_distance := absf(new_position.y - remote_sync_position.y)
+	if (
+		horizontal_distance > remote_sync_horizontal_budget
+		or vertical_distance > remote_sync_vertical_budget
+	):
+		return false
+	remote_sync_horizontal_budget = maxf(
+		remote_sync_horizontal_budget - horizontal_distance,
+		0.0
+	)
+	remote_sync_vertical_budget = maxf(
+		remote_sync_vertical_budget - vertical_distance,
+		0.0
+	)
+	remote_sync_position = new_position
+	return true

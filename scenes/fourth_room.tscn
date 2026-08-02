@@ -1,8 +1,10 @@
-[gd_scene load_steps=24 format=3 uid="uid://creepy_fourth_room"]
+[gd_scene load_steps=32 format=3 uid="uid://creepy_fourth_room"]
 
 [ext_resource type="Script" path="res://scripts/level_exit.gd" id="1_exit"]
 [ext_resource type="Script" path="res://scripts/watcher_monster.gd" id="2_watcher"]
 [ext_resource type="PackedScene" path="res://scenes/note.tscn" id="3_note"]
+[ext_resource type="Script" path="res://scripts/dialogue_npc.gd" id="4_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/common/mimic_door_basic.tscn" id="5_mimic"]
 
 [sub_resource type="Environment" id="Environment_fourth"]
 background_mode = 1
@@ -74,6 +76,29 @@ emission_enabled = true
 emission = Color(0.9, 0.55, 1, 1)
 emission_energy_multiplier = 1.2
 
+[sub_resource type="SphereShape3D" id="Shape_final_intercom_trigger"]
+radius = 1.25
+
+[sub_resource type="BoxMesh" id="Mesh_final_intercom"]
+size = Vector3(0.72, 0.38, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="Mat_final_intercom"]
+albedo_color = Color(0.06, 0.05, 0.08, 1)
+emission_enabled = true
+emission = Color(0.32, 0.18, 0.48, 1)
+emission_energy_multiplier = 0.32
+roughness = 0.88
+
+[sub_resource type="SphereShape3D" id="Shape_threshold_test"]
+radius = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_threshold_thread"]
+size = Vector3(0.025, 0.72, 0.025)
+
+[sub_resource type="StandardMaterial3D" id="Mat_threshold_thread"]
+albedo_color = Color(0.78, 0.72, 0.58, 1)
+roughness = 0.82
+
 [node name="FourthRoom" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -140,6 +165,48 @@ surface_material_override/0 = SubResource("Mat_wall")
 [node name="WatcherWarning" parent="Notes" instance=ExtResource("3_note")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.55, 2.8)
 note_text = "It only moves inside your attention. Look away before it learns your face."
+visual_type = 1
+journal_entry_id = "watcher"
+journal_fact_index = 1
+
+[node name="MimicWarning" parent="Notes" instance=ExtResource("3_note")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.55, 2.65)
+note_text = "Door test: a true opening keeps a steady glow. The copy answers with two close pulses."
+visual_type = 2
+journal_entry_id = "mimic"
+journal_fact_index = 3
+
+[node name="DialogueNpcs" type="Node3D" parent="."]
+
+[node name="FinalIntercom" type="Area3D" parent="DialogueNpcs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0.72, -3.95)
+script = ExtResource("4_dialogue")
+speaker_name = "Final Intercom"
+dialogue_text = "The copy cannot leave with you.\n\nThe Watcher needs your attention. Walls interrupt it, and brief glances deny it time to take hold.\n\nWrite that down. The house opens its last door only for someone who can name what lives here."
+journal_entry_id = "watcher"
+journal_fact_index = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueNpcs/FinalIntercom"]
+shape = SubResource("Shape_final_intercom_trigger")
+
+[node name="IntercomMesh" type="MeshInstance3D" parent="DialogueNpcs/FinalIntercom"]
+mesh = SubResource("Mesh_final_intercom")
+surface_material_override/0 = SubResource("Mat_final_intercom")
+
+[node name="ThresholdTest" type="Area3D" parent="DialogueNpcs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.35, 0.85, 0.35)
+script = ExtResource("4_dialogue")
+speaker_name = "Hanging Thread"
+dialogue_text = "The thread hangs perfectly still in front of the glowing doorway. There is no draft and no room tone beyond it.\n\nThis is not an opening. It is an imitation waiting for someone to enter."
+journal_entry_id = "mimic"
+journal_fact_index = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueNpcs/ThresholdTest"]
+shape = SubResource("Shape_threshold_test")
+
+[node name="Thread" type="MeshInstance3D" parent="DialogueNpcs/ThresholdTest"]
+mesh = SubResource("Mesh_threshold_thread")
+surface_material_override/0 = SubResource("Mat_threshold_thread")
 
 [node name="Monsters" type="Node3D" parent="."]
 
@@ -160,6 +227,10 @@ surface_material_override/0 = SubResource("Mat_watcher_eye")
 light_color = Color(0.9, 0.55, 1, 1)
 light_energy = 0.45
 omni_range = 2.5
+
+[node name="MimicDoor" parent="Monsters" instance=ExtResource("5_mimic")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 4.45, 1.15, 0.35)
+journal_fact_index_on_observation = 0
 
 [node name="LevelExit" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -4.55)

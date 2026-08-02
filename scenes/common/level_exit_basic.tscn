@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://level_exit_basic"]
+[gd_scene load_steps=8 format=3 uid="uid://level_exit_basic"]
 
 [ext_resource type="Script" path="res://scripts/level_exit.gd" id="1_exit"]
+[ext_resource type="PackedScene" path="res://scenes/common/door_draft_cue_basic.tscn" id="2_draft"]
 
 [sub_resource type="BoxShape3D" id="Shape_exit"]
 size = Vector3(2, 2.3, 1)
@@ -39,3 +40,5 @@ surface_material_override/0 = SubResource("Mat_exit_glow")
 light_color = Color(1, 0.86, 0.35, 1)
 light_energy = 1.2
 omni_range = 4.0
+
+[node name="DraftCue" parent="." instance=ExtResource("2_draft")]

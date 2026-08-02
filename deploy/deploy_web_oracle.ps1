@@ -49,12 +49,16 @@ $Domain {
     encode zstd gzip
 
     @html path / /index.html
-    header @html Cache-Control "no-cache, no-store, must-revalidate"
+    header @html Cache-Control "no-cache,no-store,must-revalidate"
     header @html Pragma "no-cache"
     header @html Expires "0"
 
-    @godot_assets path *.js *.wasm *.pck *.worklet.js *.png *.ico
-    header @godot_assets Cache-Control "public, max-age=31536000, immutable"
+    # Godot keeps stable export filenames, so clients must revalidate runtime files.
+    @godot_runtime path /*.js /*.wasm /*.pck /*.worklet.js
+    header @godot_runtime Cache-Control "no-cache,must-revalidate"
+
+    @images path /*.png /*.ico
+    header @images Cache-Control "public,max-age=3600,must-revalidate"
 
     @websocket {
         header Connection *Upgrade*

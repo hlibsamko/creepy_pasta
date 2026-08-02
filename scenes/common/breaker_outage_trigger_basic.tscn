@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/breaker_outage_trigger.gd" id="1_trigger"]
+
+[sub_resource type="BoxShape3D" id="Shape_trigger"]
+size = Vector3(3.2, 2.4, 3.2)
+
+[sub_resource type="BoxMesh" id="Mesh_panel"]
+size = Vector3(0.62, 0.8, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="Material_panel"]
+albedo_color = Color(0.07, 0.075, 0.08, 1)
+metallic = 0.5
+roughness = 0.48
+
+[sub_resource type="BoxMesh" id="Mesh_indicator"]
+size = Vector3(0.3, 0.18, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="Material_indicator"]
+albedo_color = Color(0.42, 0.22, 0.035, 1)
+emission_enabled = true
+emission = Color(0.95, 0.58, 0.12, 1)
+emission_energy_multiplier = 1.35
+
+[node name="BreakerOutageTrigger" type="Area3D"]
+collision_layer = 0
+script = ExtResource("1_trigger")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.2, 0)
+shape = SubResource("Shape_trigger")
+
+[node name="Panel" type="Node3D" parent="."]
+position = Vector3(0, 1.2, -1.82)
+
+[node name="Housing" type="MeshInstance3D" parent="Panel"]
+mesh = SubResource("Mesh_panel")
+surface_material_override/0 = SubResource("Material_panel")
+
+[node name="Indicator" type="MeshInstance3D" parent="Panel"]
+position = Vector3(0, 0, 0.08)
+mesh = SubResource("Mesh_indicator")
+surface_material_override/0 = SubResource("Material_indicator")

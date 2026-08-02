@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://creepy_next_place"]
+[gd_scene load_steps=21 format=3 uid="uid://creepy_next_place"]
 
 [ext_resource type="Script" path="res://scripts/next_place.gd" id="1_next"]
 [ext_resource type="PackedScene" path="res://scenes/note.tscn" id="2_note"]
 [ext_resource type="Script" path="res://scripts/level_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/common/pressure_plate_basic.tscn" id="4_plate"]
+[ext_resource type="PackedScene" path="res://scenes/common/survivor_npc_basic.tscn" id="5_survivor"]
 
 [sub_resource type="Environment" id="Environment_next"]
 background_mode = 1
@@ -163,44 +164,34 @@ omni_range = 4.0
 [node name="PressurePlate" parent="." instance=ExtResource("4_plate")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -2.55)
 
+[node name="DialogueNpcs" type="Node3D" parent="."]
+
+[node name="Mara" parent="DialogueNpcs" instance=ExtResource("5_survivor")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -4.35, 0, -2.9)
+
 [node name="Notes" type="Node3D" parent="."]
 
 [node name="Fragment1" parent="Notes" instance=ExtResource("2_note")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6, 0.55, 3.8)
-note_text = "Fragment 1/7: The second room is not a room."
+note_text = "Survey plate: fixed points show the room copied its own floor plan before the doorway appeared."
 requires_puzzle = true
+visual_type = 2
+journal_entry_id = "mimic"
+journal_rumor_id = "replicated_room"
 
 [node name="Fragment2" parent="Notes" instance=ExtResource("2_note")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 0.55, -4.1)
-note_text = "Fragment 2/7: It copies the shape of whoever enters."
+note_text = "Light test: one circuit repeats the signal instead of carrying it."
+enabled_for_gameplay = false
 requires_puzzle = true
 puzzle_type = 1
+visual_type = 2
 
 [node name="Fragment3" parent="Notes" instance=ExtResource("2_note")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.55, 3.4)
-note_text = "Fragment 3/7: Seven pieces make one warning."
+note_text = "Voice record: do not answer a doorway that speaks with a familiar voice."
 requires_puzzle = true
-
-[node name="Fragment4" parent="Notes" instance=ExtResource("2_note")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 0.55, -3.5)
-note_text = "Fragment 4/7: The exit only opens for a group that stays together."
-requires_puzzle = true
-puzzle_type = 1
-
-[node name="Fragment5" parent="Notes" instance=ExtResource("2_note")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0.55, 3.2)
-note_text = "Fragment 5/7: Count the lights when the whisper starts."
-requires_puzzle = true
-puzzle_type = 2
-
-[node name="Fragment6" parent="Notes" instance=ExtResource("2_note")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1, 0.55, -1.1)
-note_text = "Fragment 6/7: One light lies."
-requires_puzzle = true
-puzzle_type = 1
-
-[node name="Fragment7" parent="Notes" instance=ExtResource("2_note")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 0.55, -0.8)
-note_text = "Fragment 7/7: Do not answer if it uses your voice."
-requires_puzzle = true
-puzzle_type = 2
+puzzle_type = 3
+visual_type = 3
+journal_entry_id = "mimic"
+journal_fact_index = 1

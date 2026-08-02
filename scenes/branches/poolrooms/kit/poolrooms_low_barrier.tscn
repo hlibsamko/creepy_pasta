@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/bathtub.glb" id="1_bathtub"]
+
+[sub_resource type="BoxShape3D" id="Shape_barrier"]
+size = Vector3(2.4, 0.85, 1.35)
+
+[node name="PoolroomsBathtubBarrier" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.425, 0)
+shape = SubResource("Shape_barrier")
+
+[node name="Bathtub" parent="." instance=ExtResource("1_bathtub")]
+

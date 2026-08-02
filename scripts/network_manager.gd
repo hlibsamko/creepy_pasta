@@ -78,7 +78,14 @@ func is_dedicated_server() -> bool:
 
 
 func get_join_hint() -> String:
-	if OS.has_feature("web") or default_transport == Transport.WEBSOCKET:
+	if OS.has_feature("web"):
+		var window := JavaScriptBridge.get_interface("window")
+		if window:
+			var hostname := str(window.location.hostname)
+			if hostname == "localhost" or hostname == "127.0.0.1":
+				return "ws://127.0.0.1:%s" % port
+		return server_url
+	if default_transport == Transport.WEBSOCKET:
 		return server_url
 	return "127.0.0.1"
 

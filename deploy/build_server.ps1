@@ -11,9 +11,19 @@ $output = Join-Path $buildDir "creepy_pasta_server.x86_64"
 
 New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
 
-& $GodotExe --headless --path $projectRoot --export-release $Preset $output
-if ($null -ne $LASTEXITCODE -and $LASTEXITCODE -ne 0) {
-    throw "Godot export failed with exit code $LASTEXITCODE"
+$stdoutPath = [System.IO.Path]::GetTempFileName()
+$stderrPath = [System.IO.Path]::GetTempFileName()
+try {
+    $arguments = "--headless --path `"$projectRoot`" --export-release `"$Preset`" `"$output`""
+    $process = Start-Process -FilePath $GodotExe -ArgumentList $arguments -WorkingDirectory $projectRoot -PassThru -Wait -WindowStyle Hidden -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+    $exportOutput = (Get-Content -Raw -LiteralPath $stdoutPath) + (Get-Content -Raw -LiteralPath $stderrPath)
+    $exportOutput | Write-Host
+    if ($process.ExitCode -ne 0 -or $exportOutput -match "SCRIPT ERROR|ERROR: Failed|Parse Error") {
+        throw "Godot export failed with exit code $($process.ExitCode)"
+    }
+}
+finally {
+    Remove-Item -LiteralPath $stdoutPath, $stderrPath -Force -ErrorAction SilentlyContinue
 }
 
 Write-Host "Built $output"

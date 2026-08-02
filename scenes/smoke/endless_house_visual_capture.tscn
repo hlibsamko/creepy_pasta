@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/endless_house/endless_house_builder_demo.tscn" id="1_house"]
+[ext_resource type="Script" path="res://scripts/endless_house_visual_capture.gd" id="2_capture"]
+
+[node name="EndlessHouseVisualCapture" type="Node3D"]
+script = ExtResource("2_capture")
+
+[node name="House" parent="." instance=ExtResource("1_house")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 78.0
+
+[node name="Flashlight" type="SpotLight3D" parent="Camera3D"]
+light_color = Color(1, 0.93, 0.74, 1)
+light_energy = 5.0
+spot_range = 18.0
+spot_angle = 34.0
+spot_angle_attenuation = 1.8

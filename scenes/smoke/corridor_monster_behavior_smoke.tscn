@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/corridor_monster_behavior_smoke.gd" id="1_behavior_smoke"]
+
+[node name="CorridorMonsterBehaviorSmoke" type="Node"]
+script = ExtResource("1_behavior_smoke")

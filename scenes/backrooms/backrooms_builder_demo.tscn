@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://backrooms_builder_demo"]
+[gd_scene load_steps=7 format=3 uid="uid://backrooms_builder_demo"]
 
 [ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
+[ext_resource type="PackedScene" path="res://scenes/common/survivor_npc_basic.tscn" id="2_survivor"]
+[ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="3_evidence"]
 
 [sub_resource type="Environment" id="Environment_backrooms"]
 background_mode = 1
@@ -9,6 +11,18 @@ ambient_light_source = 2
 ambient_light_color = Color(0.42, 0.38, 0.25, 1)
 ambient_light_energy = 0.52
 
+[sub_resource type="Resource" id="Resource_match_dots"]
+script = ExtResource("3_evidence")
+note_text = "Survey plate: chalk reference points stayed fixed while the corridor around them changed."
+journal_entry_id = "house"
+journal_fact_index = 1
+
+[sub_resource type="Resource" id="Resource_code_lock"]
+script = ExtResource("3_evidence")
+note_text = "Maintenance index: room labels count downward and restart at zero, as if every copy is catalogued."
+journal_entry_id = "house"
+journal_fact_index = 2
+
 [node name="BackroomsBuilderDemo" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -16,6 +30,21 @@ environment = SubResource("Environment_backrooms")
 
 [node name="BackroomsBuilder" type="Node3D" parent="."]
 script = ExtResource("1_builder")
-layout = "############\n#S....L....#\n#.####.###.#\n#....#B..#.#\n###L.#.#C..#\n#....#.#L###\n#.##N..#P..#\n#..WL.B..E.#\n############"
+layout = "############\n#S..D.L....#\n#.####.###.#\n#..q.#B..#.#\n###L.#.#C..#\n#..A.#K#L###\n#.##o..#P..#\n#..WL.B..E.#\n############"
+generated_note_puzzle_type = 3
+match_dots_evidence = SubResource("Resource_match_dots")
+code_lock_evidence = SubResource("Resource_code_lock")
+ambush_notes_required_to_activate = 2
+
+[node name="DialogueNpcs" type="Node3D" parent="."]
+
+[node name="Elias" parent="DialogueNpcs" instance=ExtResource("2_survivor")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.0, 0, 24.0)
+speaker_name = "Elias"
+dialogue_text = "Mara writes rules as if this place keeps promises. I was a maintenance surveyor before these yellow halls swallowed our crew.\n\nI watched my partner enter a doorway after two quick blinks. The room changed before I could follow, but the light looked calm. I decided the blink meant it had reset safely.\n\nNever touch one immediately. Watch a full light cycle from several steps away first. The steady glow is what I distrust.\n\nWrite that down if you still trust the book. I stopped trusting mine after the rooms changed the ink."
+grants_journal = false
+journal_entry_id = "mimic"
+journal_fact_index = 0
+journal_rumor_id = "double_pulse_safe"
 
 [node name="Notes" type="Node3D" parent="."]

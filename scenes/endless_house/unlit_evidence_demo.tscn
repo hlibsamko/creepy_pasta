@@ -1,0 +1,41 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
+[ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_floor_tile.tscn" id="2_floor"]
+[ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_wall_block.tscn" id="3_wall"]
+[ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_ceiling_tile.tscn" id="4_ceiling"]
+[ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_ceiling_lamp.tscn" id="5_light"]
+[ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_low_sideboard.tscn" id="6_sideboard"]
+[ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
+
+[sub_resource type="Environment" id="Environment_unlit"]
+background_mode = 1
+background_color = Color(0.012, 0.017, 0.021, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.26, 0.32, 0.35, 1)
+ambient_light_energy = 0.62
+
+[sub_resource type="Resource" id="Resource_unlit_record"]
+script = ExtResource("7_evidence")
+note_text = "Maintenance test: the silhouette stayed inside the same chalk mark only while the work lamp faced it."
+journal_entry_id = "unlit"
+journal_fact_index = 1
+
+[node name="UnlitEvidenceDemo" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_unlit")
+
+[node name="EndlessHouseBuilder" type="Node3D" parent="."]
+script = ExtResource("1_builder")
+floor_scene = ExtResource("2_floor")
+wall_scene = ExtResource("3_wall")
+ceiling_scene = ExtResource("4_ceiling")
+light_scene = ExtResource("5_light")
+low_barrier_scene = ExtResource("6_sideboard")
+layout = "############\n#S.D.L..#E.#\n#.#.###.#..#\n#.#...#.#..#\n#.###.#.##.#\n#R.L.LU.LT.#\n############"
+generated_note_text = "Maintenance test: the work lamp arrests movement in the service silhouette."
+generated_note_puzzle_type = 0
+match_dots_evidence = SubResource("Resource_unlit_record")
+
+[node name="Notes" type="Node3D" parent="."]

@@ -38,4 +38,10 @@ sudo systemctl start creepy-pasta-server
 sleep 2
 sudo systemctl --no-pager --full status creepy-pasta-server
 ss -tulpen | grep 24567 || true
+sudo journalctl -u creepy-pasta-server --since=-2min --no-pager | tee /tmp/creepy-pasta-server-recent.log
+if grep -E -e SCRIPT.ERROR -e Parse.Error -e Failed.to.load.script -e status=11/SEGV -e core.dump -e Main.process.exited /tmp/creepy-pasta-server-recent.log; then
+    echo 'Fresh server logs contain Godot script/load errors or a native crash.' >&2
+    exit 1
+fi
+rm -f /tmp/creepy-pasta-server-recent.log
 "@

@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven/interior_tiles/interior_tiles_diff_1k.jpg" id="1_diff"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven/interior_tiles/interior_tiles_nor_gl_1k.jpg" id="2_normal"]
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="StandardMaterial3D" id="Mat_tile"]
+albedo_color = Color(0.78, 0.9, 0.91, 1)
+albedo_texture = ExtResource("1_diff")
+roughness = 0.32
+normal_enabled = true
+normal_scale = 0.45
+normal_texture = ExtResource("2_normal")
+uv1_scale = Vector3(2.1, 2.1, 2.1)
+
+[node name="PoolroomsFloorTile" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_floor")
+
+[node name="Tile" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_floor")
+surface_material_override/0 = SubResource("Mat_tile")

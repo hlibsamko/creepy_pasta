@@ -12,7 +12,7 @@ emission = Color(0.82, 0.92, 0.72, 1)
 emission_energy_multiplier = 1.25
 
 [node name="BackroomsFluorescentLight" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.02, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.02, 0)
 
 [node name="Panel" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_panel")

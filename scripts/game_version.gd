@@ -1,6 +1,6 @@
 extends Node
 
-const BUILD_VERSION := "0.2.0-local"
+const BUILD_VERSION := "0.3.0"
 
 
 func get_display_version() -> String:

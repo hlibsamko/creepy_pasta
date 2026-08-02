@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="BoxMesh" id="Mesh_ceiling"]
+size = Vector3(4, 0.12, 4)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ceiling"]
+albedo_color = Color(0.83, 0.87, 0.78, 1)
+roughness = 0.58
+
+[node name="PoolroomsCeilingTile" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.54, 0)
+mesh = SubResource("Mesh_ceiling")
+surface_material_override/0 = SubResource("Mat_ceiling")

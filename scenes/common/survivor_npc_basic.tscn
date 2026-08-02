@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/dialogue_npc.gd" id="1_dialogue"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_trigger"]
+radius = 1.0
+height = 2.6
+
+[sub_resource type="CapsuleMesh" id="Mesh_body"]
+radius = 0.34
+height = 1.45
+
+[sub_resource type="SphereMesh" id="Mesh_head"]
+radius = 0.24
+height = 0.48
+
+[sub_resource type="StandardMaterial3D" id="Mat_survivor"]
+albedo_color = Color(0.22, 0.26, 0.24, 1)
+roughness = 0.9
+
+[node name="Survivor" type="Area3D"]
+script = ExtResource("1_dialogue")
+speaker_name = "Mara"
+dialogue_text = "You heard it running behind you, didn't you? We call that one the Listener. It does not need eyes when the house carries every footstep.\n\nThis journal belonged to my brother Tomas. He trusted a bright-light rule from a radio log and never came back. Keep rumors separate from what you verify yourself.\n\nTake it. If we document every inhabitant, the house may finally show us a door that leads outside."
+grants_journal = true
+journal_entry_id = "listener"
+journal_fact_index = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("Shape_trigger")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+mesh = SubResource("Mesh_body")
+surface_material_override/0 = SubResource("Mat_survivor")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0)
+mesh = SubResource("Mesh_head")
+surface_material_override/0 = SubResource("Mat_survivor")

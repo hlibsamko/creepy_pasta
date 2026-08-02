@@ -50,6 +50,10 @@ If a browser build is involved, rebuild and redeploy the Web client too. The Web
 
 Current session sync contract includes level path, current-level collected note IDs, session collected-note count, level-exit open state, pressure plate states keyed by level-relative node path, and note-gated monster activation states keyed by level-relative node path. Changes to any of these fields require rebuilding both the Web client and dedicated server together.
 
+Hold-switch exits must be tested locally with `deploy/local_smoke.ps1`: after required records are complete, releasing a required non-latching pressure plate should close the level exit again and let the server broadcast the closed state.
+
+When applying synced pressure plate state, use `set_synced_active` rather than latch-specific helpers so `H`/`G` hold switches do not turn into permanent switches for late joiners.
+
 ## Fix Workflow
 
 1. Inspect the bug and identify whether it affects client only, server only, or both.
@@ -67,7 +71,13 @@ Use `-Exports` when the change should also prove Linux dedicated export and Web 
 powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\local_smoke.ps1 -Exports
 ```
 
-`local_smoke.ps1` treats Godot script/load error text as failure even if the process exits with code `0`.
+`local_smoke.ps1` includes scene startup checks, a physical input bindings smoke scene, a day/night cycle smoke scene, UI control-text, menu, and end-state smoke scenes, a UI puzzle-mode smoke scene that solves every current puzzle type, a `Main` state-discovery smoke scene for notes, monsters, pressure plates, spawns, exits, and sync-state helpers, and a Backrooms builder variants smoke scene for forced puzzle-note and pressure-plate symbols. It treats Godot script/load error text as failure even if the process exits with code `0`.
+
+When changing level order or adding a level, update `Main._get_next_level_scene()` and `main_state_smoke.gd` together.
+
+When changing note collection or RPC request handling, keep `main_state_smoke.gd` coverage for missing and duplicate note collection guards.
+
+When changing final-room content, keep the final dialogue hook covered by `Main` state-discovery smoke so the ending payoff does not regress to a silent exit.
 
 5. For a faster single parse/startup check:
 
@@ -130,7 +140,9 @@ Deploy both the website and dedicated server:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_full_oracle.ps1
 ```
 
-The Web deploy script writes Caddy cache headers. `index.html` is served with no-cache headers so players pick up the latest build entrypoint. Godot export assets such as `.wasm`, `.pck`, `.js`, worklets, and icons are served with long immutable caching to reduce reload cost.
+`deploy_full_oracle.ps1` first runs `deploy\local_smoke.ps1 -Exports`, so project parse, scene smoke checks, Linux dedicated export, and Web export must all pass before anything is uploaded. `deploy_server.ps1` also checks fresh `creepy-pasta-server` logs after restart and fails on Godot script/load parse errors.
+
+The Web deploy script writes Caddy cache headers. `index.html` is served with no-store headers, and fixed-name Godot runtime files such as `.wasm`, `.pck`, `.js`, and worklets must revalidate on reload. Do not mark these files immutable unless the export pipeline first gives them content-hashed filenames.
 
 The deploy scripts keep one rollback point on the Oracle VM:
 

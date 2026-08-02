@@ -33,6 +33,12 @@ func set_latched_active(is_latched_active: bool) -> void:
 	_apply_visual_state()
 
 
+func set_synced_active(is_synced_active: bool) -> void:
+	latched = is_synced_active if latch_once else false
+	active = is_synced_active
+	_apply_visual_state()
+
+
 func refresh_state() -> void:
 	_update_active_state()
 

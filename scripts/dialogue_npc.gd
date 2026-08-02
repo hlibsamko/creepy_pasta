@@ -6,6 +6,10 @@ signal player_exited(npc: DialogueNpc)
 
 @export var speaker_name := "Stranger"
 @export_multiline var dialogue_text := ""
+@export var grants_journal := false
+@export var journal_entry_id := ""
+@export_range(0, 3, 1) var journal_fact_index := 0
+@export var journal_rumor_id := ""
 
 
 func _ready() -> void:

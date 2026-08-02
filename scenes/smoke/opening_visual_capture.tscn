@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="1_level"]
+[ext_resource type="Script" path="res://scripts/opening_visual_capture.gd" id="2_capture"]
+
+[node name="OpeningVisualCapture" type="Node3D"]
+script = ExtResource("2_capture")
+
+[node name="Level" parent="." instance=ExtResource("1_level")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 76.0
+
+[node name="PreviewFlashlight" type="SpotLight3D" parent="Camera3D"]
+light_color = Color(0.82, 0.9, 1, 1)
+light_energy = 4.0
+shadow_enabled = true
+spot_range = 18.0
+spot_angle = 34.0
+spot_angle_attenuation = 1.7
