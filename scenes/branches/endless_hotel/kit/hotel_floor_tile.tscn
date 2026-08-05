@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3]
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(4, 0.2, 4)
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+size = Vector3(4, 0.2, 4)
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.28, 0.075, 0.07, 1)
+roughness = 0.92
+
+[node name="HotelCarpetTile" type="StaticBody3D"]
+position = Vector3(0, -0.1, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_floor")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_floor")
+surface_material_override/0 = SubResource("Mat_floor")

@@ -9,6 +9,8 @@ signal reset_session_requested(ip_address: String)
 signal create_session_requested
 signal join_session_requested(session_id: String)
 signal refresh_sessions_requested
+signal branch_browser_requested
+signal branch_requested(branch_id: String)
 signal retry_requested
 signal main_menu_requested
 signal journal_requested
@@ -32,11 +34,14 @@ enum PuzzleType {
 @onready var reconnect_button: Button = $Menu/Panel/Margin/Box/Buttons/ReconnectButton
 @onready var reset_session_button: Button = $Menu/Panel/Margin/Box/Buttons/ResetSessionButton
 @onready var fullscreen_button: Button = $Menu/Panel/Margin/Box/Buttons/FullscreenButton
+@onready var studies_button: Button = $Menu/Panel/Margin/Box/StudiesButton
 @onready var session_browser: VBoxContainer = $Menu/Panel/Margin/Box/SessionBrowser
 @onready var session_list: VBoxContainer = $Menu/Panel/Margin/Box/SessionBrowser/SessionList
 @onready var session_empty_label: Label = $Menu/Panel/Margin/Box/SessionBrowser/EmptyLabel
 @onready var create_session_button: Button = $Menu/Panel/Margin/Box/SessionBrowser/Actions/CreateSessionButton
 @onready var refresh_sessions_button: Button = $Menu/Panel/Margin/Box/SessionBrowser/Actions/RefreshSessionsButton
+@onready var branch_browser: VBoxContainer = $Menu/Panel/Margin/Box/BranchBrowser
+@onready var branch_list: VBoxContainer = $Menu/Panel/Margin/Box/BranchBrowser/BranchList
 @onready var version_label: Label = $Menu/Panel/Margin/Box/VersionLabel
 @onready var session_label: Label = $SessionLabel
 @onready var hud_label: Label = $HudLabel
@@ -105,6 +110,7 @@ func _ready() -> void:
 	reconnect_button.pressed.connect(reconnect_requested.emit)
 	reset_session_button.pressed.connect(_emit_reset_session_requested)
 	fullscreen_button.pressed.connect(_toggle_fullscreen)
+	studies_button.pressed.connect(branch_browser_requested.emit)
 	create_session_button.pressed.connect(create_session_requested.emit)
 	refresh_sessions_button.pressed.connect(refresh_sessions_requested.emit)
 	journal_button.pressed.connect(journal_requested.emit)
@@ -129,6 +135,7 @@ func _ready() -> void:
 	dialogue_panel.hide()
 	threat_warning.hide()
 	session_browser.hide()
+	branch_browser.hide()
 	session_label.hide()
 	if OS.has_feature("web"):
 		host_button.hide()
@@ -197,6 +204,7 @@ func set_connecting(is_connecting: bool) -> void:
 
 func show_session_browser(sessions: Array) -> void:
 	menu.show()
+	branch_browser.hide()
 	host_button.hide()
 	join_button.hide()
 	offline_button.hide()
@@ -227,8 +235,33 @@ func hide_session_browser() -> void:
 		reset_session_button.show()
 
 
+func show_branch_browser(branches: Array[BranchDefinition]) -> void:
+	menu.show()
+	session_browser.hide()
+	branch_browser.show()
+	for child in branch_list.get_children():
+		branch_list.remove_child(child)
+		child.queue_free()
+	for branch in branches:
+		if not branch.is_valid():
+			continue
+		var row := HBoxContainer.new()
+		var label := Label.new()
+		label.text = branch.title
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var play_button := Button.new()
+		play_button.text = "Play"
+		play_button.custom_minimum_size = Vector2(88, 36)
+		play_button.pressed.connect(branch_requested.emit.bind(branch.branch_id))
+		row.add_child(label)
+		row.add_child(play_button)
+		branch_list.add_child(row)
+	status_label.text = "Choose a short local study. Progress here does not alter online sessions."
+
+
 func prepare_connection_menu() -> void:
 	hide_session_browser()
+	branch_browser.hide()
 	if OS.has_feature("web"):
 		reset_session_button.hide()
 

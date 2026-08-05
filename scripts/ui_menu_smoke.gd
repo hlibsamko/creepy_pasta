@@ -12,6 +12,7 @@ var journal_open_count := 0
 var create_session_count := 0
 var refresh_sessions_count := 0
 var joined_session_id := ""
+var requested_branch_id := ""
 
 
 func _ready() -> void:
@@ -25,6 +26,7 @@ func _ready() -> void:
 	ui.create_session_requested.connect(func() -> void: create_session_count += 1)
 	ui.refresh_sessions_requested.connect(func() -> void: refresh_sessions_count += 1)
 	ui.join_session_requested.connect(func(session_id: String) -> void: joined_session_id = session_id)
+	ui.branch_requested.connect(func(branch_id: String) -> void: requested_branch_id = branch_id)
 	ui.journal_closed.connect(func() -> void:
 		journal_close_count += 1
 		ui.hide_journal()
@@ -56,6 +58,19 @@ func _ready() -> void:
 		_fail("Rapid session-list refresh did not replace the stale session ID")
 		return
 	(refreshed_row.get_node("JoinButton") as Button).pressed.emit()
+	ui.show_branch_browser(BranchCatalog.ALL)
+	if ui.branch_list.get_child_count() != BranchCatalog.ALL.size():
+		_fail("Branch browser did not create one row per catalog entry")
+		return
+	var branch_row := ui.branch_list.get_child(0) as HBoxContainer
+	(branch_row.get_child(1) as Button).pressed.emit()
+	if requested_branch_id != BranchCatalog.ALL[0].branch_id:
+		_fail("Branch browser did not emit the selected branch ID")
+		return
+	ui.show_branch_browser(BranchCatalog.ALL)
+	if ui.branch_list.get_child_count() != BranchCatalog.ALL.size():
+		_fail("Branch browser retained stale rows after refresh")
+		return
 
 	if host_count != 1 or join_count != 1 or offline_count != 1 or reconnect_count != 1 or reset_count != 1:
 		_fail("Menu buttons did not emit expected signals")

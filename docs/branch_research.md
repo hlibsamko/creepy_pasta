@@ -22,6 +22,7 @@ Research checked on 2026-08-02 before the first branch batch.
 - Backrooms: retained as the reference for repetitive navigation, fluorescent sound, and sparse pursuit.
 - Dreamcore schoolhouse: oversized familiar props, false daylight, pastel rooms, symbolic landmarks, and no mandatory chaser in the first study.
 - Poolrooms: tiled geometry, shallow reflective water, depth fog, echoes, and one distant slow threat only after the traversal reads clearly.
+- Empty mall: use the shared modular builder for a shuttered concourse study, existing selected CC0 furniture for kiosks/dressing, and a cold ambient/warm-wayfinding lighting split. Quaternius Downtown City MegaKit is the reference for later storefront/window modules (CC0): https://quaternius.com/packs/downtowncitymegakit.html. Poly Haven Floor Tiles 02 is the candidate 1K floor material (CC0): https://polyhaven.com/a/floor_tiles_02.
+- Endless hotel: reuse selected Kenney Furniture Kit doors/radio and the project False Door rather than adding another chaser. Quaternius Ultimate House Interior is the later CC0 source for beds and richer door/window variants: https://quaternius.com/packs/ultimatehomeinterior.html. Poly Haven Dirty Carpet is the candidate reduced 1K floor material: https://polyhaven.com/a/dirty_carpet.
 
 The first studies should compare atmosphere and navigation before adding more monsters. Visual inspection matters more than expanding task count.
-

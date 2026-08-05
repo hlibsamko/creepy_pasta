@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/chairDesk.glb" id="1_chair"]
+[sub_resource type="BoxShape3D" id="Shape_barrier"]
+size = Vector3(1.5, 1.1, 1.5)
+
+[node name="HotelLuggageBarrier" type="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.55, 0)
+shape = SubResource("Shape_barrier")
+[node name="AbandonedChair" parent="." instance=ExtResource("1_chair")]
+scale = Vector3(1.5, 1.5, 1.5)

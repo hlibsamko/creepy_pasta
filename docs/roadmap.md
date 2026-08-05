@@ -133,6 +133,9 @@ Backrooms builder baseline:
 
 Recent local progress:
 
+- Dreamcore and Poolrooms now use a shared native `BranchDefinition` resource and `BranchCatalog` lookup for scene, title, objective, and arrival copy. The main menu builds a minimal local Environment Studies browser from that catalog, and branch exits return to the browser without altering online sessions. Adding a study no longer requires branch-specific UI or objective logic in `Main`.
+- The fourth catalog study, Empty Mall: Last Closing, reuses the shared builder with a taller cold-lit concourse kit, closed kiosk barriers, one sequence-log puzzle, sparse CC0 dressing, low fog, and a warm exit landmark. It deliberately has no chaser while the space and wayfinding are evaluated.
+- The fifth catalog study, Endless Hotel: Room Zero, uses a carpeted warm corridor kit, repeated CC0 door/radio props, a descending-room-number code lock, and one non-chasing False Door. Its threat rule is observation and door comparison rather than another pursuit.
 - The first Dreamcore schoolhouse and Poolrooms comparison studies now have reusable builder kits, distinct Web-compatible fog/lighting profiles, selected CC0 environment props, and tuned visual captures under `build/branch_capture_*_tuned/`. They remain local debug previews until the shared branch-selection contract is ready.
 - Physical Space jumping is wired through the existing `CharacterBody3D` floor/gravity pattern, and ordinary chasers are capped below the player's sprint speed.
 - Three selected animated CC0 Quaternius candidates replaced importing the complete monster archive. The ordinary chaser now uses the Demon model as a visual child while retaining project-owned AI, collision, warning light, and network paths; Alien and Orc Skull remain comparison candidates.

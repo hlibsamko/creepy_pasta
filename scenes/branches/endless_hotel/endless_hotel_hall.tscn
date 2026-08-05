@@ -1,0 +1,60 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
+[ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_floor_tile.tscn" id="2_floor"]
+[ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_wall_block.tscn" id="3_wall"]
+[ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_ceiling_tile.tscn" id="4_ceiling"]
+[ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_light.tscn" id="5_light"]
+[ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_low_barrier.tscn" id="6_barrier"]
+[ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
+[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/doorwayOpen.glb" id="8_door"]
+[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/radio.glb" id="9_radio"]
+
+[sub_resource type="Environment" id="Environment_hotel"]
+background_mode = 1
+background_color = Color(0.055, 0.035, 0.025, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.42, 0.48, 0.4, 1)
+ambient_light_energy = 0.7
+fog_enabled = true
+fog_light_color = Color(0.3, 0.35, 0.31, 1)
+fog_light_energy = 0.46
+fog_density = 0.009
+adjustment_enabled = true
+adjustment_brightness = 1.02
+adjustment_contrast = 1.08
+adjustment_saturation = 0.88
+
+[sub_resource type="Resource" id="Resource_hotel_record"]
+script = ExtResource("7_evidence")
+note_text = "Night ledger: room numbers descend by one after every turn. Zero is not the lobby; it is the first copied room."
+
+[node name="EndlessHotelHall" type="Node3D"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hotel")
+[node name="HotelBuilder" type="Node3D" parent="."]
+script = ExtResource("1_builder")
+floor_scene = ExtResource("2_floor")
+wall_scene = ExtResource("3_wall")
+ceiling_scene = ExtResource("4_ceiling")
+light_scene = ExtResource("5_light")
+low_barrier_scene = ExtResource("6_barrier")
+layout = "###############\n#SL......#....E#\n#.#####.#.###.#\n#.....L.#...#.#\n#####.#####.#.#\n#K..B.......M.#\n#...L.........#\n###############"
+generated_note_puzzle_type = 2
+generated_note_visual_type = 0
+code_lock_evidence = SubResource("Resource_hotel_record")
+generate_watcher_monsters = false
+generate_chaser_monsters = false
+generate_mimic_doors = true
+generate_light_shy_monsters = false
+
+[node name="Dressing" type="Node3D" parent="."]
+[node name="Door239" parent="Dressing" instance=ExtResource("8_door")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 16, 0, 3.2)
+[node name="Door238" parent="Dressing" instance=ExtResource("8_door")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 28, 0, 3.2)
+[node name="Door237" parent="Dressing" instance=ExtResource("8_door")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 36, 0, 11.2)
+[node name="NightRadio" parent="Dressing" instance=ExtResource("9_radio")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 8, 0.2, 25)
+[node name="Notes" type="Node3D" parent="."]

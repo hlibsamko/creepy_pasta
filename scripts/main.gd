@@ -6,8 +6,6 @@ const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms_builder_demo.tscn")
 const HOUSE_BUILDER_DEMO_SCENE := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
 const UNLIT_EVIDENCE_DEMO_SCENE := preload("res://scenes/endless_house/unlit_evidence_demo.tscn")
-const DREAMCORE_BRANCH_SCENE := preload("res://scenes/branches/dreamcore/dreamcore_schoolhouse.tscn")
-const POOLROOMS_BRANCH_SCENE := preload("res://scenes/branches/poolrooms/poolrooms_gallery.tscn")
 const CORRIDOR_SCENE := preload("res://scenes/corridor.tscn")
 const FOURTH_ROOM_SCENE := preload("res://scenes/fourth_room.tscn")
 const SPAWNS := [
@@ -483,6 +481,8 @@ func _connect_ui() -> void:
 	ui.create_session_requested.connect(_request_create_online_session)
 	ui.join_session_requested.connect(_request_join_online_session)
 	ui.refresh_sessions_requested.connect(_request_online_session_list)
+	ui.branch_browser_requested.connect(_show_branch_browser)
+	ui.branch_requested.connect(_start_offline_branch)
 	ui.journal_requested.connect(_toggle_journal)
 	ui.journal_closed.connect(_close_journal)
 	ui.retry_requested.connect(_retry_after_end)
@@ -734,6 +734,28 @@ func _start_offline() -> void:
 	_reset_session()
 	_start_game()
 	_spawn_player(1)
+
+
+func _show_branch_browser() -> void:
+	if multiplayer.has_multiplayer_peer():
+		ui.set_status("Leave the online session before opening a local study.")
+		return
+	ui.show_branch_browser(BranchCatalog.ALL)
+
+
+func _start_offline_branch(branch_id: String) -> void:
+	var branch := BranchCatalog.find_by_id(branch_id)
+	if branch == null or not branch.is_valid():
+		ui.set_status("That environment study is unavailable.")
+		return
+	ui.set_connecting(false)
+	last_online_session_id = ""
+	pending_reconnect_session_id = ""
+	_reset_session()
+	_load_level_scene(branch.scene)
+	_start_game()
+	_spawn_player(1)
+	ui.set_status(branch.arrival_status)
 
 
 func _start_dedicated_server() -> void:
@@ -1673,8 +1695,8 @@ func _on_level_exit_entered() -> void:
 	if _is_local_unlit_debug_preview():
 		_leave_local_unlit_debug_preview()
 		return
-	if _is_local_branch_debug_preview():
-		_leave_local_branch_debug_preview()
+	if _is_offline_branch_study():
+		_leave_offline_branch_study()
 		return
 	if current_level_scene == FOURTH_ROOM_SCENE:
 		if not _is_journal_complete():
@@ -2707,46 +2729,40 @@ func _handle_debug_branch_preview_input(event: InputEvent) -> bool:
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return false
 	var physical_keycode := (event as InputEventKey).physical_keycode
-	var branch_scene: PackedScene
-	var status := ""
-	if physical_keycode == KEY_F10:
-		branch_scene = DREAMCORE_BRANCH_SCENE
-		status = "The school remembered a day that never happened."
-	elif physical_keycode == KEY_F11:
-		branch_scene = POOLROOMS_BRANCH_SCENE
-		status = "Water is moving somewhere beyond the tiled hall."
-	else:
+	var branch := BranchCatalog.find_by_debug_key(physical_keycode)
+	if branch == null or not branch.is_valid():
 		return false
 
-	if not _is_local_branch_debug_preview():
+	if not _is_offline_branch_study():
 		debug_preview_session_collected_notes = session_collected_notes
 	collected_notes = 0
 	collected_note_ids.clear()
-	_load_level_scene(branch_scene)
+	_load_level_scene(branch.scene)
 	_move_current_players_to_spawns()
-	ui.set_status(status)
+	ui.set_status(branch.arrival_status)
 	_update_hud()
 	return true
 
 
-func _is_local_branch_debug_preview() -> bool:
+func _is_offline_branch_study() -> bool:
 	return (
-		OS.is_debug_build()
-		and not OS.has_feature("web")
-		and not network.is_dedicated_server()
+		not network.is_dedicated_server()
 		and not multiplayer.has_multiplayer_peer()
-		and current_level_scene in [DREAMCORE_BRANCH_SCENE, POOLROOMS_BRANCH_SCENE]
+		and BranchCatalog.find_by_scene(current_level_scene) != null
 	)
 
 
-func _leave_local_branch_debug_preview() -> void:
+func _leave_offline_branch_study() -> void:
 	collected_notes = 0
 	collected_note_ids.clear()
 	session_collected_notes = debug_preview_session_collected_notes
 	debug_preview_session_collected_notes = 0
+	started = false
+	_clear_players()
 	_load_level_scene(LEVEL_SCENE)
-	_move_current_players_to_spawns()
-	ui.set_status("The study branch folded back into the first room.")
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	ui.show_branch_browser(BranchCatalog.ALL)
+	ui.set_status("Choose another environment study or return to the main route.")
 	_update_hud()
 
 
@@ -2904,15 +2920,14 @@ func _get_level_scene_by_path(scene_path: String) -> PackedScene:
 			return HOUSE_BUILDER_DEMO_SCENE
 		UNLIT_EVIDENCE_DEMO_SCENE.resource_path:
 			return UNLIT_EVIDENCE_DEMO_SCENE
-		DREAMCORE_BRANCH_SCENE.resource_path:
-			return DREAMCORE_BRANCH_SCENE
-		POOLROOMS_BRANCH_SCENE.resource_path:
-			return POOLROOMS_BRANCH_SCENE
 		CORRIDOR_SCENE.resource_path:
 			return CORRIDOR_SCENE
 		FOURTH_ROOM_SCENE.resource_path:
 			return FOURTH_ROOM_SCENE
 		_:
+			var branch_scene := BranchCatalog.find_scene_by_path(scene_path)
+			if branch_scene != null:
+				return branch_scene
 			push_warning("Unknown level scene path in session sync: %s" % scene_path)
 			return null
 
@@ -3461,10 +3476,8 @@ func _update_objective() -> void:
 			objective = "Hold the work light, cross the silhouette, and reach the breaker."
 		else:
 			objective = "The breaker is spent. Keep a flashlight on the silhouette and reach the exit."
-	elif current_level_scene == DREAMCORE_BRANCH_SCENE:
-		objective = "Find the attendance card and follow the objects that do not fit their room."
-	elif current_level_scene == POOLROOMS_BRANCH_SCENE:
-		objective = "Find the drain report and follow the ripples toward the quiet opening."
+	elif BranchCatalog.find_by_scene(current_level_scene) != null:
+		objective = BranchCatalog.find_by_scene(current_level_scene).objective
 	elif current_level_scene == CORRIDOR_SCENE:
 		objective = "Run the corridor. Sprint only when you can afford to be heard."
 	elif current_level_scene == FOURTH_ROOM_SCENE:
@@ -3505,10 +3518,9 @@ func _get_level_title() -> String:
 		return "House Survey: Repeated Hall"
 	if current_level_scene == UNLIT_EVIDENCE_DEMO_SCENE:
 		return "The Unlit: Maintenance Wing"
-	if current_level_scene == DREAMCORE_BRANCH_SCENE:
-		return "Dreamcore Study: Absent School"
-	if current_level_scene == POOLROOMS_BRANCH_SCENE:
-		return "Poolrooms Study: Echo Gallery"
+	var branch := BranchCatalog.find_by_scene(current_level_scene)
+	if branch != null:
+		return branch.title
 	if current_level_scene == CORRIDOR_SCENE:
 		return "Corridor: Do Not Sprint"
 	if current_level_scene == FOURTH_ROOM_SCENE:

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/endless_hotel_hall.tscn" id="1_branch"]
+[ext_resource type="Script" path="res://scripts/branch_visual_capture.gd" id="2_capture"]
+
+[node name="EndlessHotelVisualCapture" type="Node3D"]
+script = ExtResource("2_capture")
+branch_type = 3
+[node name="Branch" parent="." instance=ExtResource("1_branch")]
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 76.0
+[node name="Flashlight" type="SpotLight3D" parent="Camera3D"]
+light_color = Color(1, 0.78, 0.52, 1)
+light_energy = 1.8
+spot_range = 14.0
+spot_angle = 34.0

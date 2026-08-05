@@ -1,0 +1,72 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
+[ext_resource type="PackedScene" path="res://scenes/branches/empty_mall/kit/mall_floor_tile.tscn" id="2_floor"]
+[ext_resource type="PackedScene" path="res://scenes/branches/empty_mall/kit/mall_wall_block.tscn" id="3_wall"]
+[ext_resource type="PackedScene" path="res://scenes/branches/empty_mall/kit/mall_ceiling_tile.tscn" id="4_ceiling"]
+[ext_resource type="PackedScene" path="res://scenes/branches/empty_mall/kit/mall_light.tscn" id="5_light"]
+[ext_resource type="PackedScene" path="res://scenes/branches/empty_mall/kit/mall_low_barrier.tscn" id="6_barrier"]
+[ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
+[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/plantSmall2.glb" id="8_plant"]
+[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/chairDesk.glb" id="9_chair"]
+
+[sub_resource type="Environment" id="Environment_mall"]
+background_mode = 1
+background_color = Color(0.035, 0.045, 0.055, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.19, 0.28, 0.32, 1)
+ambient_light_energy = 0.68
+fog_enabled = true
+fog_light_color = Color(0.15, 0.24, 0.28, 1)
+fog_light_energy = 0.62
+fog_density = 0.007
+fog_height = 0.7
+fog_height_density = 0.25
+adjustment_enabled = true
+adjustment_brightness = 1.04
+adjustment_contrast = 1.12
+adjustment_saturation = 0.7
+
+[sub_resource type="Resource" id="Resource_mall_record"]
+script = ExtResource("7_evidence")
+note_text = "Closing log: the same announcement played after every shutter was locked. Camera 12 shows a crowd, but the concourse is empty."
+
+[node name="EmptyMallConcourse" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_mall")
+
+[node name="MallBuilder" type="Node3D" parent="."]
+script = ExtResource("1_builder")
+floor_scene = ExtResource("2_floor")
+wall_scene = ExtResource("3_wall")
+ceiling_scene = ExtResource("4_ceiling")
+light_scene = ExtResource("5_light")
+low_barrier_scene = ExtResource("6_barrier")
+layout = "##############\n#S.L.........E#\n#............#\n#..###..###..#\n#..#Q#..#B#..#\n#..###..###..#\n#....L........#\n##############"
+generated_note_puzzle_type = 1
+generated_note_visual_type = 2
+sequence_lock_evidence = SubResource("Resource_mall_record")
+generate_watcher_monsters = false
+generate_chaser_monsters = false
+generate_mimic_doors = false
+generate_light_shy_monsters = false
+
+[node name="Dressing" type="Node3D" parent="."]
+
+[node name="DeadPlantA" parent="Dressing" instance=ExtResource("8_plant")]
+transform = Transform3D(2.1, 0, 0, 0, 2.1, 0, 0, 0, 2.1, 12, 0, 22)
+
+[node name="DeadPlantB" parent="Dressing" instance=ExtResource("8_plant")]
+transform = Transform3D(2.1, 0, 0, 0, 2.1, 0, 0, 0, 2.1, 40, 0, 10)
+
+[node name="WaitingChair" parent="Dressing" instance=ExtResource("9_chair")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 25, 0, 24)
+
+[node name="WarmWayfinding" type="OmniLight3D" parent="."]
+position = Vector3(48, 2.8, 4)
+light_color = Color(1, 0.56, 0.26, 1)
+light_energy = 1.8
+omni_range = 10.0
+
+[node name="Notes" type="Node3D" parent="."]
