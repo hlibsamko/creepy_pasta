@@ -11,6 +11,7 @@ ExecStart=/home/ubuntu/creepy-pasta-server/creepy_pasta_server.x86_64 --headless
 Restart=always
 RestartSec=5
 Environment=GODOT_HEADLESS=1
+EnvironmentFile=/etc/creepy-pasta/game-server.env
 
 [Install]
 WantedBy=multi-user.target

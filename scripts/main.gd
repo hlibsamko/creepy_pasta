@@ -1,5 +1,9 @@
 extends Node3D
 
+#region Scene resources and authoritative session contracts
+
+const LEVEL_RUNTIME_QUERY := preload("res://scripts/level_runtime_query.gd")
+const ACCOUNT_GAME_BRIDGE := preload("res://scripts/account_game_bridge.gd")
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const LEVEL_SCENE := preload("res://scenes/level.tscn")
 const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
@@ -26,6 +30,8 @@ const CONNECTION_TIMEOUT_SECONDS := 10.0
 const MAX_ONLINE_SESSIONS := 8
 const SESSION_RECONNECT_GRACE_MSEC := 90000
 const SERVER_MONSTER_SYNC_INTERVAL := 0.1
+const ACCOUNT_AUTH_TIMEOUT_MSEC := 10000
+const ACCOUNT_HEARTBEAT_INTERVAL := 60.0
 const SESSION_LEVEL_PATHS := [
 	"res://scenes/level.tscn",
 	"res://scenes/next_place.tscn",
@@ -341,6 +347,10 @@ const SESSION_NOTE_GATED_MONSTERS := {
 	"res://scenes/fourth_room.tscn": [],
 }
 
+#endregion
+
+#region Runtime node references and state
+
 @onready var network: Node = $NetworkManager
 @onready var day_night_cycle: Node = $DayNightCycle
 @onready var audio_cues: Node = $AudioCues
@@ -370,6 +380,12 @@ var suppress_disconnect_until_msec := 0
 var reset_session_on_connect := false
 var online_sessions := {}
 var peer_session_ids := {}
+var peer_account_ids := {}
+var peer_account_profiles := {}
+var peer_play_session_ids := {}
+var peer_account_event_sequences := {}
+var peer_auth_deadlines_msec := {}
+var peer_auth_in_progress := {}
 var active_session_id := ""
 var loaded_session_id := ""
 var last_online_session_id := ""
@@ -377,12 +393,23 @@ var pending_reconnect_session_id := ""
 var next_session_number := 1
 var debug_preview_session_collected_notes := 0
 var server_monster_sync_accumulator := 0.0
+var account_heartbeat_accumulator := 0.0
+var pending_game_ticket := ""
+var game_account_authenticated := false
+var account_game_bridge
 var last_death_was_server_authoritative := false
 var last_death_reason := ""
 var last_recovered_record_text := ""
 
 
+#endregion
+
+#region Lifecycle and scene wiring
+
 func _ready() -> void:
+	account_game_bridge = ACCOUNT_GAME_BRIDGE.new()
+	account_game_bridge.name = "AccountGameBridge"
+	add_child(account_game_bridge)
 	_setup_connection_timer()
 	_setup_monster_activation_feedback_timer()
 	if network.is_dedicated_server():
@@ -393,12 +420,11 @@ func _ready() -> void:
 	_connect_ui()
 	_connect_level_interactables()
 	ui.set_join_address(network.get_join_hint())
+	ui.set_status("The house remembers every connection. Choose how you enter.")
 	last_join_address = network.get_join_hint()
 	if network.is_dedicated_server():
 		_start_dedicated_server()
 		return
-	if audio_cues.has_method("play_ambience"):
-		audio_cues.play_ambience(current_level_scene.resource_path)
 	_update_objective()
 	_update_hud()
 
@@ -406,6 +432,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not _is_network_server():
 		return
+	_prune_unauthenticated_peers()
+	_step_account_heartbeats(delta)
 	_prune_expired_online_sessions()
 	if online_sessions.is_empty():
 		return
@@ -565,6 +593,10 @@ func _connect_dialogue_npcs() -> void:
 			npc.player_exited.connect(_on_dialogue_npc_exited)
 
 
+#endregion
+
+#region Connection and game-session lifecycle
+
 func _setup_connection_timer() -> void:
 	connection_timer = Timer.new()
 	connection_timer.one_shot = true
@@ -594,6 +626,7 @@ func _on_connection_timeout() -> void:
 	_close_network_locally()
 	reset_session_on_connect = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	ui.set_connection_visual_active(true)
 	ui.show_menu()
 	ui.set_connecting(false)
 	ui.set_status("Connection timed out. Check the server and try Reconnect.")
@@ -621,6 +654,31 @@ func _host_game() -> void:
 
 
 func _join_game(ip_address: String) -> void:
+	game_account_authenticated = false
+	var uses_debug_smoke_ticket := OS.is_debug_build() and pending_game_ticket.begins_with("smoke-")
+	if not uses_debug_smoke_ticket:
+		var account_service := get_node_or_null("/root/AccountService")
+		if not account_service or not account_service.has_method("is_authenticated"):
+			ui.set_connecting(false)
+			ui.set_status("Account service is unavailable. Sign in before playing online.")
+			return
+		if not bool(account_service.call("is_authenticated")):
+			ui.set_connecting(false)
+			ui.set_status("Sign in with Google before playing online.")
+			return
+		ui.set_connecting(true)
+		ui.set_status("Preparing a secure game session...")
+		var ticket_result: Dictionary = await account_service.call("create_game_ticket")
+		if not bool(ticket_result.get("ok", false)):
+			ui.set_connecting(false)
+			ui.set_status(str(ticket_result.get("error", "Could not create a game ticket.")))
+			return
+		pending_game_ticket = str(ticket_result.get("ticket", ""))
+		if pending_game_ticket == "":
+			ui.set_connecting(false)
+			ui.set_status("The account service returned an empty game ticket.")
+			return
+
 	last_join_address = ip_address.strip_edges()
 	if last_join_address == "":
 		last_join_address = network.get_join_hint()
@@ -721,7 +779,10 @@ func _return_to_menu() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	ui.hide_death()
 	ui.hide_victory()
+	ui.set_connection_visual_active(true)
 	ui.show_menu()
+	if audio_cues.has_method("stop_ambience"):
+		audio_cues.stop_ambience()
 	ui.prepare_connection_menu()
 	ui.set_connecting(false)
 	ui.set_status("Ready.")
@@ -759,13 +820,22 @@ func _start_offline_branch(branch_id: String) -> void:
 
 
 func _start_dedicated_server() -> void:
-	var error: Error = network.host_websocket()
+	if not _is_account_auth_test_mode() and not account_game_bridge.is_configured():
+		push_error(
+			"Dedicated server refused to start without CREEPY_ACCOUNT_INTERNAL_SECRET."
+		)
+		get_tree().quit(1)
+		return
+	# Production traffic reaches this listener through Caddy (HTTPS/WSS). Keeping
+	# it on loopback prevents clients from bypassing the TLS/authenticated edge.
+	var error: Error = network.host_websocket("127.0.0.1")
 	if error != OK:
 		push_error("Dedicated server failed: %s" % error)
 		get_tree().quit(1)
 		return
 
 	started = true
+	ui.set_connection_visual_active(false)
 	ui.hide_menu()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_log_server_event("started", {"transport": "WebSocket", "port": network.port})
@@ -776,9 +846,12 @@ func _start_game() -> void:
 		return
 
 	started = true
+	ui.set_connection_visual_active(false)
 	ui.hide_death()
 	ui.hide_victory()
 	ui.hide_menu()
+	if audio_cues.has_method("play_ambience"):
+		audio_cues.play_ambience(current_level_scene.resource_path)
 	if OS.has_feature("web"):
 		ui.show_pointer_hint()
 	_capture_game_input(not OS.has_feature("web"))
@@ -824,12 +897,23 @@ func _clear_players() -> void:
 func _on_connected_to_server() -> void:
 	_stop_connection_timer()
 	ui.set_connecting(false)
+	if pending_game_ticket != "":
+		ui.set_connecting(true)
+		ui.set_status("Authenticating game account...")
+		_server_authenticate_game_ticket.rpc_id(1, pending_game_ticket)
+		pending_game_ticket = ""
+		return
+	ui.set_status("Waiting for game account authentication...")
+
+
+func _continue_after_game_authentication() -> void:
 	if reset_session_on_connect:
 		reset_session_on_connect = false
 	started = false
 	active_session_id = ""
 	loaded_session_id = ""
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	ui.set_connection_visual_active(true)
 	ui.show_menu()
 	ui.prepare_connection_menu()
 	if pending_reconnect_session_id != "":
@@ -843,6 +927,8 @@ func _on_connected_to_server() -> void:
 
 func _on_connection_failed() -> void:
 	_stop_connection_timer()
+	pending_game_ticket = ""
+	game_account_authenticated = false
 	reset_session_on_connect = false
 	ui.set_connecting(false)
 	ui.set_status("Connection failed.")
@@ -853,6 +939,8 @@ func _on_server_disconnected() -> void:
 		return
 
 	_stop_connection_timer()
+	pending_game_ticket = ""
+	game_account_authenticated = false
 	reset_session_on_connect = false
 	if active_session_id != "":
 		last_online_session_id = active_session_id
@@ -863,6 +951,7 @@ func _on_server_disconnected() -> void:
 	started = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_clear_players()
+	ui.set_connection_visual_active(true)
 	ui.show_menu()
 	ui.prepare_connection_menu()
 	ui.set_connecting(false)
@@ -871,6 +960,7 @@ func _on_server_disconnected() -> void:
 
 func _close_network_locally() -> void:
 	suppress_disconnect_until_msec = Time.get_ticks_msec() + 500
+	game_account_authenticated = false
 	network.close()
 
 
@@ -879,10 +969,121 @@ func _on_peer_connected(peer_id: int) -> void:
 		return
 
 	_log_server_event("peer_connected", {"peer_id": peer_id})
+	if network.is_dedicated_server():
+		peer_auth_deadlines_msec[peer_id] = Time.get_ticks_msec() + ACCOUNT_AUTH_TIMEOUT_MSEC
+		return
+	_complete_peer_account_authentication(
+		peer_id,
+		{"id": "local:%s" % peer_id, "display_name": "Local player", "friend_code": ""},
+		"",
+		false
+	)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func _server_authenticate_game_ticket(ticket: String) -> void:
+	if not _is_network_server() or not network.is_dedicated_server():
+		return
+	var peer_id := multiplayer.get_remote_sender_id()
+	if peer_id <= 0 or peer_account_ids.has(peer_id) or peer_auth_in_progress.has(peer_id):
+		return
+	if peer_account_ids.size() >= network.max_clients:
+		_reject_peer_account_authentication(peer_id, "The game server is full.")
+		return
+	if ticket.length() > 512 or (ticket.length() < 24 and not _is_account_auth_test_mode()):
+		_reject_peer_account_authentication(peer_id, "Invalid or expired game ticket.")
+		return
+	peer_auth_in_progress[peer_id] = true
+	var result: Dictionary
+	if _is_account_auth_test_mode() and ticket.begins_with("smoke-"):
+		var test_account_ticket := ticket.trim_suffix("-reconnect")
+		result = {
+			"ok": true,
+			"user": {
+				"id": "test:%s" % test_account_ticket,
+				"display_name": "Smoke player",
+				"friend_code": "TEST",
+			},
+			"play_session_id": "test-session:%s" % ticket,
+		}
+	else:
+		result = await account_game_bridge.redeem_game_ticket(ticket)
+	peer_auth_in_progress.erase(peer_id)
+	if not multiplayer.get_peers().has(peer_id):
+		return
+	if not bool(result.get("ok", false)):
+		_log_server_event("account_auth_rejected", {
+			"peer_id": peer_id,
+			"status": int(result.get("status", 0)),
+		})
+		_reject_peer_account_authentication(peer_id, "Invalid or expired game ticket.")
+		return
+	var user: Dictionary = result.get("user", {})
+	var account_id := str(user.get("id", ""))
+	var play_session_id := str(result.get("play_session_id", ""))
+	if account_id == "" or play_session_id == "":
+		_reject_peer_account_authentication(peer_id, "Account service returned an invalid identity.")
+		return
+	_complete_peer_account_authentication(peer_id, user, play_session_id, true)
+
+
+func _complete_peer_account_authentication(
+	peer_id: int,
+	user: Dictionary,
+	play_session_id: String,
+	notify_client: bool
+) -> void:
+	peer_auth_deadlines_msec.erase(peer_id)
+	peer_account_ids[peer_id] = str(user.get("id", ""))
+	peer_account_profiles[peer_id] = user.duplicate(true)
+	peer_account_event_sequences[peer_id] = 0
+	if play_session_id != "":
+		peer_play_session_ids[peer_id] = play_session_id
+		if not _is_account_auth_test_mode():
+			account_game_bridge.enqueue_heartbeat(play_session_id, false)
+	_log_server_event("account_authenticated", {
+		"peer_id": peer_id,
+		"account_id": peer_account_ids[peer_id],
+	})
+	if notify_client:
+		_game_ticket_authenticated.rpc_id(peer_id, user)
+	_send_authenticated_peer_state(peer_id)
+
+
+func _send_authenticated_peer_state(peer_id: int) -> void:
 	for player in players.get_children():
 		var existing_id := int(player.name)
 		_spawn_player_remote.rpc_id(peer_id, existing_id, player.global_position, player.player_color, player.rotation.y, str(player.get("session_id")))
 	_send_online_session_list(peer_id)
+
+
+func _reject_peer_account_authentication(peer_id: int, message: String) -> void:
+	peer_auth_deadlines_msec.erase(peer_id)
+	peer_auth_in_progress.erase(peer_id)
+	_game_ticket_rejected.rpc_id(peer_id, message)
+	_disconnect_peer_after_auth_rejection(peer_id)
+
+
+func _disconnect_peer_after_auth_rejection(peer_id: int) -> void:
+	await get_tree().create_timer(0.25).timeout
+	if multiplayer.multiplayer_peer and multiplayer.get_peers().has(peer_id):
+		multiplayer.multiplayer_peer.disconnect_peer(peer_id)
+
+
+@rpc("authority", "call_remote", "reliable")
+func _game_ticket_authenticated(_user: Dictionary) -> void:
+	game_account_authenticated = true
+	ui.set_connecting(false)
+	_continue_after_game_authentication()
+
+
+@rpc("authority", "call_remote", "reliable")
+func _game_ticket_rejected(message: String) -> void:
+	_stop_connection_timer()
+	game_account_authenticated = false
+	ui.set_connecting(false)
+	ui.set_status(message)
+	_close_network_locally()
 
 
 func _on_peer_disconnected(peer_id: int) -> void:
@@ -890,9 +1091,112 @@ func _on_peer_disconnected(peer_id: int) -> void:
 		_log_server_event("peer_disconnected", {"peer_id": peer_id})
 		_remove_peer_from_online_session(peer_id, false)
 		_remove_player_remote.rpc(peer_id)
+		_end_account_play_session(peer_id)
+		peer_account_ids.erase(peer_id)
+		peer_account_profiles.erase(peer_id)
+		peer_account_event_sequences.erase(peer_id)
+		peer_auth_deadlines_msec.erase(peer_id)
+		peer_auth_in_progress.erase(peer_id)
 	_remove_player_remote(peer_id)
 	_refresh_pressure_plates()
 	_broadcast_online_session_list()
+
+
+func _is_account_auth_test_mode() -> bool:
+	return OS.is_debug_build() and OS.get_cmdline_args().has("--account-auth-test-mode")
+
+
+func _authenticated_remote_sender_id() -> int:
+	var peer_id := multiplayer.get_remote_sender_id()
+	if peer_id <= 0:
+		return 0
+	if not network.is_dedicated_server() or peer_account_ids.has(peer_id):
+		return peer_id
+	_log_server_event("unauthenticated_rpc_rejected", {"peer_id": peer_id})
+	return 0
+
+
+func _reject_dedicated_lobby_rpc(
+	peer_id: int,
+	rpc_name: String,
+	online_state: Dictionary
+) -> bool:
+	if not network.is_dedicated_server() or peer_id <= 0 or not online_state.is_empty():
+		return false
+	_log_server_event("lobby_rpc_rejected", {"peer_id": peer_id, "rpc": rpc_name})
+	return true
+
+
+func _prune_unauthenticated_peers() -> void:
+	if not network.is_dedicated_server() or peer_auth_deadlines_msec.is_empty():
+		return
+	var now_msec := Time.get_ticks_msec()
+	for peer_id_value in peer_auth_deadlines_msec.keys():
+		var peer_id := int(peer_id_value)
+		if now_msec < int(peer_auth_deadlines_msec[peer_id]):
+			continue
+		_log_server_event("account_auth_timeout", {"peer_id": peer_id})
+		_reject_peer_account_authentication(peer_id, "Game account authentication timed out.")
+
+
+func _step_account_heartbeats(delta: float) -> void:
+	if peer_play_session_ids.is_empty() or _is_account_auth_test_mode():
+		return
+	account_heartbeat_accumulator += maxf(delta, 0.0)
+	if account_heartbeat_accumulator < ACCOUNT_HEARTBEAT_INTERVAL:
+		return
+	account_heartbeat_accumulator = fmod(account_heartbeat_accumulator, ACCOUNT_HEARTBEAT_INTERVAL)
+	for peer_id_value in peer_play_session_ids.keys():
+		var peer_id := int(peer_id_value)
+		var online_state := _get_online_session_for_peer(peer_id)
+		var play_session_id := str(peer_play_session_ids.get(peer_id, ""))
+		if play_session_id != "":
+			var active := (
+				not online_state.is_empty()
+				and not bool(online_state.get("finished", false))
+			)
+			account_game_bridge.enqueue_heartbeat(play_session_id, active)
+
+
+func _end_account_play_session(peer_id: int) -> void:
+	var play_session_id := str(peer_play_session_ids.get(peer_id, ""))
+	peer_play_session_ids.erase(peer_id)
+	if play_session_id == "" or _is_account_auth_test_mode():
+		return
+	account_game_bridge.enqueue_end(play_session_id)
+
+
+func _record_account_event(
+	peer_id: int,
+	event_type: String,
+	achievement_code := "",
+	context := ""
+) -> void:
+	var play_session_id := str(peer_play_session_ids.get(peer_id, ""))
+	if play_session_id == "" or _is_account_auth_test_mode():
+		return
+	var sequence := int(peer_account_event_sequences.get(peer_id, 0)) + 1
+	peer_account_event_sequences[peer_id] = sequence
+	var event_id := ("%s:%s:%s:%s" % [
+		play_session_id,
+		event_type,
+		sequence,
+		context.validate_node_name(),
+	]).left(256)
+	account_game_bridge.enqueue_event(
+		play_session_id,
+		event_id,
+		event_type,
+		achievement_code
+	)
+
+
+func _record_account_achievement(peer_id: int, achievement_code: String, context := "") -> void:
+	_record_account_event(peer_id, "achievement", achievement_code, context)
+
+
+func _record_account_death(peer_id: int, context := "") -> void:
+	_record_account_event(peer_id, "death", "", context)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -907,14 +1211,19 @@ func _remove_player_remote(peer_id: int) -> void:
 func _server_request_online_session_list() -> void:
 	if not _is_network_server():
 		return
-	_send_online_session_list(multiplayer.get_remote_sender_id())
+	var peer_id := _authenticated_remote_sender_id()
+	if peer_id == 0:
+		return
+	_send_online_session_list(peer_id)
 
 
 @rpc("any_peer", "call_remote", "reliable")
 func _server_create_online_session() -> void:
 	if not _is_network_server():
 		return
-	var peer_id := multiplayer.get_remote_sender_id()
+	var peer_id := _authenticated_remote_sender_id()
+	if peer_id == 0:
+		return
 	_prune_expired_online_sessions()
 	if online_sessions.size() >= MAX_ONLINE_SESSIONS:
 		_online_session_error.rpc_id(peer_id, "All session slots are currently in use.")
@@ -929,9 +1238,14 @@ func _server_create_online_session() -> void:
 func _server_join_online_session(session_id: String) -> void:
 	if not _is_network_server():
 		return
-	var peer_id := multiplayer.get_remote_sender_id()
+	var peer_id := _authenticated_remote_sender_id()
+	if peer_id == 0:
+		return
 	_prune_expired_online_sessions()
-	if not _is_online_session_joinable(session_id) and not _is_online_session_reconnectable(session_id):
+	if (
+		not _is_online_session_joinable(session_id)
+		and not _is_online_session_reconnectable_for_peer(session_id, peer_id)
+	):
 		_log_server_event("session_join_ignored", {
 			"peer_id": peer_id,
 			"session_id": session_id,
@@ -987,6 +1301,7 @@ func _create_online_session_state(session_id: String) -> Dictionary:
 		"monster_kill_latches": {},
 		"journal_state": _create_empty_journal_snapshot(),
 		"members": [],
+		"account_ids": [],
 		"empty_since_msec": 0,
 		"finished": false,
 	}
@@ -1011,6 +1326,14 @@ func _is_online_session_reconnectable(session_id: String, now_msec := -1) -> boo
 		return false
 	var checked_msec: int = Time.get_ticks_msec() if now_msec < 0 else int(now_msec)
 	return checked_msec - empty_since_msec < SESSION_RECONNECT_GRACE_MSEC
+
+
+func _is_online_session_reconnectable_for_peer(session_id: String, peer_id: int) -> bool:
+	if not _is_online_session_reconnectable(session_id):
+		return false
+	var state: Dictionary = online_sessions[session_id]
+	var account_id := str(peer_account_ids.get(peer_id, ""))
+	return account_id != "" and (state.get("account_ids", []) as Array).has(account_id)
 
 
 func _prune_expired_online_sessions(now_msec := -1) -> void:
@@ -1039,8 +1362,16 @@ func _assign_peer_to_online_session(peer_id: int, session_id: String) -> void:
 	if not members.has(peer_id):
 		members.append(peer_id)
 	state["members"] = members
+	var account_ids: Array = state.get("account_ids", [])
+	var account_id := str(peer_account_ids.get(peer_id, ""))
+	if account_id != "" and not account_ids.has(account_id):
+		account_ids.append(account_id)
+	state["account_ids"] = account_ids
 	state["empty_since_msec"] = 0
 	peer_session_ids[peer_id] = session_id
+	var play_session_id := str(peer_play_session_ids.get(peer_id, ""))
+	if play_session_id != "" and not _is_account_auth_test_mode():
+		account_game_bridge.enqueue_heartbeat(play_session_id, true)
 	_online_session_joined.rpc_id(peer_id, session_id)
 	_send_online_session_state(peer_id, state)
 	_spawn_player_for_online_session(peer_id, state)
@@ -1104,6 +1435,8 @@ func _broadcast_online_session_list() -> void:
 		return
 	var sessions := _serialize_online_sessions()
 	for peer_id in multiplayer.get_peers():
+		if network.is_dedicated_server() and not peer_account_ids.has(peer_id):
+			continue
 		if not peer_session_ids.has(peer_id):
 			_receive_online_session_list.rpc_id(peer_id, sessions)
 
@@ -1157,19 +1490,36 @@ func _get_level_title_from_path(level_path: String) -> String:
 	return "Unknown Room"
 
 
+#endregion
+
+#region Player spawning and session runtime
+
 @rpc("any_peer", "call_remote", "reliable")
-func _request_spawn(peer_id: int) -> void:
+func _request_spawn(_peer_id: int) -> void:
 	if _is_network_server():
-		_log_server_event("spawn_requested", {"peer_id": peer_id, "sender": multiplayer.get_remote_sender_id()})
-		_spawn_player(peer_id)
+		var sender_id := _authenticated_remote_sender_id()
+		if sender_id == 0:
+			return
+		var online_state := _get_online_session_for_peer(sender_id)
+		if _reject_dedicated_lobby_rpc(sender_id, "spawn", online_state):
+			return
+		if network.is_dedicated_server():
+			_spawn_player_for_online_session(sender_id, online_state)
+			return
+		_log_server_event("spawn_requested", {"peer_id": sender_id, "sender": sender_id})
+		_spawn_player(sender_id)
 
 
 @rpc("any_peer", "call_remote", "reliable")
 func _request_respawn() -> void:
 	if not _is_network_server():
 		return
-	var peer_id := multiplayer.get_remote_sender_id()
+	var peer_id := _authenticated_remote_sender_id()
+	if peer_id == 0:
+		return
 	var online_state := _get_online_session_for_peer(peer_id)
+	if _reject_dedicated_lobby_rpc(peer_id, "respawn", online_state):
+		return
 	if not online_state.is_empty():
 		_log_server_event("session_respawn_requested", {"session_id": online_state["id"], "peer_id": peer_id})
 		_reset_online_monster_runtime_state(online_state)
@@ -1253,8 +1603,12 @@ func _request_session_reset() -> void:
 	if not _is_network_server():
 		return
 
-	var requesting_peer_id := multiplayer.get_remote_sender_id()
+	var requesting_peer_id := _authenticated_remote_sender_id()
+	if requesting_peer_id == 0:
+		return
 	var online_state := _get_online_session_for_peer(requesting_peer_id)
+	if _reject_dedicated_lobby_rpc(requesting_peer_id, "session_reset", online_state):
+		return
 	if not online_state.is_empty():
 		_reset_online_session_state(online_state)
 		return
@@ -1484,6 +1838,10 @@ func _update_session_status() -> void:
 	)
 
 
+#endregion
+
+#region Evidence, exits, mechanics, and observation
+
 func _on_note_collected(note_id: String, note_text: String) -> void:
 	if not multiplayer.has_multiplayer_peer():
 		_collect_note(note_id, note_text)
@@ -1518,11 +1876,15 @@ func _on_note_puzzle_cancelled(note_id: String) -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func _request_collect_note(note_id: String) -> void:
 	if _is_network_server():
-		_server_collect_note(note_id, multiplayer.get_remote_sender_id())
+		var peer_id := _authenticated_remote_sender_id()
+		if peer_id != 0:
+			_server_collect_note(note_id, peer_id)
 
 
 func _server_collect_note(note_id: String, requesting_peer_id := 0) -> void:
 	var online_state := _get_online_session_for_peer(requesting_peer_id)
+	if _reject_dedicated_lobby_rpc(requesting_peer_id, "collect_note", online_state):
+		return
 	if not online_state.is_empty():
 		_server_collect_online_session_note(online_state, note_id, requesting_peer_id)
 		return
@@ -1586,6 +1948,11 @@ func _server_collect_online_session_note(
 		_apply_discovery_to_online_session(state, false, entry_id, fact_index, rumor_id)
 	_update_online_note_gated_monsters(state)
 	_evaluate_online_session_exit(state)
+	_record_account_achievement(
+		requesting_peer_id,
+		"first_record",
+		"%s:%s" % [level_path, note_id]
+	)
 	_log_server_event("session_note_collected", {"session_id": state["id"], "note_id": note_id})
 
 
@@ -1737,7 +2104,10 @@ func _on_pressure_plate_changed(_is_active: bool, plate: Node = null) -> void:
 func _request_online_pressure_state(plate_id: String, is_active: bool) -> void:
 	if not _is_network_server():
 		return
-	var state := _get_online_session_for_peer(multiplayer.get_remote_sender_id())
+	var requesting_peer_id := _authenticated_remote_sender_id()
+	if requesting_peer_id == 0:
+		return
+	var state := _get_online_session_for_peer(requesting_peer_id)
 	if state.is_empty():
 		return
 	var level_path := str(state["level_path"])
@@ -1751,7 +2121,7 @@ func _request_online_pressure_state(plate_id: String, is_active: bool) -> void:
 	if is_active:
 		var definition: Dictionary = plate_definitions[plate_id]
 		if not _is_online_peer_near_position(
-			multiplayer.get_remote_sender_id(),
+			requesting_peer_id,
 			state,
 			definition["position"],
 			float(definition["activation_radius"])
@@ -1843,7 +2213,9 @@ func _on_breaker_outage_requested(source: Node) -> void:
 func _request_online_breaker_outage(source_id: String) -> void:
 	if not _is_network_server():
 		return
-	var peer_id := multiplayer.get_remote_sender_id()
+	var peer_id := _authenticated_remote_sender_id()
+	if peer_id == 0:
+		return
 	var state := _get_online_session_for_peer(peer_id)
 	if state.is_empty():
 		return
@@ -2046,12 +2418,20 @@ func _is_session_level_open_by_default(level_path: String) -> bool:
 	return level_path == CORRIDOR_SCENE.resource_path or level_path == FOURTH_ROOM_SCENE.resource_path
 
 
+#endregion
+
+#region Level transitions, dialogue, and journal
+
 @rpc("any_peer", "call_remote", "reliable")
 func _request_next_level_transition() -> void:
 	if not _is_network_server():
 		return
-	var requesting_peer_id := multiplayer.get_remote_sender_id()
+	var requesting_peer_id := _authenticated_remote_sender_id()
+	if requesting_peer_id == 0:
+		return
 	var online_state := _get_online_session_for_peer(requesting_peer_id)
+	if _reject_dedicated_lobby_rpc(requesting_peer_id, "next_level", online_state):
+		return
 	if not online_state.is_empty():
 		if not bool(online_state["exit_open"]):
 			_log_server_event("session_transition_ignored", {"session_id": online_state["id"], "peer_id": requesting_peer_id})
@@ -2078,9 +2458,20 @@ func _request_next_level_transition() -> void:
 func _request_complete_game() -> void:
 	if not _is_network_server():
 		return
-	var requesting_peer_id := multiplayer.get_remote_sender_id()
+	var requesting_peer_id := _authenticated_remote_sender_id()
+	if requesting_peer_id == 0:
+		return
 	var online_state := _get_online_session_for_peer(requesting_peer_id)
+	if _reject_dedicated_lobby_rpc(requesting_peer_id, "complete_game", online_state):
+		return
 	if not online_state.is_empty():
+		if bool(online_state.get("finished", false)):
+			_log_server_event("session_victory_ignored", {
+				"session_id": online_state["id"],
+				"peer_id": requesting_peer_id,
+				"reason": "already_finished",
+			})
+			return
 		if (
 			str(online_state["level_path"]) != FOURTH_ROOM_SCENE.resource_path
 			or not bool(online_state["exit_open"])
@@ -2091,6 +2482,11 @@ func _request_complete_game() -> void:
 			return
 		online_state["finished"] = true
 		for member_id in online_state["members"]:
+			_record_account_achievement(int(member_id), "field_researcher", "complete-journal")
+			_record_account_achievement(int(member_id), "escaped", "completed-game")
+			var play_session_id := str(peer_play_session_ids.get(int(member_id), ""))
+			if play_session_id != "" and not _is_account_auth_test_mode():
+				account_game_bridge.enqueue_heartbeat(play_session_id, false)
 			_complete_game.rpc_id(int(member_id))
 		_broadcast_online_session_list()
 		return
@@ -2402,12 +2798,15 @@ func _request_journal_discovery(
 	rumor_id: String
 ) -> void:
 	if _is_network_server():
+		var peer_id := _authenticated_remote_sender_id()
+		if peer_id == 0:
+			return
 		_server_apply_journal_discovery(
 			should_unlock,
 			entry_id,
 			fact_index,
 			rumor_id,
-			multiplayer.get_remote_sender_id(),
+			peer_id,
 			source_id
 		)
 
@@ -2421,6 +2820,8 @@ func _server_apply_journal_discovery(
 	source_id := ""
 ) -> void:
 	var online_state := _get_online_session_for_peer(requesting_peer_id)
+	if _reject_dedicated_lobby_rpc(requesting_peer_id, "journal_discovery", online_state):
+		return
 	if not online_state.is_empty():
 		var discovery_definition := _get_online_client_discovery_definition(
 			online_state,
@@ -2618,6 +3019,10 @@ func _apply_journal_difficulty() -> String:
 	return behavior_shift
 
 
+#endregion
+
+#region Input handling and debug previews
+
 func _capture_game_input(capture_mouse := true) -> void:
 	get_viewport().gui_release_focus()
 	if capture_mouse:
@@ -2803,6 +3208,10 @@ func _adjust_day_night_cycle(multiplier: float) -> void:
 	ui.set_status("Day/night cycle length: %ss" % int(next_length))
 
 
+#endregion
+
+#region Level loading and local-state synchronization
+
 func _spawn_current_players() -> void:
 	if not multiplayer.has_multiplayer_peer():
 		_spawn_player(1)
@@ -2933,83 +3342,40 @@ func _get_level_scene_by_path(scene_path: String) -> PackedScene:
 
 
 func _get_level_marker_positions(prefix: String) -> Array:
-	var positions := []
-	if not level:
-		return positions
-
-	for child in level.find_children("%s*" % prefix, "Marker3D", true, false):
-		positions.append((child as Marker3D).global_position)
-	return positions
+	return LEVEL_RUNTIME_QUERY.marker_positions(level, prefix)
 
 
 func _get_level_notes() -> Array:
-	var found_notes := []
-	if not level:
-		return found_notes
-	for candidate in level.find_children("*", "Area3D", true, false):
-		if not candidate.has_signal("collected"):
-			continue
-		if candidate.has_method("is_enabled_for_gameplay") and not bool(candidate.call("is_enabled_for_gameplay")):
-			continue
-		found_notes.append(candidate)
-	return found_notes
+	return LEVEL_RUNTIME_QUERY.notes(level)
 
 
 func _get_level_monsters() -> Array:
-	var found_monsters := []
-	if not level:
-		return found_monsters
-	for candidate in level.find_children("*", "", true, false):
-		if candidate.has_signal("killed_player") or candidate.has_method("stop_chase"):
-			found_monsters.append(candidate)
-	return found_monsters
+	return LEVEL_RUNTIME_QUERY.monsters(level)
 
 
 func _get_level_pressure_plates() -> Array:
-	var found_plates := []
-	if not level:
-		return found_plates
-	for candidate in level.find_children("*", "Area3D", true, false):
-		if candidate.has_signal("active_changed") and candidate.has_method("is_active"):
-			found_plates.append(candidate)
-	return found_plates
+	return LEVEL_RUNTIME_QUERY.pressure_plates(level)
 
 
 func _get_pressure_plate_states() -> Dictionary:
-	var states := {}
-	for plate in _get_level_pressure_plates():
-		states[str(level.get_path_to(plate))] = bool(plate.call("is_active"))
-	return states
+	return LEVEL_RUNTIME_QUERY.pressure_plate_states(level)
 
 
 func _apply_pressure_plate_states(states: Dictionary) -> void:
-	for plate in _get_level_pressure_plates():
-		var state_id := str(level.get_path_to(plate))
-		if not states.has(state_id):
-			continue
-		if plate.has_method("set_synced_active"):
-			plate.set_synced_active(bool(states[state_id]))
-			continue
-		if plate.has_method("set_latched_active"):
-			plate.set_latched_active(bool(states[state_id]))
+	LEVEL_RUNTIME_QUERY.apply_pressure_plate_states(level, states)
 
 
 func _get_monster_activation_states() -> Dictionary:
-	var states := {}
-	for monster in _get_level_monsters():
-		if monster.has_method("is_note_gated_activated"):
-			states[str(level.get_path_to(monster))] = bool(monster.call("is_note_gated_activated"))
-	return states
+	return LEVEL_RUNTIME_QUERY.monster_activation_states(level)
 
 
 func _apply_monster_activation_states(states: Dictionary) -> void:
-	for monster in _get_level_monsters():
-		var state_id := str(level.get_path_to(monster))
-		if not states.has(state_id):
-			continue
-		if monster.has_method("set_note_gated_activated"):
-			monster.set_note_gated_activated(bool(states[state_id]))
+	LEVEL_RUNTIME_QUERY.apply_monster_activation_states(level, states)
 
+
+#endregion
+
+#region Server-authoritative monster simulation
 
 @rpc("authority", "call_remote", "unreliable_ordered")
 func _apply_online_monster_states(states: Dictionary) -> void:
@@ -3131,6 +3497,7 @@ func _server_update_online_monster_contacts(
 			"peer_id": peer_id,
 		})
 		if _is_network_server():
+			_record_account_death(peer_id, source_id)
 			_apply_online_player_death.rpc_id(peer_id, reason)
 	all_latches[source_id] = current_latches
 	state["monster_kill_latches"] = all_latches
@@ -3343,14 +3710,12 @@ func _broadcast_online_monster_states(state: Dictionary) -> void:
 		_apply_online_monster_states.rpc_id(int(member_id), snapshot)
 
 
+#endregion
+
+#region Mechanic synchronization and UI presentation
+
 func _get_level_mechanic_states() -> Dictionary:
-	var states := {}
-	if not level:
-		return states
-	for mechanic in level.find_children("*", "", true, false):
-		if mechanic.has_method("get_sync_state") and mechanic.has_method("apply_sync_state"):
-			states[str(level.get_path_to(mechanic))] = mechanic.call("get_sync_state")
-	return states
+	return LEVEL_RUNTIME_QUERY.mechanic_states(level)
 
 
 func _get_online_mechanic_snapshot(state: Dictionary, now_msec := -1) -> Dictionary:
@@ -3380,14 +3745,7 @@ func _get_online_mechanic_snapshot(state: Dictionary, now_msec := -1) -> Diction
 
 @rpc("authority", "call_remote", "reliable")
 func _apply_level_mechanic_states(states: Dictionary) -> void:
-	if not level:
-		return
-	for mechanic in level.find_children("*", "", true, false):
-		if not mechanic.has_method("apply_sync_state"):
-			continue
-		var state_id := str(level.get_path_to(mechanic))
-		if states.has(state_id) and states[state_id] is Dictionary:
-			mechanic.call("apply_sync_state", states[state_id])
+	LEVEL_RUNTIME_QUERY.apply_mechanic_states(level, states)
 
 
 func _notify_monsters_note_progress() -> void:
@@ -3403,12 +3761,7 @@ func _refresh_pressure_plates() -> void:
 
 
 func _get_note_by_id(note_id: String) -> Node:
-	if not level:
-		return null
-	for note in _get_level_notes():
-		if note.name == note_id:
-			return note
-	return null
+	return LEVEL_RUNTIME_QUERY.note_by_id(level, note_id)
 
 
 func _is_level_exit_open() -> bool:
@@ -3418,13 +3771,7 @@ func _is_level_exit_open() -> bool:
 
 
 func _are_pressure_plates_satisfied() -> bool:
-	var plates := _get_level_pressure_plates()
-	if plates.is_empty():
-		return true
-	for plate in plates:
-		if not bool(plate.call("is_active")):
-			return false
-	return true
+	return LEVEL_RUNTIME_QUERY.pressure_plates_satisfied(level)
 
 
 func _are_breaker_requirements_satisfied() -> bool:
@@ -3551,3 +3898,5 @@ func _log_server_event(event_name: String, data := {}) -> void:
 		total_notes,
 		" ".join(parts),
 	])
+
+#endregion

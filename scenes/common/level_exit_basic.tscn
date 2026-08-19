@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://level_exit_basic"]
+[gd_scene load_steps=10 format=3 uid="uid://level_exit_basic"]
 
 [ext_resource type="Script" path="res://scripts/level_exit.gd" id="1_exit"]
 [ext_resource type="PackedScene" path="res://scenes/common/door_draft_cue_basic.tscn" id="2_draft"]
@@ -17,10 +17,18 @@ roughness = 0.9
 size = Vector3(1.9, 2.15, 0.08)
 
 [sub_resource type="StandardMaterial3D" id="Mat_exit_glow"]
-albedo_color = Color(0.95, 0.86, 0.45, 1)
+albedo_color = Color(1, 0.72, 0.28, 1)
 emission_enabled = true
-emission = Color(1, 0.86, 0.35, 1)
-emission_energy_multiplier = 1.45
+emission = Color(1, 0.68, 0.18, 1)
+emission_energy_multiplier = 1.75
+
+[sub_resource type="BoxMesh" id="Mesh_exit_frame"]
+size = Vector3(2.28, 2.54, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_exit_frame"]
+albedo_color = Color(0.09, 0.07, 0.035, 1)
+metallic = 0.2
+roughness = 0.68
 
 [node name="LevelExit" type="Area3D"]
 script = ExtResource("1_exit")
@@ -32,13 +40,18 @@ shape = SubResource("Shape_exit")
 mesh = SubResource("Mesh_exit_door")
 surface_material_override/0 = SubResource("Mat_exit_door")
 
+[node name="Frame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.08)
+mesh = SubResource("Mesh_exit_frame")
+surface_material_override/0 = SubResource("Mat_exit_frame")
+
 [node name="Glow" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_exit_glow")
 surface_material_override/0 = SubResource("Mat_exit_glow")
 
 [node name="PortalLight" type="OmniLight3D" parent="Glow"]
 light_color = Color(1, 0.86, 0.35, 1)
-light_energy = 1.2
+light_energy = 1.45
 omni_range = 4.0
 
 [node name="DraftCue" parent="." instance=ExtResource("2_draft")]

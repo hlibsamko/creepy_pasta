@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/common/watcher_monster_basic.tscn" id="1_watcher"]
+[ext_resource type="Script" path="res://scripts/watcher_visual_capture.gd" id="2_capture"]
+
+[node name="WatcherVisualCapture" type="Node3D"]
+script = ExtResource("2_capture")
+
+[node name="Watcher" parent="." instance=ExtResource("1_watcher")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 68.0
+
+[node name="Fill" type="OmniLight3D" parent="."]
+position = Vector3(0, 2.2, 3.5)
+light_color = Color(0.52, 0.42, 0.7, 1)
+light_energy = 2.2
+omni_range = 9.0
+shadow_enabled = true

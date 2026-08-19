@@ -1,25 +1,27 @@
 # Web + Oracle deployment
 
-This project now supports a browser client joining a dedicated WebSocket server.
+> **Reference-only during the visual-upgrade mission.** Normal asset/model/material work should not spend context here unless a Web export/deploy issue is relevant. `docs/workflow.md` remains authoritative for current deploy/release behavior.
+
+
+This project supports an authenticated browser client joining a dedicated
+WebSocket server through Caddy. The account service and Godot listener are
+loopback-only; only HTTPS/WSS is public.
 
 ## Local smoke test
 
-Start the server from the project folder:
+Start the account API and server test harness through the project smoke script:
 
-```bash
-godot --headless --path . --server
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\local_smoke.ps1 -NetworkOnly
 ```
 
-Then run the game normally and join:
-
-```text
-ws://127.0.0.1:24567
-```
+The debug-only smoke ticket mode is never present in a release export.
 
 ## Oracle VM
 
 1. Create an Always Free VM.
-2. Open inbound TCP ports `80`, `443`, and `24567` in the Oracle security rules.
+2. Open inbound TCP ports `80` and `443` in the Oracle security rules. Keep SSH
+   `22` restricted to administrative sources. Do not expose `24567` or `8080`.
 3. Copy the Linux dedicated server export to the VM.
 4. Run the server:
 
@@ -32,7 +34,8 @@ Current test VPS:
 ```text
 ubuntu@138.2.166.64
 /home/ubuntu/creepy-pasta-server
-TCP 24567
+Godot: 127.0.0.1:24567
+Account API: 127.0.0.1:8080
 ```
 
 Current test domain:
@@ -49,30 +52,8 @@ journalctl -u creepy-pasta-server -f
 ss -tulpen | grep 24567
 ```
 
-Oracle-provided Ubuntu images may use iptables even when UFW is not installed. The local VM rule is:
-
-```bash
-sudo iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 24567 -j ACCEPT
-sudo netfilter-persistent save
-```
-
-Oracle Cloud Console still needs subnet ingress rules. For the dedicated Godot server:
-
-```text
-Networking -> Virtual cloud networks -> creepy-pasta-vcn
-Subnets -> public subnet-creepy-pasta-vcn
-Security Lists -> default/security list for the subnet
-Add Ingress Rule:
-  Source CIDR: 0.0.0.0/0
-  IP Protocol: TCP
-  Destination Port Range: 24567
-  Stateless: No
-  Description: Creepy Pasta Godot WebSocket server
-```
-
-Keep the existing SSH rule for TCP `22`.
-
-For the browser site and HTTPS/WSS, add two more ingress rules:
+Oracle Cloud Console still needs subnet ingress rules for the browser site and
+HTTPS/WSS:
 
 ```text
 Source CIDR: 0.0.0.0/0
@@ -110,7 +91,11 @@ The browser client then joins the server through:
 wss://creepy-pasta.duckdns.org
 ```
 
-The deployed Caddy config should keep `index.html` uncached and cache Godot asset files aggressively. This prevents stale HTML from pointing at an old build while keeping `.wasm` and `.pck` reloads cheap.
+Caddy also proxies `/api/*`, `/privacy`, and `/terms` to the account service.
+It must never proxy `/internal/*`; that interface additionally requires a
+root-managed shared secret and a loopback source address.
+
+The deployed Caddy config should keep `index.html` uncached (`no-store`). Fixed-name Godot runtime files such as `.wasm`, `.pck`, `.js`, and worklets must revalidate on reload; do not mark them immutable unless the export pipeline first gives them content-hashed filenames. Longer-lived caching is appropriate only where filenames/content rules make stale runtime mismatches impossible. `docs/workflow.md` is authoritative if cache guidance differs.
 
 ## Godot web export
 
@@ -145,11 +130,16 @@ Deploy only the browser site to Oracle:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_web_oracle.ps1
 ```
 
-Deploy both Web client and dedicated server from the same project state:
+Deploy the account API, Web client, and dedicated server from the same project
+state (with a root-private Google credential file):
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_full_oracle.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_full_oracle.ps1 `
+  -AccountEnvPath 'D:\private\creepy-pasta-google.local.env'
 ```
+
+See `docs/account_auth_oracle.md` for Google Cloud configuration, stored data,
+backup/restore, and setup-pending deployment.
 
 The deploy scripts keep a single previous-version rollback point on the Oracle VM. Use these only after a bad deploy:
 

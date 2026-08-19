@@ -33,6 +33,11 @@ func _ready() -> void:
 	)
 	ui.journal_requested.connect(func() -> void: journal_open_count += 1)
 	await get_tree().process_frame
+	ui.update_hud(0, 2)
+	ui.set_objective("Find a way out")
+	if ui.hud_label.visible or ui.objective_label.visible:
+		_fail("Gameplay HUD leaked through the open connection menu")
+		return
 
 	ui.set_join_address("127.0.0.1")
 	ui.host_button.pressed.emit()
@@ -108,6 +113,9 @@ func _ready() -> void:
 		return
 	if ui.is_blocking_overlay_visible():
 		_fail("Hidden menu incorrectly blocked gameplay input")
+		return
+	if not ui.hud_label.visible or not ui.objective_label.visible:
+		_fail("Gameplay HUD did not return after the connection menu closed")
 		return
 	ui.show_journal("0/2 creatures documented", "No verified observations.")
 	if not ui.is_journal_visible() or not ui.is_blocking_overlay_visible():

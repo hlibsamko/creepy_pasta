@@ -23,6 +23,7 @@ func _run_smoke() -> void:
 	_assert_online_player_reassignment_state()
 	await _assert_same_level_session_switch_rebuilds_scene()
 	_assert_level_state("initial level", 2, 1, 0, true)
+	_assert_initial_level_structure()
 	_assert_active_note_limit("initial level")
 	_assert_authoritative_note_copy("initial level")
 	_assert_client_discovery_whitelist("initial level")
@@ -45,6 +46,7 @@ func _run_smoke() -> void:
 	main.call("_load_level_scene", NEXT_PLACE_SCENE)
 	await get_tree().process_frame
 	_assert_level_state("next place", 2, 0, 1, true)
+	_assert_next_place_structure()
 	_assert_active_note_limit("next place")
 	_assert_authoritative_note_copy("next place")
 	_assert_client_discovery_whitelist("next place")
@@ -106,6 +108,7 @@ func _run_smoke() -> void:
 
 	main.call("_load_level_scene", main.CORRIDOR_SCENE)
 	await get_tree().process_frame
+	_assert_corridor_structure()
 	_assert_client_discovery_whitelist("corridor")
 	_assert_note_gated_monster_definitions("corridor")
 	_assert_exit_definition("corridor")
@@ -113,6 +116,7 @@ func _run_smoke() -> void:
 	main.call("_load_level_scene", FOURTH_ROOM_SCENE)
 	await get_tree().process_frame
 	_assert_level_state("fourth room", 2, 2, 0, true)
+	_assert_fourth_room_structure()
 	_assert_active_note_limit("fourth room")
 	_assert_authoritative_note_copy("fourth room")
 	_assert_client_discovery_whitelist("fourth room")
@@ -132,6 +136,151 @@ func _run_smoke() -> void:
 
 	print("[smoke] Main state discovery OK")
 	get_tree().quit()
+
+
+func _assert_fourth_room_structure() -> void:
+	var loaded_level := main.get("level") as Node3D
+	if not loaded_level:
+		_fail("Fourth room did not instantiate as a 3D level")
+		return
+	for required_path in [
+		"Environment/Geometry/Floor",
+		"Environment/Geometry/NorthWall",
+		"Environment/Geometry/SouthWall",
+		"Environment/Geometry/WestWall",
+		"Environment/Geometry/EastWall",
+		"Environment/Lighting/RoomLight",
+		"DialogueNpcs/FinalIntercom",
+		"DialogueNpcs/ThresholdTest",
+		"Monsters/WatcherMonster",
+		"Monsters/MimicDoor",
+		"LevelExit",
+	]:
+		if not loaded_level.has_node(required_path):
+			_fail("Fourth room architecture lost required node: %s" % required_path)
+			return
+	var watcher := loaded_level.get_node("Monsters/WatcherMonster") as WatcherMonster
+	if not watcher.has_node("Head") or not watcher.has_node("ArmLeft") or not watcher.has_node("Eye"):
+		_fail("Fourth room Watcher is no longer backed by the reusable visual scene")
+		return
+	var room_exit := loaded_level.get_node("LevelExit") as LevelExit
+	if not room_exit.has_node("Frame") or not room_exit.has_node("DraftCue"):
+		_fail("Fourth room exit is no longer backed by the reusable exit scene")
+		return
+	_assert_exit_box_size(room_exit, Vector3(2.0, 2.3, 1.0), "Fourth room")
+
+
+func _assert_next_place_structure() -> void:
+	var loaded_level := main.get("level") as Node3D
+	if not loaded_level:
+		_fail("Next place did not instantiate as a 3D level")
+		return
+	for required_path in [
+		"Environment/Geometry/Floor",
+		"Environment/Geometry/NorthWall",
+		"Environment/Geometry/SouthWall",
+		"Environment/Geometry/WestWall",
+		"Environment/Geometry/EastWall",
+		"Environment/Lighting/EntryLight",
+		"Environment/Lighting/CenterLamp",
+		"Environment/Lighting/BackLamp",
+		"Environment/Lighting/WarningLamp",
+		"PressurePlate",
+		"DialogueNpcs/Mara",
+		"Notes/Fragment1",
+		"Notes/Fragment2",
+		"Notes/Fragment3",
+		"LevelExit",
+	]:
+		if not loaded_level.has_node(required_path):
+			_fail("Next-place architecture lost required node: %s" % required_path)
+			return
+	var room_exit := loaded_level.get_node("LevelExit") as LevelExit
+	if not room_exit.has_node("Frame") or not room_exit.has_node("DraftCue"):
+		_fail("Next-place exit is no longer backed by the reusable exit scene")
+		return
+	_assert_exit_box_size(room_exit, Vector3(2.0, 2.3, 1.0), "Next place")
+
+
+func _assert_corridor_structure() -> void:
+	var loaded_level := main.get("level") as Node3D
+	if not loaded_level:
+		_fail("Corridor did not instantiate as a 3D level")
+		return
+	for required_path in [
+		"Environment/Geometry/Floor",
+		"Environment/Geometry/LeftWall",
+		"Environment/Geometry/RightWall",
+		"Environment/Geometry/BackWall",
+		"Environment/Lighting/DimLightA",
+		"Environment/Lighting/DimLightB",
+		"Environment/Lighting/ExitLight",
+		"Monsters/CorridorMonster",
+		"Monsters/CorridorMonster2",
+		"Notes",
+		"LevelExit",
+	]:
+		if not loaded_level.has_node(required_path):
+			_fail("Corridor architecture lost required node: %s" % required_path)
+			return
+	for monster_path in ["Monsters/CorridorMonster", "Monsters/CorridorMonster2"]:
+		var monster := loaded_level.get_node(monster_path) as CorridorMonster
+		if not monster.has_node("KillZone") or not monster.has_node("PhotoSprite"):
+			_fail("Corridor photo-chaser prefab lost its collision or visual contract")
+			return
+	var room_exit := loaded_level.get_node("LevelExit") as LevelExit
+	if not room_exit.has_node("Frame") or not room_exit.has_node("DraftCue"):
+		_fail("Corridor exit is no longer backed by the reusable exit scene")
+		return
+	_assert_exit_box_size(room_exit, Vector3(2.0, 2.3, 1.2), "Corridor")
+
+
+func _assert_initial_level_structure() -> void:
+	var loaded_level := main.get("level") as Node3D
+	if not loaded_level:
+		_fail("Initial room did not instantiate as a 3D level")
+		return
+	for required_path in [
+		"Environment/Geometry/Floor",
+		"Environment/Geometry/Ceiling",
+		"Environment/Geometry/NorthWall",
+		"Environment/Geometry/SouthWall",
+		"Environment/Geometry/WestWall",
+		"Environment/Geometry/EastWall",
+		"Environment/Lighting/ColdMoonLeak",
+		"Environment/Lighting/RouteLampA",
+		"Environment/Lighting/RouteLampB",
+		"Environment/Dressing/BrokenShelf",
+		"Environment/Dressing/LongTable",
+		"Environment/Dressing/RitualMark",
+		"ThresholdLeftWall",
+		"ThresholdRightWall",
+		"ThresholdLight",
+		"SpawnMarker1",
+		"SpawnMarker2",
+		"SafeThresholdMarker",
+		"DialogueNpcs/EntryRadio",
+		"Monsters/OpeningListener",
+		"Notes/Note1",
+		"Notes/Note2",
+		"Notes/Note3",
+		"LevelExit",
+	]:
+		if not loaded_level.has_node(required_path):
+			_fail("Initial-room architecture lost required node: %s" % required_path)
+			return
+	var room_exit := loaded_level.get_node("LevelExit") as LevelExit
+	if not room_exit.has_node("Frame") or not room_exit.has_node("DraftCue"):
+		_fail("Initial-room exit is no longer backed by the reusable exit scene")
+		return
+	_assert_exit_box_size(room_exit, Vector3(2.2, 2.3, 1.0), "Initial room")
+
+
+func _assert_exit_box_size(room_exit: LevelExit, expected_size: Vector3, label: String) -> void:
+	var collision := room_exit.get_node_or_null("CollisionShape3D") as CollisionShape3D
+	var box_shape := collision.shape as BoxShape3D if collision else null
+	if not box_shape or not box_shape.size.is_equal_approx(expected_size):
+		_fail("%s exit collision footprint changed during prefab extraction" % label)
 
 
 func _assert_level_sequence() -> void:

@@ -6,7 +6,7 @@
 size = Vector3(3.2, 2.4, 3.2)
 
 [sub_resource type="BoxMesh" id="Mesh_panel"]
-size = Vector3(0.62, 0.8, 0.12)
+size = Vector3(0.78, 0.96, 0.12)
 
 [sub_resource type="StandardMaterial3D" id="Material_panel"]
 albedo_color = Color(0.07, 0.075, 0.08, 1)
@@ -14,13 +14,13 @@ metallic = 0.5
 roughness = 0.48
 
 [sub_resource type="BoxMesh" id="Mesh_indicator"]
-size = Vector3(0.3, 0.18, 0.04)
+size = Vector3(0.4, 0.22, 0.04)
 
 [sub_resource type="StandardMaterial3D" id="Material_indicator"]
-albedo_color = Color(0.42, 0.22, 0.035, 1)
+albedo_color = Color(0.36, 0.18, 0.03, 1)
 emission_enabled = true
-emission = Color(0.95, 0.58, 0.12, 1)
-emission_energy_multiplier = 1.35
+emission = Color(0.9, 0.5, 0.08, 1)
+emission_energy_multiplier = 1.15
 
 [node name="BreakerOutageTrigger" type="Area3D"]
 collision_layer = 0

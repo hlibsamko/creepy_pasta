@@ -1,6 +1,36 @@
-[gd_scene load_steps=2 format=3 uid="uid://creepy_game_ui"]
+[gd_scene load_steps=8 format=3 uid="uid://creepy_game_ui"]
 
 [ext_resource type="Script" path="res://scripts/game_ui.gd" id="1_ui"]
+[ext_resource type="Theme" path="res://themes/horror_menu_theme.tres" id="2_menu_theme"]
+[ext_resource type="PackedScene" path="res://scenes/account_panel.tscn" id="3_account_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menu_parallax.tscn" id="4_menu_parallax"]
+
+[sub_resource type="StyleBoxFlat" id="Style_journal_panel"]
+bg_color = Color(0.075, 0.068, 0.06, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.48, 0.36, 0.22, 0.9)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 12
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="Style_journal_page"]
+bg_color = Color(0.12, 0.105, 0.085, 0.82)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34, 0.28, 0.19, 0.7)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="GameUi" type="CanvasLayer"]
 script = ExtResource("1_ui")
@@ -12,14 +42,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_menu_theme")
+
+[node name="MenuParallax" parent="Menu" instance=ExtResource("4_menu_parallax")]
 
 [node name="Panel" type="PanelContainer" parent="Menu"]
-custom_minimum_size = Vector2(520, 410)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 0
 offset_left = 32.0
 offset_top = 32.0
-offset_right = 552.0
-offset_bottom = 442.0
+offset_right = 492.0
+offset_bottom = 342.0
 
 [node name="Margin" type="MarginContainer" parent="Menu/Panel"]
 layout_mode = 2
@@ -34,21 +67,27 @@ theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "Creepy Pasta 3D"
+theme_override_colors/font_color = Color(0.72, 0.84, 0.98, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.75)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 34
+text = "CREEPY PASTA"
 
 [node name="StatusLabel" type="Label" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2
-text = "Host locally, join a server, or play offline."
+theme_override_colors/font_color = Color(0.68, 0.74, 0.8, 1)
+text = "The house remembers every connection. Choose how you enter."
 autowrap_mode = 3
 
 [node name="VersionLabel" type="Label" parent="Menu/Panel/Margin/Box"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.62, 0.62, 0.56, 1)
+theme_override_colors/font_color = Color(0.5, 0.57, 0.64, 1)
 theme_override_font_sizes/font_size = 12
 text = "v0.2.0-local"
 
 [node name="IpEdit" type="LineEdit" parent="Menu/Panel/Margin/Box"]
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "ws://127.0.0.1:24567"
 placeholder_text = "ws://127.0.0.1:24567"
@@ -60,15 +99,15 @@ theme_override_constants/separation = 8
 
 [node name="HostButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
 layout_mode = 2
-text = "Host"
+text = "Host Game"
 
 [node name="JoinButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
 layout_mode = 2
-text = "Join"
+text = "Join Game"
 
 [node name="OfflineButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
 layout_mode = 2
-text = "Offline"
+text = "Play Offline"
 
 [node name="ReconnectButton" type="Button" parent="Menu/Panel/Margin/Box/Buttons"]
 layout_mode = 2
@@ -270,6 +309,7 @@ offset_right = 310.0
 offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_journal_panel")
 
 [node name="Margin" type="MarginContainer" parent="JournalPanel/Panel"]
 layout_mode = 2
@@ -284,6 +324,7 @@ theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="JournalPanel/Panel/Margin/Box"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.78, 0.47, 1)
 theme_override_font_sizes/font_size = 26
 text = "Field Journal"
 
@@ -297,6 +338,9 @@ custom_minimum_size = Vector2(560, 300)
 layout_mode = 2
 bbcode_enabled = true
 scroll_active = true
+theme_override_styles/normal = SubResource("Style_journal_page")
+theme_override_constants/line_separation = 3
+theme_override_colors/default_color = Color(0.87, 0.83, 0.74, 1)
 text = "No verified observations."
 
 [node name="CloseButton" type="Button" parent="JournalPanel/Panel/Margin/Box"]
@@ -574,3 +618,5 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Continue"
 horizontal_alignment = 2
+
+[node name="AccountPanel" parent="Menu" instance=ExtResource("3_account_panel")]

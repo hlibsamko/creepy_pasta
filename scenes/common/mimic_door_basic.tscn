@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/mimic_door.gd" id="1_mimic"]
 
@@ -30,6 +30,14 @@ emission_enabled = true
 emission = Color(0.8, 0.04, 0.08, 1)
 emission_energy_multiplier = 0.8
 
+[sub_resource type="BoxMesh" id="Mesh_frame"]
+size = Vector3(2.38, 2.62, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_frame"]
+albedo_color = Color(0.018, 0.012, 0.026, 1)
+metallic = 0.25
+roughness = 0.72
+
 [node name="MimicDoor" type="Area3D"]
 script = ExtResource("1_mimic")
 collision_layer = 0
@@ -41,6 +49,11 @@ shape = SubResource("Shape_trigger")
 [node name="Door" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_door")
 surface_material_override/0 = SubResource("Mat_door")
+
+[node name="Frame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.08)
+mesh = SubResource("Mesh_frame")
+surface_material_override/0 = SubResource("Mat_frame")
 
 [node name="Glow" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13)

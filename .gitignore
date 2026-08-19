@@ -2,3 +2,17 @@
 .godot/
 /android/
 /build/
+
+# Account-service runtime data and local secrets
+.env
+.env.*
+!.env.example
+/backend/data/
+/backend/*.sqlite
+/backend/*.sqlite3
+/backend/*.sqlite-*
+/backend/*.sqlite3-*
+/backend/__pycache__/
+/deploy/*.local.env
+__pycache__/
+*.py[cod]

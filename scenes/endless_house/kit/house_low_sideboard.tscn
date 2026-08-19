@@ -1,4 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=53 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/desk.glb" id="1_desk"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_radio_visual.tscn" id="2_radio"]
 
 [sub_resource type="BoxShape3D" id="Shape_sideboard"]
 size = Vector3(2.8, 1.12, 0.7)
@@ -7,15 +10,339 @@ size = Vector3(2.8, 1.12, 0.7)
 size = Vector3(2.8, 1.05, 0.68)
 
 [sub_resource type="StandardMaterial3D" id="Mat_body"]
-albedo_color = Color(0.19, 0.075, 0.09, 1)
-roughness = 0.9
+albedo_color = Color(0.27, 0.1, 0.12, 1)
+roughness = 0.86
 
 [sub_resource type="BoxMesh" id="Mesh_top"]
 size = Vector3(2.92, 0.1, 0.78)
 
 [sub_resource type="StandardMaterial3D" id="Mat_top"]
-albedo_color = Color(0.055, 0.065, 0.07, 1)
+albedo_color = Color(0.085, 0.095, 0.1, 1)
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="Mesh_handle"]
+size = Vector3(0.24, 0.045, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="Mat_handle"]
+albedo_color = Color(0.55, 0.34, 0.15, 1)
+metallic = 0.55
+roughness = 0.38
+
+[sub_resource type="CylinderMesh" id="Mesh_lamp_base"]
+top_radius = 0.1
+bottom_radius = 0.13
+height = 0.08
+
+[sub_resource type="CylinderMesh" id="Mesh_lamp_shade"]
+top_radius = 0.12
+bottom_radius = 0.22
+height = 0.22
+
+[sub_resource type="StandardMaterial3D" id="Mat_lamp"]
+albedo_color = Color(0.4, 0.26, 0.15, 1)
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="Mat_lamp_shade"]
+albedo_color = Color(0.3, 0.18, 0.1, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="Mesh_papers"]
+size = Vector3(0.34, 0.06, 0.24)
+
+[sub_resource type="StandardMaterial3D" id="Mat_papers"]
+albedo_color = Color(0.48, 0.42, 0.3, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_photo_frame"]
+size = Vector3(0.3, 0.34, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="Mat_photo_frame"]
+albedo_color = Color(0.3, 0.18, 0.09, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_survey_map_frame"]
+albedo_color = Color(0.22, 0.12, 0.07, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="Mesh_photo"]
+size = Vector3(0.22, 0.23, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="Mat_photo"]
+albedo_color = Color(0.18, 0.32, 0.34, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall_portrait"]
+albedo_color = Color(0.12, 0.2, 0.22, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Mat_survey_map"]
+albedo_color = Color(0.36, 0.42, 0.44, 1)
+roughness = 0.94
+
+[sub_resource type="SphereMesh" id="Mesh_key_bowl"]
+radius = 0.12
+height = 0.08
+
+[sub_resource type="StandardMaterial3D" id="Mat_key_bowl"]
+albedo_color = Color(0.16, 0.17, 0.18, 1)
+metallic = 0.5
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_note"]
+size = Vector3(0.12, 0.09, 0.018)
+
+[sub_resource type="StandardMaterial3D" id="Mat_note_yellow"]
+albedo_color = Color(0.62, 0.47, 0.13, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_note_yellow_hero"]
+albedo_color = Color(0.7, 0.52, 0.14, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_room_number"]
+albedo_color = Color(0.58, 0.43, 0.12, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Mat_switch_toggle"]
+albedo_color = Color(0.76, 0.56, 0.16, 1)
+roughness = 0.78
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_note_cyan"]
+albedo_color = Color(0.12, 0.42, 0.45, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_note_cyan_hero"]
+albedo_color = Color(0.15, 0.5, 0.52, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_note_red"]
+albedo_color = Color(0.48, 0.12, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_note_red_hero"]
+albedo_color = Color(0.56, 0.14, 0.11, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_paint_wear"]
+albedo_color = Color(0.32, 0.12, 0.1, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="Mesh_stool_seat"]
+size = Vector3(0.58, 0.12, 0.58)
+
+[sub_resource type="BoxMesh" id="Mesh_stool_leg"]
+size = Vector3(0.08, 0.62, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_stool"]
+albedo_color = Color(0.27, 0.11, 0.065, 1)
+roughness = 0.91
+
+[sub_resource type="BoxMesh" id="Mesh_coat"]
+size = Vector3(0.48, 0.18, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_coat"]
+albedo_color = Color(0.08, 0.105, 0.12, 1)
+roughness = 0.97
+
+[sub_resource type="CylinderMesh" id="Mesh_plant_pot"]
+top_radius = 0.12
+bottom_radius = 0.16
+height = 0.18
+
+[sub_resource type="CapsuleMesh" id="Mesh_plant_leaf"]
+radius = 0.045
+height = 0.42
+
+[sub_resource type="StandardMaterial3D" id="Mat_plant"]
+albedo_color = Color(0.14, 0.26, 0.14, 1)
+roughness = 0.98
+
+[sub_resource type="StandardMaterial3D" id="Mat_pot"]
+albedo_color = Color(0.25, 0.12, 0.07, 1)
+roughness = 0.93
+
+[sub_resource type="BoxMesh" id="Mesh_runner"]
+size = Vector3(2.1, 0.035, 1.05)
+
+[sub_resource type="StandardMaterial3D" id="Mat_runner"]
+albedo_color = Color(0.2, 0.075, 0.1, 1)
+roughness = 0.99
+
+[sub_resource type="BoxMesh" id="Mesh_radio"]
+size = Vector3(0.34, 0.2, 0.2)
+
+[sub_resource type="CylinderMesh" id="Mesh_radio_dial"]
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.025
+
+[sub_resource type="CylinderMesh" id="Mesh_radio_antenna"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.34
+
+[sub_resource type="StandardMaterial3D" id="Mat_radio"]
+albedo_color = Color(0.095, 0.105, 0.11, 1)
+metallic = 0.22
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_radio_dial"]
+albedo_color = Color(0.32, 0.24, 0.12, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="Mat_telephone"]
+albedo_color = Color(0.07, 0.08, 0.09, 1)
+metallic = 0.28
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="Mat_telephone_dial"]
+albedo_color = Color(0.38, 0.27, 0.12, 1)
+roughness = 0.76
+
+[sub_resource type="TorusMesh" id="Mesh_key_ring"]
+inner_radius = 0.045
+outer_radius = 0.07
+rings = 8
+ring_segments = 12
+
+[sub_resource type="BoxMesh" id="Mesh_key"]
+size = Vector3(0.16, 0.025, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="Mat_key"]
+albedo_color = Color(0.55, 0.36, 0.12, 1)
+metallic = 0.75
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_key_ring_accent"]
+albedo_color = Color(0.62, 0.4, 0.14, 1)
+metallic = 0.7
+roughness = 0.34
+
+[sub_resource type="BoxMesh" id="Mesh_clipboard"]
+size = Vector3(0.28, 0.38, 0.035)
+
+[sub_resource type="BoxMesh" id="Mesh_clipboard_paper"]
+size = Vector3(0.22, 0.29, 0.012)
+
+[sub_resource type="StandardMaterial3D" id="Mat_clipboard"]
+albedo_color = Color(0.32, 0.2, 0.1, 1)
 roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Mat_thermometer"]
+albedo_color = Color(0.24, 0.27, 0.25, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Mat_thermometer_mark"]
+albedo_color = Color(0.52, 0.12, 0.08, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_clipboard_hero"]
+albedo_color = Color(0.36, 0.22, 0.11, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_clipboard_paper"]
+albedo_color = Color(0.45, 0.41, 0.32, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Mat_clipboard_paper_hero"]
+albedo_color = Color(0.5, 0.45, 0.34, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_mail_slot"]
+albedo_color = Color(0.12, 0.085, 0.075, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_key_tag"]
+albedo_color = Color(0.76, 0.5, 0.12, 1)
+metallic = 0.35
+roughness = 0.36
+
+[sub_resource type="StandardMaterial3D" id="Mat_coat_hook"]
+albedo_color = Color(0.18, 0.08, 0.07, 1)
+metallic = 0.55
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Mat_doorbell"]
+albedo_color = Color(0.42, 0.28, 0.09, 1)
+metallic = 0.6
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_room_label"]
+albedo_color = Color(0.56, 0.47, 0.32, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_room_label_mark"]
+albedo_color = Color(0.18, 0.36, 0.4, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_emergency_tag"]
+albedo_color = Color(0.68, 0.12, 0.08, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Mat_maintenance_decal"]
+albedo_color = Color(0.58, 0.4, 0.11, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_maintenance_arrow"]
+albedo_color = Color(0.5, 0.32, 0.08, 1)
+roughness = 0.92
+
+[sub_resource type="CylinderMesh" id="Mesh_clock"]
+top_radius = 0.19
+bottom_radius = 0.19
+height = 0.05
+
+[sub_resource type="BoxMesh" id="Mesh_clock_hand"]
+size = Vector3(0.025, 0.12, 0.018)
+
+[sub_resource type="StandardMaterial3D" id="Mat_clock"]
+albedo_color = Color(0.28, 0.22, 0.14, 1)
+roughness = 0.84
+
+[sub_resource type="StandardMaterial3D" id="Mat_clock_hand"]
+albedo_color = Color(0.62, 0.44, 0.18, 1)
+metallic = 0.2
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_wall_curtain"]
+size = Vector3(0.42, 1.15, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall_curtain"]
+albedo_color = Color(0.09, 0.13, 0.16, 1)
+roughness = 0.92
+
+[sub_resource type="CylinderMesh" id="Mesh_basket"]
+top_radius = 0.24
+bottom_radius = 0.28
+height = 0.38
+
+[sub_resource type="TorusMesh" id="Mesh_basket_rim"]
+inner_radius = 0.2
+outer_radius = 0.24
+rings = 8
+ring_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="Mat_basket"]
+albedo_color = Color(0.32, 0.18, 0.09, 1)
+roughness = 0.98
+
+[sub_resource type="TorusMesh" id="Mesh_cable"]
+inner_radius = 0.09
+outer_radius = 0.12
+rings = 8
+ring_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="Mat_cable"]
+albedo_color = Color(0.1, 0.11, 0.12, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="Mesh_shoe"]
+size = Vector3(0.28, 0.12, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_shoe"]
+albedo_color = Color(0.07, 0.075, 0.085, 1)
+roughness = 0.98
+
 
 [node name="HouseLowSideboard" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
@@ -23,11 +350,348 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_sideboard")
 
-[node name="Body" type="MeshInstance3D" parent="."]
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="Furniture" type="Node3D" parent="Visuals"]
+
+[node name="SurfaceProps" type="Node3D" parent="Visuals"]
+
+[node name="FloorDressing" type="Node3D" parent="Visuals"]
+
+[node name="WallDressing" type="Node3D" parent="Visuals"]
+
+[node name="Body" type="MeshInstance3D" parent="Visuals/Furniture"]
 mesh = SubResource("Mesh_body")
 surface_material_override/0 = SubResource("Mat_body")
 
-[node name="Top" type="MeshInstance3D" parent="."]
+[node name="Top" type="MeshInstance3D" parent="Visuals/Furniture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
 mesh = SubResource("Mesh_top")
 surface_material_override/0 = SubResource("Mat_top")
+
+[node name="HandleLeft" type="MeshInstance3D" parent="Visuals/Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68, 0.18, -0.365)
+mesh = SubResource("Mesh_handle")
+surface_material_override/0 = SubResource("Mat_handle")
+
+[node name="HandleRight" type="MeshInstance3D" parent="Visuals/Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.68, 0.18, -0.365)
+mesh = SubResource("Mesh_handle")
+surface_material_override/0 = SubResource("Mat_handle")
+
+[node name="LampBase" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82, 0.68, -0.14)
+mesh = SubResource("Mesh_lamp_base")
+surface_material_override/0 = SubResource("Mat_lamp")
+
+[node name="LampShade" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82, 0.83, -0.14)
+mesh = SubResource("Mesh_lamp_shade")
+surface_material_override/0 = SubResource("Mat_lamp_shade")
+
+[node name="LampGlow" type="OmniLight3D" parent="Visuals/SurfaceProps"]
+position = Vector3(0.82, 0.78, -0.16)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 0.62
+omni_range = 3.2
+
+[node name="PaperStack" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.64, -0.2)
+mesh = SubResource("Mesh_papers")
+surface_material_override/0 = SubResource("Mat_papers")
+
+[node name="EvidencePhotoFrame" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.86, -0.19)
+mesh = SubResource("Mesh_photo_frame")
+surface_material_override/0 = SubResource("Mat_photo_frame")
+
+[node name="EvidencePhoto" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.86, -0.22)
+mesh = SubResource("Mesh_photo")
+surface_material_override/0 = SubResource("Mat_photo")
+
+[node name="KeyBowl" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.65, -0.18)
+mesh = SubResource("Mesh_key_bowl")
+surface_material_override/0 = SubResource("Mat_key_bowl")
+
+[node name="MaintenanceNoteYellow" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.95, -0.365)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_note_yellow_hero")
+
+[node name="MaintenanceNoteCyan" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(0.92, 0.08, 0, -0.08, 0.92, 0, 0, 0, 1, -0.2, 0.98, -0.365)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_note_cyan_hero")
+
+[node name="MaintenanceNoteRed" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.94, -0.365)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_note_red_hero")
+
+[node name="StoolSeat" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0.72, 0.18)
+mesh = SubResource("Mesh_stool_seat")
+surface_material_override/0 = SubResource("Mat_stool")
+
+[node name="StoolLegFront" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.93, 0.38, -0.02)
+mesh = SubResource("Mesh_stool_leg")
+surface_material_override/0 = SubResource("Mat_stool")
+
+[node name="StoolLegBack" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.57, 0.38, 0.38)
+mesh = SubResource("Mesh_stool_leg")
+surface_material_override/0 = SubResource("Mat_stool")
+
+[node name="DrapedCoat" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(0.96, 0.12, 0, -0.12, 0.96, 0, 0, 0, 1, -1.75, 0.86, 0.18)
+mesh = SubResource("Mesh_coat")
+surface_material_override/0 = SubResource("Mat_coat")
+
+[node name="PlantPot" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.68, -0.14)
+mesh = SubResource("Mesh_plant_pot")
+surface_material_override/0 = SubResource("Mat_pot")
+
+[node name="PlantLeafLeft" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(0.9, 0.16, 0, -0.16, 0.9, 0, 0, 0, 1, 1.12, 0.94, -0.14)
+mesh = SubResource("Mesh_plant_leaf")
+surface_material_override/0 = SubResource("Mat_plant")
+
+[node name="PlantLeafCenter" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.0, -0.14)
+mesh = SubResource("Mesh_plant_leaf")
+surface_material_override/0 = SubResource("Mat_plant")
+
+[node name="PlantLeafRight" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(0.9, -0.16, 0, 0.16, 0.9, 0, 0, 0, 1, 1.28, 0.94, -0.14)
+mesh = SubResource("Mesh_plant_leaf")
+surface_material_override/0 = SubResource("Mat_plant")
+
+[node name="WornRunner" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.53, 0.62)
+mesh = SubResource("Mesh_runner")
+surface_material_override/0 = SubResource("Mat_runner")
+
+[node name="RadioReceiver" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, 0.72, -0.16)
+mesh = SubResource("Mesh_radio")
+surface_material_override/0 = SubResource("Mat_radio")
+
+[node name="RadioDial" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+visible = false
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -0.88, 0.72, -0.27)
+mesh = SubResource("Mesh_radio_dial")
+surface_material_override/0 = SubResource("Mat_radio_dial")
+surface_material_override/0 = SubResource("Mat_handle")
+
+[node name="RadioAntenna" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 0.94, -0.34, 0, 0.34, 0.94, -0.8, 0.97, -0.16)
+mesh = SubResource("Mesh_radio_antenna")
+surface_material_override/0 = SubResource("Mat_radio")
+
+[node name="RadioModel" parent="Visuals/SurfaceProps" instance=ExtResource("2_radio")]
+position = Vector3(-1.1, 0.61, -0.16)
+
+[node name="KeyRing" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.72, -0.28)
+mesh = SubResource("Mesh_key_ring")
+surface_material_override/0 = SubResource("Mat_key_ring_accent")
+
+[node name="KeyOne" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(0.98, 0.12, 0, -0.12, 0.98, 0, 0, 0, 1, -0.69, 0.71, -0.28)
+mesh = SubResource("Mesh_key")
+surface_material_override/0 = SubResource("Mat_key")
+
+[node name="KeyTwo" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(0.94, -0.2, 0, 0.2, 0.94, 0, 0, 0, 1, -0.91, 0.7, -0.28)
+mesh = SubResource("Mesh_key")
+surface_material_override/0 = SubResource("Mat_key")
+
+[node name="MaintenanceClipboard" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 1, 0, 0.33, 0.82, -0.38)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_clipboard_hero")
+
+[node name="ClipboardPaper" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
+transform = Transform3D(1, 0, 0, 0, 0.98, 0.1, 0, -0.1, 0.98, 0.33, 0.84, -0.405)
+mesh = SubResource("Mesh_clipboard_paper")
+surface_material_override/0 = SubResource("Mat_clipboard_paper_hero")
+
+[node name="WallClock" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.25, 1.36, 0.24)
+mesh = SubResource("Mesh_clock")
+surface_material_override/0 = SubResource("Mat_clock")
+
+[node name="ClockHandMinute" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.25, 1.46, 0.2)
+mesh = SubResource("Mesh_clock_hand")
+surface_material_override/0 = SubResource("Mat_clock_hand")
+
+[node name="ClockHandHour" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.25, 1.34, 0.2)
+mesh = SubResource("Mesh_clock_hand")
+surface_material_override/0 = SubResource("Mat_clock_hand")
+
+[node name="WallPortraitFrame" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1, -0.72, 1.48, 0.24)
+mesh = SubResource("Mesh_photo_frame")
+surface_material_override/0 = SubResource("Mat_photo_frame")
+
+[node name="WallPortrait" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1, -0.72, 1.48, 0.205)
+mesh = SubResource("Mesh_photo")
+surface_material_override/0 = SubResource("Mat_wall_portrait")
+
+[node name="WallIntercom" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.78, 0, 0, 0, 1.15, 0, 0, 0, 0.72, 1.18, 1.3, 0.23)
+mesh = SubResource("Mesh_radio")
+surface_material_override/0 = SubResource("Mat_radio")
+
+[node name="WallIntercomDial" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 1.18, 1.3, 0.08)
+mesh = SubResource("Mesh_radio_dial")
+surface_material_override/0 = SubResource("Mat_handle")
+
+[node name="WallSwitchPanel" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.6, 0, 0, 0, 0.82, 0, 0, 0, 0.5, 0.72, 1.24, 0.23)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_clipboard")
+
+[node name="WallSwitchToggle" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.6, 0.72, 1.24, 0.08)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_switch_toggle")
+
+[node name="WallMailSlot" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.72, 0, 0, 0, 0.42, 0, 0, 0, 0.55, 0.36, 1.18, 0.23)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_mail_slot")
+
+[node name="WallMailPaper" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.62, 0, 0, 0, 0.58, 0, 0, 0, 0.5, 0.36, 1.22, 0.08)
+mesh = SubResource("Mesh_clipboard_paper")
+surface_material_override/0 = SubResource("Mat_clipboard_paper")
+
+[node name="WallKeyHook" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, -0.1, 1.18, 0.22)
+mesh = SubResource("Mesh_key_ring")
+surface_material_override/0 = SubResource("Mat_key")
+
+[node name="WallKeyTag" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.7, 0.14, 0, -0.14, 0.7, 0, 0, 0, 0.7, -0.1, 1.1, 0.08)
+mesh = SubResource("Mesh_key")
+surface_material_override/0 = SubResource("Mat_key_tag")
+
+[node name="WallThermometer" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.34, 0, 0, 0, 0.8, 0, 0, 0, 0.42, -0.42, 1.26, 0.22)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_thermometer")
+
+[node name="WallThermometerMark" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.62, 0, 0, 0, 0.62, 0, 0, 0, 0.52, -0.42, 1.28, 0.08)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_thermometer_mark")
+
+[node name="WallRoomLabel" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.9, 0, 0, 0, 0.34, 0, 0, 0, 0.5, 0.7, 1.68, 0.22)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_room_label")
+
+[node name="WallRoomLabelMark" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.65, 0, 0, 0, 0.5, 0, 0, 0, 0.52, 0.7, 1.68, 0.08)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_room_label_mark")
+
+[node name="WallPaintWear" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1.8, 0.12, 0, -0.12, 0.46, 0, 0, 0, 0.4, 1.05, 0.36, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_paint_wear")
+
+[node name="MaintenanceDecal" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.78, 0.06, 0, -0.06, 0.5, 0, 0, 0, 0.42, -1.02, 1.24, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_maintenance_decal")
+
+[node name="MaintenanceArrow" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1.15, 0.08, 0, -0.08, 0.3, 0, 0, 0, 0.4, -1.0, 1.02, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_maintenance_arrow")
+
+[node name="WallRoomNumber" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.5, 0, 0, 0, 0.42, 0, 0, 0, 0.4, 0.08, 1.58, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_room_number")
+
+[node name="WallCoatHook" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.42, 1.36, 0.22)
+mesh = SubResource("Mesh_key_ring")
+surface_material_override/0 = SubResource("Mat_coat_hook")
+
+[node name="WallDoorbell" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.58, 0, 0, 0, 0.58, 0, 0, 0, 0.58, 0.58, 1.2, 0.22)
+mesh = SubResource("Mesh_radio_dial")
+surface_material_override/0 = SubResource("Mat_doorbell")
+
+[node name="WallEmergencyTag" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.72, 0.04, 0, -0.04, 0.44, 0, 0, 0, 0.4, 0.86, 1.2, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_emergency_tag")
+
+[node name="WallSurveyMapFrame" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1.45, 0, 0, 0, 1.45, 0, 0, 0, 1, -0.2, 1.72, 0.22)
+mesh = SubResource("Mesh_photo_frame")
+surface_material_override/0 = SubResource("Mat_survey_map_frame")
+
+[node name="WallSurveyMap" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1.45, 0, 0, 0, 1.45, 0, 0, 0, 1, -0.2, 1.72, 0.18)
+mesh = SubResource("Mesh_photo")
+surface_material_override/0 = SubResource("Mat_survey_map")
+
+[node name="WallCurtain" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(1.0, 0.06, 0, -0.06, 1.0, 0, 0, 0, 1, 1.35, 1.45, 0.22)
+mesh = SubResource("Mesh_wall_curtain")
+surface_material_override/0 = SubResource("Mat_wall_curtain")
+
+[node name="WallTelephone" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.72, 0, 0, 0, 0.92, 0, 0, 0, 0.68, -1.12, 1.38, 0.22)
+mesh = SubResource("Mesh_radio")
+surface_material_override/0 = SubResource("Mat_telephone")
+
+[node name="WallTelephoneDial" type="MeshInstance3D" parent="Visuals/WallDressing"]
+transform = Transform3D(0.62, 0, 0, 0, 0.62, 0, 0, 0, 0.62, -1.12, 1.38, 0.08)
+mesh = SubResource("Mesh_radio_dial")
+surface_material_override/0 = SubResource("Mat_telephone_dial")
+
+[node name="StorageBasket" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, -0.37, 0.2)
+mesh = SubResource("Mesh_basket")
+surface_material_override/0 = SubResource("Mat_basket")
+
+[node name="StorageBasketRim" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, -0.18, 0.2)
+mesh = SubResource("Mesh_basket_rim")
+surface_material_override/0 = SubResource("Mat_basket")
+
+[node name="RadioCableCoil" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(1, 0, 0, 0.707, 0.707, 0, 0, 0, 1, -0.98, 0.64, -0.18)
+mesh = SubResource("Mesh_cable")
+surface_material_override/0 = SubResource("Mat_cable")
+
+[node name="ShoeLeft" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(0.98, 0.08, 0, -0.08, 0.98, 0, 0, 0, 1, -1.8, -0.02, 0.22)
+mesh = SubResource("Mesh_shoe")
+surface_material_override/0 = SubResource("Mat_shoe")
+
+[node name="ShoeRight" type="MeshInstance3D" parent="Visuals/FloorDressing"]
+transform = Transform3D(0.96, -0.12, 0, 0.12, 0.96, 0, 0, 0, 1, -1.55, -0.02, 0.2)
+mesh = SubResource("Mesh_shoe")
+surface_material_override/0 = SubResource("Mat_shoe")
+
+
+[node name="DeskVisual" parent="Visuals/Furniture" instance=ExtResource("1_desk")]
+transform = Transform3D(1.55, 0, 0, 0, 0.98, 0, 0, 0, 0.72, 0, -0.56, 0)

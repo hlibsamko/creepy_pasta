@@ -1,0 +1,293 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/account_panel.gd" id="1_account"]
+
+[node name="AccountPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_account")
+
+[node name="AccountCard" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -412.0
+offset_top = 32.0
+offset_right = -32.0
+offset_bottom = 202.0
+grow_horizontal = 0
+
+[node name="Margin" type="MarginContainer" parent="AccountCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Box" type="VBoxContainer" parent="AccountCard/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="AccountCard/Margin/Box"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="AccountCard/Margin/Box/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.94, 0.78, 0.47, 1)
+theme_override_font_sizes/font_size = 18
+text = "Account"
+
+[node name="LoadingLabel" type="Label" parent="AccountCard/Margin/Box/Header"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.78, 0.68, 1)
+text = "Working..."
+
+[node name="SignedOutRow" type="HBoxContainer" parent="AccountCard/Margin/Box"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GuestLabel" type="Label" parent="AccountCard/Margin/Box/SignedOutRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Guest - offline play remains available"
+autowrap_mode = 3
+
+[node name="SignInButton" type="Button" parent="AccountCard/Margin/Box/SignedOutRow"]
+custom_minimum_size = Vector2(156, 38)
+layout_mode = 2
+text = "Sign in with Google"
+
+[node name="SignedInBox" type="VBoxContainer" parent="AccountCard/Margin/Box"]
+visible = false
+layout_mode = 2
+
+[node name="IdentityRow" type="HBoxContainer" parent="AccountCard/Margin/Box/SignedInBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DisplayName" type="Label" parent="AccountCard/Margin/Box/SignedInBox/IdentityRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Player"
+text_overrun_behavior = 3
+
+[node name="ProfileButton" type="Button" parent="AccountCard/Margin/Box/SignedInBox/IdentityRow"]
+custom_minimum_size = Vector2(70, 34)
+layout_mode = 2
+text = "Profile"
+
+[node name="FriendsButton" type="Button" parent="AccountCard/Margin/Box/SignedInBox/IdentityRow"]
+custom_minimum_size = Vector2(70, 34)
+layout_mode = 2
+text = "Friends"
+
+[node name="SignOutButton" type="Button" parent="AccountCard/Margin/Box/SignedInBox/IdentityRow"]
+custom_minimum_size = Vector2(76, 34)
+layout_mode = 2
+text = "Sign out"
+
+[node name="LegalRow" type="HBoxContainer" parent="AccountCard/Margin/Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PrivacyButton" type="LinkButton" parent="AccountCard/Margin/Box/LegalRow"]
+layout_mode = 2
+text = "Privacy"
+
+[node name="TermsButton" type="LinkButton" parent="AccountCard/Margin/Box/LegalRow"]
+layout_mode = 2
+text = "Terms"
+
+[node name="CardFeedback" type="Label" parent="AccountCard/Margin/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.78, 0.68, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="ModalDim" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.72)
+
+[node name="DetailsModal" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(720, 540)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -270.0
+offset_right = 360.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="DetailsModal"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="Box" type="VBoxContainer" parent="DetailsModal/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="DetailsModal/Margin/Box"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="DetailsModal/Margin/Box/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.94, 0.78, 0.47, 1)
+theme_override_font_sizes/font_size = 24
+text = "Account Profile"
+
+[node name="CloseButton" type="Button" parent="DetailsModal/Margin/Box/Header"]
+custom_minimum_size = Vector2(84, 36)
+layout_mode = 2
+text = "Close"
+
+[node name="FeedbackLabel" type="Label" parent="DetailsModal/Margin/Box"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.78, 0.68, 1)
+autowrap_mode = 3
+
+[node name="Tabs" type="TabContainer" parent="DetailsModal/Margin/Box"]
+custom_minimum_size = Vector2(0, 430)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Profile" type="VBoxContainer" parent="DetailsModal/Margin/Box/Tabs"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ProfileName" type="Label" parent="DetailsModal/Margin/Box/Tabs/Profile"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Player: Player"
+
+[node name="FriendCode" type="Label" parent="DetailsModal/Margin/Box/Tabs/Profile"]
+layout_mode = 2
+text = "Friend code: Not assigned"
+
+[node name="Playtime" type="Label" parent="DetailsModal/Margin/Box/Tabs/Profile"]
+layout_mode = 2
+text = "Verified playtime: 0.0 hours"
+
+[node name="Deaths" type="Label" parent="DetailsModal/Margin/Box/Tabs/Profile"]
+layout_mode = 2
+text = "Deaths: 0"
+
+[node name="AchievementsHeader" type="Label" parent="DetailsModal/Margin/Box/Tabs/Profile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.86, 0.62, 1)
+theme_override_font_sizes/font_size = 17
+text = "Achievements"
+
+[node name="AchievementsScroll" type="ScrollContainer" parent="DetailsModal/Margin/Box/Tabs/Profile"]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="AchievementsList" type="VBoxContainer" parent="DetailsModal/Margin/Box/Tabs/Profile/AchievementsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="AchievementsEmpty" type="Label" parent="DetailsModal/Margin/Box/Tabs/Profile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.68, 0.62, 1)
+text = "No achievements unlocked yet."
+
+[node name="Friends" type="VBoxContainer" parent="DetailsModal/Margin/Box/Tabs"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AddHeader" type="Label" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.86, 0.62, 1)
+theme_override_font_sizes/font_size = 17
+text = "Add by friend code"
+
+[node name="AddRow" type="HBoxContainer" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FriendCodeEdit" type="LineEdit" parent="DetailsModal/Margin/Box/Tabs/Friends/AddRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Friend code"
+
+[node name="AddButton" type="Button" parent="DetailsModal/Margin/Box/Tabs/Friends/AddRow"]
+custom_minimum_size = Vector2(90, 36)
+layout_mode = 2
+text = "Add"
+
+[node name="RequestsHeader" type="Label" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.86, 0.62, 1)
+text = "Incoming requests"
+
+[node name="RequestsScroll" type="ScrollContainer" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+custom_minimum_size = Vector2(0, 105)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RequestsList" type="VBoxContainer" parent="DetailsModal/Margin/Box/Tabs/Friends/RequestsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="RequestsEmpty" type="Label" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.68, 0.62, 1)
+text = "No incoming friend requests."
+
+[node name="FriendsHeader" type="Label" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.86, 0.62, 1)
+text = "Friends"
+
+[node name="FriendsScroll" type="ScrollContainer" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="FriendsList" type="VBoxContainer" parent="DetailsModal/Margin/Box/Tabs/Friends/FriendsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="FriendsEmpty" type="Label" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.68, 0.62, 1)
+text = "Your friends list is empty."
+
+[node name="RefreshButton" type="Button" parent="DetailsModal/Margin/Box/Tabs/Friends"]
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Refresh"

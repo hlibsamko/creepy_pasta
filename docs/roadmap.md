@@ -1,602 +1,286 @@
-# Creepy Pasta Roadmap
-
-This is the high-level project plan for moving the game from a working prototype toward a polished browser-based co-op horror game.
-
-## Current State
-
-The project already has the technical foundation:
-
-- Godot 4.6 browser client
-- Oracle dedicated WebSocket server
-- HTTPS site at `https://creepy-pasta.duckdns.org`
-- WSS multiplayer through `wss://creepy-pasta.duckdns.org`
-- Level scenes, notes, portals, player spawning, and basic multiplayer
-- Deployment workflow for Web client plus dedicated server
-
-The next goal is not simply "more content". The priority is a small, stable, clear co-op horror session that feels complete.
-
-## Product Direction: The Endless House
-
-The game is moving toward an almost endless house whose inhabitants can only be escaped by understanding them.
-
-Core fantasy and progression:
-
-- The opening forces the player to flee from the first creature before receiving a full explanation.
-- A survivor NPC explains the encounter and gives the player a field journal.
-- Each creature has distinct behavior, warning signs, weaknesses, and several discoverable facts.
-- Journal facts can come from direct observation, NPC dialogue, found records, environmental evidence, or risky interaction.
-- Rumors may be incomplete or wrong until corroborated.
-- The main victory condition is completing the house bestiary, not defeating every creature.
-- As the journal fills, the house becomes more dangerous and its inhabitants gain harder behavior variants.
-- Additional survivors have their own histories, partial knowledge, and conflicting accounts.
-- The hidden story explains why the house has no stable end, where its inhabitants came from, and what happened to earlier researchers.
-
-Near-term implementation order:
-
-1. Build a reusable branch-selection contract so short environment studies can coexist without forcing one linear route.
-2. Create and compare the first Backrooms, dreamcore, and poolrooms branches before committing the whole game to one visual language.
-3. Grow the branch catalog gradually to 20 distinct studies; each branch must differ in space, atmosphere, traversal, evidence, or threat rule rather than only color.
-4. Add physical-key jumping and keep ordinary threats slightly slower than the player's sprint speed.
-5. Replace primitive creature and environment placeholders incrementally with compatible existing assets, preserving stable gameplay roots and collisions.
-6. Add fog, volumetrics, reflections, particles, and restrained post-processing only where they support a branch's identity and remain viable in Web builds.
-7. Keep multiplayer authority, late-join sync, reset, reconnect, and physical-key controls covered as the branch catalog expands.
-
-## Environment Branch Program
-
-Target: 20 short playable branches used to decide the final style and feel of the Endless House.
-
-Initial sequence:
-
-1. Backrooms service maze - yellow offices, fluorescent hum, sparse pursuit.
-2. Dreamcore schoolhouse - familiar oversized rooms, false daylight, symbolic navigation.
-3. Poolrooms - tiled water halls, reflections, mist, sound-based tension.
-4. Empty mall after closing - shuttered shops, escalators, distant announcements.
-5. Endless hotel - repeating numbered doors, carpeted silence, room-copy clues.
-6. Concrete liminal transit - platforms, tunnels, moving light, no trains.
-7. Suburban night loop - repeated facades, fog, windows that change occupants.
-8. Abandoned hospital - curtains, service corridors, unreliable intercom guidance.
-9. Indoor playground - bright forms, soft obstacles, movement behind mesh.
-10. Flooded basement - shallow water, breakers, reflected threat silhouettes.
-11. Office after hours - cubicle sightlines, printers, copied workstations.
-12. Archive stacks - movable shelves, catalog evidence, constrained visibility.
-13. Greenhouse interior - condensation, overgrowth, light-sensitive routes.
-14. Museum storage - covered exhibits, observation puzzles, shifting labels.
-15. Brutalist stairwell - vertical traversal, landings that repeat incorrectly.
-16. Synthetic apartment showrooms - staged domestic copies with missing details.
-17. Boiler/service plant - pipes, steam, timed machinery and loud traversal.
-18. Snowed-in atrium - cold haze, footprints, large quiet open space.
-19. Theatre backstage - curtains, rigging, changing sets and false exits.
-20. Impossible attic - low beams, stored memories, final House-lore branch.
-
-Branch production rules:
-
-- Start with short environment studies, not 20 long levels.
-- Reuse native Godot scenes/resources and proven addons or open assets where practical.
-- Keep a shared gameplay contract for spawn, exit, evidence, ambience, fog/effects profile, and optional threat slots.
-- Limit early studies to zero or one ordinary chasing threat; environmental tension and observation mechanics should carry most branches.
-- Finish and visually inspect one small branch batch before expanding the next batch.
-- Record source, license, import settings, and replacement boundary for every external asset.
-
-Completed Endless House concept foundation:
-
-- Journal facts are independent discoveries rather than cumulative counters; finding fact 3 no longer grants facts 1 and 2.
-- The journal stores unverified rumors separately and can visibly mark a rumor as disputed by a specific verified fact.
-- NPC dialogue, found records, direct observation, and level survival each provide distinct fact sources.
-- The opening chase now stages the Listener behind correctly oriented co-op spawns, places evidence along a forward route, and ends at a narrow readable threshold before Mara.
-- The False Door is a third non-chasing creature: it copies an exit, has a learnable two-pulse tell, and kills only a locally controlled player who enters it.
-- A hanging-thread threshold test gives the player an explicit interact-to-observe action instead of awarding every fact through automatic proximity.
-- Room 2 currently uses two active purposeful records with different short puzzle modes plus a separate co-op floor switch; a third authored record remains disabled for faster testing.
-- The shared editor builder now accepts swappable visual `PackedScene` kits, and an Endless House kit can generate residential rooms without duplicating layout/gameplay code.
-- Listener knowledge now changes its decisions as well as its speed: it can fixate on the loudest runner, investigate the last heard position, and eventually lead a sprinting target.
-- Elias is a second survivor in Backrooms who provides a plausible but false account of the False Door's light pattern; later verified evidence explicitly disputes his rumor.
-- The generated House survey now has an authored evidence-to-threat-to-exit route, readable local lighting, and correctly oriented real and False Doors.
-- World evidence now has minimal readable paper, survey-panel, and voice-recorder forms instead of presenting every record as the same yellow sphere.
-- Watcher knowledge now adds lingering attention and one clear line-of-sight step toward the last observer; its lethal warning never drops below three seconds.
-- False Door knowledge now lets it borrow a real exit's warm glow between pulses and eventually conceal its identifying pulse until a player reaches a safe observation range.
-- Rumors in the journal now name their source; Mara and Elias have personal histories that explain their evidence rules and disagreement.
-
-## Operating Instructions
-
-Use this file as the source of truth before and during work to avoid context degradation.
-
-- Input requirement: movement and action bindings must stay on physical keys/scancodes, not layout-dependent letters, so non-English keyboard layouts keep working.
-- Prefer local testing over server deployment. Deploy to the server only after a larger coherent chunk is done and local checks have passed.
-- Push to GitHub no more than once every 4 hours.
-- Once per calendar day, when the project has meaningful changes, run the release checkpoint and publish one coherent state: push it to GitHub and deploy the matching Web/server build to the site. Skip the daily publish when nothing changed or the local release checkpoint is red; never deploy a different revision from the one pushed.
-- Continue autonomous local development until the user explicitly says `СТОП`; collect non-blocking questions and asset requests for the user instead of waiting.
-- Research official documentation, established implementations, addons, and asset packs before implementing a new subsystem; record the chosen reference when it affects architecture.
-- Use fewer intermediate test passes. Run only a parse/basic startup check while iterating, then run focused gameplay and visual checks at the end of a coherent branch or feature stage.
-- Standard chasing monsters should remain slightly slower than the player's sprint speed. Reserve faster movement for clearly telegraphed short abilities, scripted moments, or difficulty variants.
-- Player traversal includes a physical-key jump that works independently of keyboard layout.
-- Replace primitive visual placeholders with suitable existing models and materials in staged batches; preserve gameplay roots, collision, signals, and server-owned paths.
-- Use fog and other atmospheric effects selectively per environment branch, with Web performance and readability budgets.
-- UI should be polished, convenient, and not overloaded.
-- Prefer existing Godot addons, proven open-source implementations, or well-known patterns for complex features instead of inventing everything from scratch.
-- Add multiple different puzzle types, not repeated variations of a single puzzle.
-- Build a map/level builder so new levels can be assembled conveniently. Prefer native Godot editor tooling: prepared assets, scenes, nodes, and editor-friendly workflows.
-- Start the builder with a Backrooms-style level kit.
-- Add several monster mechanics, abilities, and visual variants.
-- Support multiple monsters existing at the same time without blocking or interfering with each other.
-- Add a continuous day/night system where cycle length is adjustable.
-
-Backrooms builder baseline:
-
-- Builder script: `res://scripts/backrooms_builder.gd`.
-- Builder docs: `docs/backrooms_builder.md`.
-- Demo scene: `res://scenes/backrooms/backrooms_builder_demo.tscn`.
-- Kit scenes live under `res://scenes/backrooms/kit/`.
-- Layout symbols: `#` wall block, `.` walkable floor/ceiling, `L` floor/ceiling/light, `S` floor plus spawn `Marker3D`, `E` floor plus exit `Marker3D`, `N` generated note, `D` Match Dots note, `Q` Sequence Lock note, `K` Code Lock note, `O` Polarity Switch note, lowercase `n/d/q/k/o` inactive note placeholders, `W` generated watcher monster, `C` generated chaser monster, `A` late ambush chaser, `M` False Door, `U` The Unlit, `B` low barrier/cover, `P` latch-once pressure plate, `H` one-player hold switch, `G` two-player group hold switch, `R` powered work-light hold station, `T` breaker outage trigger.
-- Current builder generates geometry, editor markers, `LevelExit` nodes, generated notes, watcher/chaser/ambush/False Door/Unlit monsters, barriers, pressure-plate variants, work lights, and breaker triggers directly from layout symbols.
-- `N` uses the builder-wide generated note puzzle type; `D`, `Q`, `K`, and `O` force specific puzzle types per cell.
-- `Main` now reads `SpawnMarker*` nodes from loaded levels before falling back to hardcoded spawn positions.
-- `Main` finds generated `LevelExit` nodes recursively, so builder-created exits work inside generated level roots.
-
-Recent local progress:
-
-- Dreamcore and Poolrooms now use a shared native `BranchDefinition` resource and `BranchCatalog` lookup for scene, title, objective, and arrival copy. The main menu builds a minimal local Environment Studies browser from that catalog, and branch exits return to the browser without altering online sessions. Adding a study no longer requires branch-specific UI or objective logic in `Main`.
-- The fourth catalog study, Empty Mall: Last Closing, reuses the shared builder with a taller cold-lit concourse kit, closed kiosk barriers, one sequence-log puzzle, sparse CC0 dressing, low fog, and a warm exit landmark. It deliberately has no chaser while the space and wayfinding are evaluated.
-- The fifth catalog study, Endless Hotel: Room Zero, uses a carpeted warm corridor kit, repeated CC0 door/radio props, a descending-room-number code lock, and one non-chasing False Door. Its threat rule is observation and door comparison rather than another pursuit.
-- The first Dreamcore schoolhouse and Poolrooms comparison studies now have reusable builder kits, distinct Web-compatible fog/lighting profiles, selected CC0 environment props, and tuned visual captures under `build/branch_capture_*_tuned/`. They remain local debug previews until the shared branch-selection contract is ready.
-- Physical Space jumping is wired through the existing `CharacterBody3D` floor/gravity pattern, and ordinary chasers are capped below the player's sprint speed.
-- Three selected animated CC0 Quaternius candidates replaced importing the complete monster archive. The ordinary chaser now uses the Demon model as a visual child while retaining project-owned AI, collision, warning light, and network paths; Alien and Orc Skull remain comparison candidates.
-
-- Builder symbols `R` and `T` now generate The Unlit's powered work-light station and one-shot breaker directly from the layout. Work lights bind to their own generated hold plate and aim at the nearest `U`; breaker triggers bind to the nearest generated work light.
-- The isolated Unlit evidence chamber no longer contains manually placed work-light or breaker nodes. Its complete record-to-power-to-creature-to-outage-to-exit route is builder-authored, while stable generated paths continue to participate in `Main` mechanic snapshots.
-- Builder variants smoke now protects generated count, plate/light/trigger binding, inspector range propagation, and nearest-creature aiming. The full local gameplay, UI, monster, dedicated-network, and two-session suite passed after the conversion; no deploy or GitHub push followed.
-- A two-encounter builder smoke now creates separate `R/U/T` clusters and proves their plate power, creature hold, breaker outage, and timed recovery remain independent. This protects layouts that contain several simultaneous Unlit creatures instead of only the single chamber.
-- `BackroomsBuilder` now exposes native Godot Inspector warnings for empty/uneven grids, unsupported symbols, missing spawn/exit markers, incomplete `R/T/U` mechanics, and equal-distance automatic bindings. A dedicated smoke protects both clean layouts and each warning class.
-- The full local suite passed with the paired-mechanic and Inspector-authoring checks, including dedicated networking and two isolated online sessions; no deploy or GitHub push followed.
-- Main-state smoke now snapshots the active Unlit plate, work-light outage, spent breaker, and exit, destroys the complete generated level, rebuilds fresh node instances, and restores state in the same plate-to-mechanic-to-exit order used by Restart and late join. Stable generated paths survive the reload.
-- Online pressure-state RPCs now accept only level-relative plate paths explicitly whitelisted for the session's current level. Exit evaluation independently counts only those paths, so invented IDs or stale Room 2 IDs cannot satisfy the Backrooms gate.
-- Network smoke sends one invalid plate ID in Room 2 and one stale path in Backrooms before the valid requests. The dedicated server logs both rejections, keeps each exit closed, then completes the normal route.
-- The PowerShell smoke harness now launches foreground network clients with redirected `Start-Process` streams instead of `cmd` under stop-on-stderr semantics. Diagnostics retain complete stdout/stderr and explicit exit codes without treating a warning line as a PowerShell invocation failure.
-- The complete local gameplay, builder, UI, monster, dedicated-network, and two-session suite passed after the pressure whitelist and harness changes; no deploy or GitHub push followed.
-- A fresh deterministic render under `build/unlit_evidence_capture_builder/` visually rechecked the fully builder-generated chamber. The record remains flashlight-readable, `R` auto-aim produces the cyan held state, `T` restores the red moving state, and the spent breaker panel/corridor floor remain legible.
-- Client-originated journal discoveries are now whitelisted by the session's current level and exact unlock/entry/fact/rumor tuple. A Room 1 client can no longer grant itself Mara's handoff or combine a valid rumor with an unrelated fact.
-- Dedicated network smoke now proves a forged Room 1 combined discovery is ignored, the separate radio rumor is accepted without unlocking the journal, and Mara's journal/fact handoff becomes valid only after entering Room 2.
-- The longer authority scenario raised the emergency network-client frame cap from 1800 to 3600 while retaining its 20-second real-time watchdog. The full local suite passed after this authority change; no deploy or GitHub push followed.
-- Main-state smoke now derives client-driven discovery tuples from every production scene's Dialogue NPCs, Listeners, Watchers, and False Doors, then requires an exact match with the server whitelist. This immediately exposed and fixed a missing Backrooms Watcher observation permission.
-- The compact HUD now calls purposeful pickups `Records` instead of the generic internal `Notes`; physical-key control copy and responsive long-message layout remain unchanged and smoke-covered.
-- The complete local gameplay, UI, builder, monster, dedicated-network, Restart, and two-session suite passed after the scene-derived discovery contract and HUD copy change; no deploy or GitHub push followed.
-- Remote player synchronization now rejects packets from the wrong peer, non-finite transforms, and movement outside a bounded horizontal/vertical token budget. Respawn and level-transition moves reset the accepted baseline so legitimate server teleports do not poison the next client update.
-- A dedicated remote-sync smoke protects sender ownership, sustained legal sprinting, delayed packets, horizontal/vertical teleport rejection, NaN rejection, and respawn-baseline recovery.
-- Production pressure plates now have server-owned path, position, and activation-radius definitions. A client may release its plate state from anywhere, but activation is ignored unless the session's accepted player position is physically near the matching plate.
-- Main-state smoke requires the server pressure definitions to match the exact generated or authored scene paths and positions. Dedicated network smoke proves both Room 2 and Backrooms reject valid plate IDs from spawn, then accept them only after bounded movement reaches the real plate.
-- The complete local gameplay, UI, builder, monster, dedicated-network, Restart, and two-session suite passed after movement-budget and pressure-proximity authority changes; no deploy or GitHub push followed.
-- Every client-originated journal request now identifies the exact level-relative scene source. The whitelist distinguishes separate monsters that award the same fact, so a valid tuple cannot be replayed under an unrelated radio, NPC, or creature path.
-- Explicit dialogue evidence has server-owned positions and interaction radii. Radio, Mara, Elias, Final Intercom, and Hanging Thread discoveries are rejected when the reporting player's bounded position has not reached the matching scene object.
-- Main-state smoke now compares source-aware discovery definitions against every production DialogueNpc, Listener, Watcher, and False Door node, including generated names and authored positions. Dedicated network smoke rejects the correct Room 1 radio and Mara handoff from out of range, then accepts each after bounded movement reaches its source.
-- The complete local gameplay, UI, builder, monster, dedicated-network, Restart, and two-session suite passed after source-aware journal validation; no deploy or GitHub push followed.
-- Note-gated Listener activation is now derived from server-owned record progress. The server stores and broadcasts each exact monster activation path, and grants the Listener fact itself at the authored thresholds instead of accepting activation reports from clients.
-- Main-state smoke compares server thresholds against every note-gated Listener in production scenes. Dedicated network and two-session checks confirm the first Room 1 record grants the fact independently and remains isolated/reset correctly.
-- The complete local suite passed after moving Listener activation to server-owned progress rules; no deploy or GitHub push followed.
-- Watcher observations now require the reporting peer's accepted camera to be within the authored trigger range and facing the exact scene source. False Door observations require the peer to reach its own shorter authored range.
-- Dedicated network smoke rejects the Backrooms Watcher from afar and while faced away, accepts it after a bounded move and turn, and rejects the House False Door from spawn. Main-state smoke keeps every observation position/range/facing rule aligned with the actual generated and authored monster nodes.
-- Every active production record now has a server-owned position and collection radius. Valid note IDs requested from outside their real Area3D are ignored, while ordinary body-entry and puzzle-completion requests still succeed near the record.
-- Main-state smoke compares all record positions with Room 1, Room 2, Backrooms, House Survey, and final-room scene transforms. The dedicated route now physically moves through each evidence source, and the two-session clients do the same while retaining reset/isolation coverage.
-- The longer authority route raised only its emergency frame cap from 7200 to 12000; its independent 90-second scenario watchdog remains active.
-- The complete local gameplay, UI, builder, monster, dedicated-network, Restart, and two-session suite passed after observation and record-proximity authority changes; no deploy or GitHub push followed.
-- Every production exit now has a server-owned position and activation radius. An open gate no longer accepts a transition or final-victory request from a peer elsewhere in the level.
-- Main-state smoke keeps all six authored/generated exit positions aligned with their scene nodes. Dedicated network smoke proves an open Room 1 exit rejects a remote transition, then traverses Room 1, Room 2, Backrooms, and House only after bounded movement reaches each real doorway.
-- The complete local suite passed after exit-proximity authority, including Restart and two-session isolation; no deploy or GitHub push followed.
-- Remaining authority boundary: Watcher line of sight is still evaluated in the local scene because the multiplexed server has no collision world per session. Puzzle completion is proximity-gated but not independently recomputed by the server.
-- Runtime copy now consistently calls purposeful pickups records/evidence: the puzzle fallback title, monster wake cue, Backrooms objective, and victory summary no longer expose the old generic fragment wording. Internal `Fragment1/3` IDs remain stable for session compatibility.
-- Room 1's radio now names the two active paper records instead of the old three-fragment count, and both records use in-world maintenance/route evidence copy.
-- The server-authoritative note whitelist now carries the authored recovered text for every active production record. Online clients receive the same text as offline scene notes instead of a generic `Evidence recovered.` message.
-- Main-state smoke compares every active scene record with its server definition across Room 1, Room 2, Backrooms, House Survey, and the final room; network smoke confirms the server-delivered Room 1 and House messages reach the HUD.
-- The lower objective and HUD rows now use responsive bottom anchors, word wrapping, a bounded long-message tail, and a tested non-overlap gap at the base `1152x648` viewport. A deterministic local frame confirmed the two rows remain readable and inside the screen with the longest House survey message.
-- Main-state sequence smoke now restores `current_level_scene` after inspecting the route, so later assertions and server-event labels reflect the physically loaded Room 1 rather than stale Corridor metadata.
-- The fourth inhabitant, `The Unlit`, advances outside flashlight coverage and freezes only inside an unobstructed `SpotLight3D` cone.
-- Builder symbol `U` generates The Unlit in editor layouts, including its short production maintenance-wing encounter, with smoke coverage for the scene contract.
-- A reusable pressure-powered work spotlight can also hold The Unlit. It reuses the existing pressure-plate contract, responds to both local signals and silent server-synced state, and provides a future one-player-holds-power/two-player-crosses co-op encounter without adding another switch system.
-- A non-production Endless House evidence chamber now connects one authored Match Dots maintenance record, a one-player non-latching plate, the pressure-powered work light, one generated `U`, and an exit in the intended record-to-power-to-crossing order.
-- The chamber smoke verifies the generated counts, reachable route order, exact light-rule wording, generated plate resolution, server-style silent plate updates, illuminated hold, and release. The complete local gameplay/UI/monster/network/two-session suite passed afterward; no deploy or GitHub push followed.
-- Pressure-powered work lights now support timed breaker outages while their plate remains held. The remaining outage can be captured and restored as a small state dictionary for future server snapshots, late join, and Restart.
-- Chamber smoke verifies that an outage releases The Unlit, clearing it restores held power, applying the saved outage suppresses power again, and the lamp automatically resumes after the restored timer. The existing flashlight/work-light behavior smoke also remains green.
-- The journal defines a hidden optional `The Unlit` section without adding it to the required three creatures or nine victory facts. It renders only after an Unlit discovery and persists through the normal snapshot format.
-- The chamber maintenance record maps to optional Unlit fact 1, while the first unobstructed beam hold maps to fact 2 through the existing monster `observed` signal and generic `Main` discovery path. Journal and chamber smoke protect hidden-until-found rendering, snapshot restoration, metadata, and unchanged victory progress.
-- A reusable one-shot breaker passage trigger now starts the timed work-light outage after the creature crossing. It has a minimal wall indicator plus separate spent-state snapshot, while the lamp retains its own remaining-outage snapshot.
-- `Main` now accepts generic `evidence_observed` signals from environmental devices. The breaker uses that path for optional Unlit fact 3, and restoration remains silent so late state application cannot duplicate the discovery.
-- Chamber and Main-state smoke protect record-to-power-to-creature-to-outage-to-exit order, one-shot emission, independent trigger/light restoration, automatic lamp recovery, optional fact 3 routing, and unchanged required victory progress.
-- Physical local debug `F8` opens the production Unlit chamber directly through the normal `Main` player/UI path for fast desktop iteration. The shortcut remains disabled for Web, release, dedicated, and multiplayer use; ordinary play reaches the same scene through the production route.
-- Main-state smoke rejects layout-dependent `F8`, verifies the physical-key preview, spawn yaw, mechanic-specific objective, generated gameplay counts, and breaker presence. The preview also exposed and fixed a missing root `Notes` container required by the common level loader.
-- The local smoke gate now fails on any Godot line beginning with `ERROR:` instead of only selected error phrases, preventing zero-exit-code load errors from being reported as passing.
-- A deterministic 1152x648 capture exposed that the Unlit chamber was too dark to teach its mechanic. Cold ambient fill and sparse warm ceiling fixtures now reveal the route while the focused work light remains the only environmental light that freezes the creature.
-- The same visual pass moved the crossing camera to a realistic inspection distance and fixed the breaker panel's thin mesh axis, making its red spent indicator legible on the wall.
-- Visual inspection also caught a missing floor/ceiling cell under the manual breaker: a temporary `T` layout character was not a builder walkable symbol. The layout now uses a real floor cell, and route smoke derives the outage step from the trigger node's actual grid position.
-- Verified frames in `build/unlit_evidence_capture_verified/` show the flashlight-readable record, cyan held silhouette, red released silhouette, and intact breaker corridor. Targeted chamber smoke passed after the visual fixes.
-- First-observation HUD feedback now reinforces The Unlit's rule without a modal: illumination says to keep the beam on it, and breaker evidence says to use the player's own beam. Main-state smoke verifies both messages and their corresponding optional facts.
-- WorkLight and BreakerTrigger now expose a shared dictionary `get_sync_state`/`apply_sync_state` contract. `Main` gathers and restores environmental mechanics by stable paths relative to the loaded level.
-- Online session state now transports `level_mechanic_states` through initial join, Restart respawn, full reset, and level transition. The full dedicated network and two-session isolation suite passed with the new RPC signature.
-- Client-originated mechanic mutation is deliberately not accepted yet: The Unlit chamber is not in `SESSION_LEVEL_PATHS`, so there is no production level/mechanic whitelist against which the server could safely validate such a request.
-- Chamber smoke now uses two real `CharacterBody3D` player probes instead of directly toggling its gameplay interactions. It verifies the record's `body_entered` puzzle request, non-latching plate hold/release, automatic passage-trigger outage, and one-shot evidence signal.
-- The physical test highlighted that a holder could occlude a work light mounted at chest height directly above the plate. The chamber lamp is now ceiling-mounted at `2.65 m`; a player body can hold the plate while its unobstructed beam still freezes The Unlit.
-- The physical `F8` preview is now solo-completable without weakening the co-op scene: after the tester solves its single record, a debug-only assist holds the floor plate and the normal exit gate opens.
-- Entering the preview exit returns to a playable Room 1, restores the production record count from before preview entry, and keeps optional Unlit journal observations for inspection. Main-state smoke covers assist activation, work-light power, exit opening, return spawn, and counter restoration.
-- The full local gameplay/UI/monster/dedicated-network/two-session suite passed after the solo preview flow; no deploy or GitHub push followed.
-- `docs/asset_needs.md` now maps each current placeholder to its exact scene and visual children, with target dimensions, pivots, forward axis, and material requirements. Gameplay roots, collisions, triggers, and scripts remain stable replacement boundaries.
-- Free environment candidates were rechecked against their official pages. The list now prioritizes Quaternius House Interior for residential dressing and Kenney Factory Kit for the Backrooms service wing, while unverified Sketchfab creature links are explicitly marked for manual review.
-- The outdated question about whether House Survey remains debug-only was removed; it is already production. User follow-up now asks for an `F8` Unlit readability playtest and a decision on fixed versus variable outage timing.
-- Deterministic visual frames now distinguish The Unlit's cold frozen band from its red moving band from any approach direction; the four-sided marker remains a placeholder for a proper creature material/model.
-- Its implementation follows Godot 4.6's documented `-Z` spotlight direction, angular radius/range, and physics ray-query pattern. A dedicated smoke protects cone direction, wall occlusion, illumination hold, movement, first observation, and independent state across two instances.
-- The Unlit remains outside the required journal count and victory condition, but now participates in the production sequence and server session definitions. Its three optional evidence sources, trigger, outage, movement, death contact, Restart, and late-join state are integrated and smoke-covered.
-- Optional House Records stay hidden until the first related discovery, keeping the early journal focused on its three creature entries.
-- The tuned House survey now follows Backrooms in both offline and server-authoritative production sequences instead of remaining an `F9`-only preview. Backrooms remains a distinct swallowed service wing rather than being replaced.
-- House Survey stays short: one Match Dots record documents that copied rooms lose air movement and room tone before shape, while the separate False Door dead end can verify the creature's missing-draft fact through proximity observation.
-- A third optional House Record captures that physical-copy rule. Session path lookup, titles, spawn positions/yaw, note authority, late state sync, and transition to Corridor now include the House level.
-- Main-state and dedicated network smoke protect `Backrooms -> House Survey -> Corridor`, the one-record task limit, server synchronization of House fact 3, and unchanged bestiary victory progress.
-- Backrooms regular and late chasers now have separate editor-tunable speeds. Their early sprint speeds were reduced from roughly `5.5`/`7.8` to `3.84`/`4.29`, while journal scaling preserves a smaller late-game escalation.
-- Builder smoke protects both the lower playtest speed ceiling and the readable speed difference between the two simultaneous Backrooms chaser roles. Main-state smoke additionally verifies their effective journal-scaled speeds remain below the player's `5.1` sprint speed at the actual Backrooms point in the route.
-- Generated puzzle records can now receive editor-assigned `EvidenceProfile` resources with distinct recovered text and journal facts/rumors instead of sharing one generic fragment string.
-- The two active Backrooms records now document fixed survey marks and descending maintenance indices through different Match Dots and Code Lock tasks. Inactive placeholders remain disabled for short playtests.
-- The journal now has an optional `House Records` section for hidden environmental lore. These records persist and synchronize online but do not change the `3 creatures / 9 verified facts` victory requirement.
-- Main-state, journal, builder, and dedicated-server smoke cover the two House records, their stable generated IDs, snapshot/Restart persistence, and server whitelist mappings.
-- Network smoke clients now have an emergency frame limit, preventing a future script parse failure from leaving an idle headless process. The full local gameplay, UI, monster, Restart, two-session isolation, and server-authority gate passed after the change; no deploy or GitHub push followed.
-- Journal rumor rows now identify the prior radio log, Room 2 survey, or Elias as their source, so players can compare testimony instead of seeing anonymous claims.
-- Mara's journal belonged to her missing brother Tomas, whose trust in the bright-light rumor motivates her insistence on verified observations.
-- Elias is now a former maintenance surveyor whose partner disappeared through a blinking doorway. His conclusion is wrong, but his advice to watch a full light cycle from several steps away is valid counterplay for the advanced False Door.
-- Journal and main-state smoke protect both histories, the source labels, and Elias's actionable method. Deterministic UI frames at 1152x648 confirmed source wrapping, disputed styling, scrolling, and button separation.
-- Watcher entry progress now controls two stateful variants: a short warning hold after gaze breaks, then one obstacle-checked step toward the last observer after the hold expires.
-- Watcher behavior smoke protects immediate baseline calming, learned attention memory, one-step-only movement, and the minimum three-second kill buffer.
-- The Watcher line-of-sight test no longer calls nonexistent `Camera3D.get_rid`; only the player's physical body is excluded from the ray query.
-- False Door entry progress now changes its visual strategy: tier 1 alternates a warm exit disguise with the known violet pulse, while tier 2 suppresses the pulse at long range and restores it before the lethal trigger.
-- False Door smoke protects color alternation, safe reveal distance, pulse contrast, controlled-player filtering, and one-shot trap behavior. Deterministic House frames visually confirmed the warm disguise, violet reveal, and separate real-door appearance.
-- Watcher and False Door smoke scenes now have emergency frame limits so a future parse failure reports cleanly instead of leaving an idle Godot process.
-- The shared collectible scene now supports glow-orb, paper-note, survey-panel, and voice-recorder visuals while retaining one collection, puzzle, reset, and multiplayer contract.
-- Hand-authored Listener warnings use paper, Room 2 distinguishes its floor-plan survey from its False Door voice recording, and builder-generated evidence defaults to a diagonally readable survey panel.
-- Room 2's first active gate is now a purposeful reconstruction of fixed survey points and records the unverified theory that False Doors grow where a floor plan repeats.
-- Pattern-lock copy now describes reconstructing evidence rather than collecting an abstract fragment.
-- New evidence-visual smoke verifies one visible variant at a time and keeps disabled placeholders invisible and non-interactive. Project, journal, main-state, puzzle UI, and builder variant checks passed.
-- Deterministic Room 2 capture exposed and fixed edge-on and floating props; the final survey panel and recorder have distinct cyan/amber and red silhouettes from diagonal approaches.
-- The dedicated server's Room 2 note whitelist now awards the survey theory for `Fragment1` instead of silently discarding the scene-authored rumor online.
-- The network smoke now requires the authoritative server to synchronize both the survey rumor and the separate voice-recorder fact before leaving Room 2. The full local gameplay, dedicated-server, reset, and two-session isolation gate passed with the expected `replicated_room` server event; no deploy or GitHub push followed.
-- The reusable builder now rotates generated real and False Doors toward their more open corridor axis, avoiding edge-on door silhouettes in side approaches.
-- The House survey route now requires an early record, offers a later one-axis False Door dead end, and puts the real exit beyond the longer return route; its smoke verifies reachability and presentation order.
-- A deterministic local visual-capture scene checks the House from the spawn, False Door approach, and real-exit approach using the player's flashlight settings. Fresh frames confirmed readable warm route lighting, a distinct violet false exit, and a clearly different real door.
-- The tuned House builder smoke and fresh local Web export passed. The public server and GitHub were not touched.
-- Listener behavior progression now uses the exact Listener journal completion ratio, with independent per-monster state for noisy-target fixation, last-noise search, and movement interception.
-- A dedicated Listener behavior smoke verifies baseline target release, learned noise memory, advanced interception, and isolation between two simultaneous monster instances.
-- Backrooms now contains Elias, a second survivor who does not grant the journal and records an unverified `double_pulse_safe` False Door rumor that verified fact 3 later disputes.
-- Journal and main-state smoke coverage now protects Elias's dialogue contract, his conflicting rumor, snapshot persistence, and the later disputed state. Targeted project, journal, Listener, main-state, and Backrooms startup checks passed locally; no deploy or GitHub push followed.
-- Production `v0.3.0` was deployed to `https://creepy-pasta.duckdns.org` on 2026-07-22 after the full local gameplay, UI, multiplayer, Linux-server export, and Web export gate passed.
-- The deployed `.pck` SHA-256 matched the fresh local export, the public WSS endpoint returned `101 Switching Protocols`, and a public browser client created `Session 001` without console warnings; the dedicated service and Caddy remained active.
-- Windows smoke/export helpers now launch Godot through `Start-Process -Wait`, capture stdout/stderr, and reject parse/load errors reliably instead of reporting success while the GUI executable still runs asynchronously.
-- The main-state smoke now gives its generated wall list an explicit type and uses a 600-frame emergency timeout, so the raised Backrooms wall assertion both parses and finishes without orphaning headless Godot processes.
-- Online entry now opens an active-session browser. Players can join an existing session or create a clean isolated session instead of inheriting one global server state.
-- Dedicated-server session state isolates level path, collected records, journal discoveries, pressure switches, exit state, players, reset, respawn, and transitions.
-- Local network smoke now runs two simultaneous clients in separate sessions and verifies that collecting/resetting one session cannot change the other.
-- Signal and code locks now both use a visible `0-5` keypad and identify their puzzle type with distinct titles.
-- Backrooms walls and ceiling are one meter taller, keeping the maze above the player's eye line.
-- Watcher gaze now gives a visible three-second look-away countdown before it can kill the local player.
-- Online `Restart` respawns into the current shared state without disconnecting; offline restart rebuilds Room 1 and restores a player.
-- Code locks now use a visible `0-5` keypad; a clue such as `3 4 1` resolves directly to `230` without hidden wraparound.
-- Production rooms currently expose no more than two required records for faster playtesting. Extra authored/generated records stay as inactive placeholders and can be re-enabled later.
-- Keyboard actions now use physical key bindings in `project.godot`.
-- Local smoke now verifies gameplay input actions use physical key bindings, so non-English keyboard layouts stay protected from regression.
-- HUD control text no longer depends on English letter labels for movement keys.
-- Dialogue interaction hint no longer names the `Q` letter, keeping non-English keyboard layouts from seeing misleading control text.
-- HUD/dialogue hints now avoid hardcoded `Ctrl`, `Shift`, and `Esc` labels and describe actions instead.
-- `DayNightCycle` is attached to `Main` and rebinds to each loaded level.
-- Local desktop testing can adjust day/night cycle length with physical `F6`/`F7` keys.
-- Local smoke now verifies day/night cycle length clamping, lighting application, and level rebinding.
-- The level sequence now includes the Backrooms builder demo before the corridor.
-- Fragment puzzles now support matching dots, sequence locks, and code locks.
-- Fragment puzzles now also support a short polarity-switch puzzle where six linked circuits must all be turned on.
-- Level 2 now includes a latch-once floor pressure plate that must be activated after collecting fragments to stabilize the exit.
-- Pressure plates now depress and brighten when active.
-- Pressure plates refresh their occupied-body state after peer disconnects, preventing stale non-latching switches.
-- Exits now close again when required non-latching pressure plates are released, so hold-switch co-op gates behave as actual hold gates.
-- Exit close events now have a distinct status/audio cue so hold-switch gates read clearly when they destabilize.
-- Corridor contains two monster instances, and monster targeting/collision setup is prepared for multiple monsters.
-- Fourth room has an open final exit and a victory screen.
-- Victory screen now includes a short session summary with recovered fragment count.
-- Build version is exposed through `GameVersion`, shown in menu/HUD, and printed by the dedicated server on startup.
-- Menu now has reconnect and fullscreen actions; Web builds keep the simplified `Play Online` flow.
-- Death and victory screens now have explicit `Retry` and `Menu` actions.
-- End-state retry buttons are labeled as `Restart` to make the session reset behavior clear.
-- Default death copy now avoids prototype-style monster labels and uses in-world wording.
-- `deploy/local_smoke.ps1` now includes a UI end-state smoke scene for death/victory panels and their retry/menu signals.
-- Web play now shows a pointer-lock hint until the player clicks to control the camera.
-- Web menu now recommends desktop browsers without exposing server setup controls.
-- Join/reconnect/offline buttons are disabled during active connection attempts and restored on timeout/failure/disconnect.
-- `deploy/local_smoke.ps1` now includes a UI menu smoke scene for menu signals, connecting disabled state, and menu show/hide behavior.
-- Late join now receives a server session snapshot with the current level scene path and collected note IDs.
-- Late-join session snapshots now also include session collected-note count, pressure plate states, and note-gated monster activation states.
-- Late-join pressure plate sync now preserves non-latching hold-switch behavior instead of accidentally latching active `H`/`G` plates on clients.
-- Note collection now goes through a server-approved request/broadcast flow instead of client-side collection broadcast.
-- `Main` state-discovery smoke now verifies missing and duplicate note collection requests do not change counters.
-- Corridor and Backrooms kit lights now use a reusable flicker component for atmosphere.
-- Corridor monster startup delay now uses an owned `Timer`, so standalone scene smoke checks exit cleanly.
-- Backrooms builder `E` cells now create a reusable gameplay `LevelExit` from `res://scenes/common/level_exit_basic.tscn`.
-- Server-side event logs now cover startup, peer connect/disconnect, spawn requests, note collection, duplicate/missing note ignores, session sync, and level transitions.
-- Players expose sprinting state, and corridor monsters prefer/accelerate toward sprinting targets within hearing range.
-- Chaser monsters can now stay dormant until a configured number of notes is collected; the reusable Backrooms chaser activates after the first note.
-- Progress-gated monster activation now gives a short UI/audio threat cue.
-- Progress-gated monster activation is logged server-side without trying to drive UI on dedicated servers.
-- First level now has an entry radio dialogue that gives the opening premise and objective.
-- Reconnect reuses the last join address, and connection attempts time out with a useful status instead of hanging forever.
-- Manual reconnect/retry/menu/timeout closes now suppress their expected disconnect callback briefly, preventing stale disconnect UI from overwriting the active flow.
-- Final victory now uses a server-approved request/broadcast flow so all peers receive the end state.
-- Server ignores transition/victory requests when the exit is closed or a transition is already running.
-- Late-join session snapshots now include explicit exit-open state, not only collected note IDs.
-- Corridor monster behavior is more editor-tunable, and the second corridor monster now has a distinct speed/hearing/death-text/tint variant.
-- HUD now includes a compact level objective that changes per level and updates when the exit opens.
-- Backrooms objective text now reflects its generated notes, pressure switch, and escalating chaser threat instead of only saying to find the exit.
-- Starting and entering levels now shows a short level banner so scene changes read as progress.
-- `AudioCues` now provides lightweight procedural sounds for note pickup, exit opening, and victory.
-- Backrooms builder `N` cells now create notes, and `Main` discovers notes recursively so builder-generated notes count and sync.
-- Backrooms builder generated content is now grouped into `Geometry`, `Markers`, `Mechanics`, `Notes`, and `Monsters` under `GeneratedBackrooms`.
-- Fourth room now includes a watcher monster that punishes prolonged direct staring, adding a non-chase threat variant.
-- Fourth-room objective and warning note now teach the watcher rule before the player commits to the final exit.
-- Fourth room now has a final intercom dialogue near the exit for a short reveal before victory.
-- Watcher gaze checks require line of sight, so walls and obstacles can break the stare.
-- Watcher line-of-sight checks now ignore the viewer's own body collision.
-- Local controlled players now have lightweight procedural footstep sounds with different walk/sprint cadence.
-- `AudioCues` now plays a quiet procedural ambience bed that changes per loaded level.
-- Code-lock puzzles are available for notes and Backrooms-generated notes.
-- Code-lock puzzles now show a short numeric clue instead of directly exposing the answer.
-- Backrooms-generated notes now default to polarity-switch puzzles, adding another puzzle shape without expanding the UI panel.
-- Backrooms builder `W` cells now create reusable watcher monsters, and `Main` discovers monster signals recursively.
-- Backrooms builder `C` cells now create reusable chaser monsters with sprint-hearing behavior.
-- Backrooms builder `C` chasers start dormant and activate after note progress by default.
-- Backrooms builder `A` cells now create a faster late-activating ambush chaser with longer sprint hearing.
-- Chaser monsters now support optional idle patrol radius; the reusable Backrooms chaser patrols when it has no target.
-- Backrooms builder `B` cells now create low barriers/cover for navigation and watcher line-of-sight breaks.
-- Backrooms builder `P` cells now create reusable pressure plates.
-- Backrooms builder note cells now support forced puzzle types with `D`, `Q`, `K`, and `O`, and the demo level uses all four puzzle modes.
-- Backrooms builder `H` and `G` cells now create non-latching hold-switch pressure plates for one-player and two-player co-op gates.
-- `AudioCues` and player footsteps now skip playback in headless/dedicated runs and release procedural audio streams/players cleanly during local smoke exits.
-- Web deploy Caddy config now serves `index.html` uncached and forces revalidation of fixed-name Godot runtime files, preventing stale `.pck`/`.wasm` builds after deployment.
-- Oracle deploy scripts now keep one previous-version rollback point, and `deploy/rollback_oracle.ps1` can rollback server, web, or both.
-- `deploy/local_smoke.ps1` now runs the standard local smoke suite, with optional `-Exports` for Linux dedicated and Web exports.
-- `deploy/local_smoke.ps1` now fails on Godot script/load error output even when Godot exits with code `0`.
-- `deploy/local_smoke.ps1` now includes a UI puzzle-mode smoke scene that solves Match Dots, Sequence Lock, Code Lock, and Polarity Switch through the real puzzle buttons.
-- `deploy/local_smoke.ps1` now includes a `Main` state-discovery smoke scene for notes, monsters, pressure plates, spawns, exits, and sync-state helper calls across hand-authored and Backrooms-builder levels.
-- `Main` state-discovery smoke now verifies the intended level sequence: first room, copied room, Backrooms, corridor, fourth room.
-- `Main` state-discovery smoke now verifies the fourth room keeps its final dialogue hook.
-- `Main` state-discovery smoke now verifies final-room dialogue hooks contain actual dialogue pages, not only empty nodes.
-- `Main` state-discovery smoke now verifies that releasing required pressure-plate state closes an already opened exit.
-- `deploy/local_smoke.ps1` now includes a Backrooms builder variants smoke scene for forced puzzle-note symbols and pressure-plate variants.
-- Backrooms builder variants smoke now verifies synced non-latching pressure plates do not become latched.
-- `deploy/local_smoke.ps1` now includes a physical input bindings smoke scene for movement, sprint, interact, and dialogue controls.
-- Fragment puzzles now explicitly disable player controls while open, then re-enable controls, release deferred GUI focus, and restore mouse capture after completion or cancellation.
-- Plain world fragments no longer touch player controls or mouse capture when their server-approved collection arrives, avoiding browser input freezes after yellow pickups.
-- Gameplay clicks and physical key events now self-heal a stale player-controls flag whenever no blocking UI is open; fragment collection also rechecks controls and Web pointer guidance without forcing pointer lock outside a user gesture.
-- The start menu now includes `Reset Online`; it can connect and request a server-authoritative shared-session reset back to Room 1, clearing progress and respawning all connected players.
-- Local network smoke covers collecting `Note1`, resetting the shared session, restoring Room 1 with zero notes, and keeping the connection alive.
-- The primary Windows test machine had UAC disabled (`EnableLUA=0`), leaving Explorer High while Firefox content remained sandboxed; UAC defaults were restored and will take effect after reboot, resolving UIPI drag/drop mismatches without weakening Firefox sandboxing.
-- A minimal shared field journal now tracks the Listener and Watcher with three facts each, a physical-key action, and a compact on-screen button after the journal is granted.
-- Mara now appears in the second room, explains the Listener, grants the journal, and provides its first verified fact.
-- The first room now starts a delayed Listener chase, giving the opening an immediate threat before Mara's explanation.
-- Listener activation, corridor survival, the Watcher warning record, direct Watcher observation, and the final intercom all contribute journal progress through server-approved updates.
-- Journal state is included in late-join snapshots and cleared by the shared online reset.
-- Creature speed, hearing, and Watcher stare tolerance scale conservatively with journal completion, implementing the first knowledge-driven difficulty progression.
-- Final victory now requires the server to confirm an unlocked, complete journal; the final objective explains missing knowledge instead of allowing an early exit.
-- `local_smoke.ps1` now launches an actual temporary dedicated server and client to test note collection, journal synchronization, reset, disconnect cleanup, and server survival.
-- The network harness exposed and fixed a disconnect race where a removed player could run one last state-sync callback after losing its multiplayer API.
-- Local Web visual checks confirmed the compact reset menu, Room 1 objective, pointer guidance, and non-overlapping bottom HUD at 1280x720; no server deploy or GitHub push followed this local concept block.
-- `DayNightCycle` now removes freed dynamic lights before casting or updating them; collecting a glowing fragment no longer crashes WebAssembly or the dedicated server through its freed `OmniLight3D`.
-- Cached lights unregister on `tree_exiting`, and dedicated servers skip visual day/night binding entirely, keeping render-only state out of authoritative headless sessions.
-- `deploy/local_smoke.ps1` now includes a day/night cycle smoke scene for cycle length clamping, lighting changes, and level rebinding.
-- `deploy/local_smoke.ps1` now includes a UI control-text smoke scene to keep layout-dependent key labels out of runtime hints.
-- Full Oracle deploy now runs the local smoke/export gate before uploading, and server deploy fails if fresh Godot logs contain script/load parse errors or native crash signals.
-- Latest checks ran the full local smoke suite plus Linux dedicated/Web exports, then deployed the freed-light crash fix to Oracle. A public `Play Online` test collected `Note1` and moved away afterward; the dedicated service stayed on the same PID with `NRestarts=0` and no crash signals. Local/remote `.pck` SHA-256 matched, and revalidation headers remain active; no GitHub push.
-- Journal progress now stores exact 1-based fact indices per creature, so later clues cannot silently unlock skipped evidence or satisfy the final victory gate.
-- Journal snapshots now synchronize independent facts and rumors, while retaining a migration path for older cumulative-count snapshots.
-- The first-room radio records an unverified bright-light rumor; surviving the Listener provides contradictory evidence and changes that rumor to `DISPUTED` after the journal is unlocked.
-- Watcher warning, direct gaze observation, and final intercom now each grant one exact fact instead of cumulative progress.
-- Room 1 now has explicit co-op spawn markers, route-facing player yaw, forward-spaced evidence, route lighting, pursuit-breaking furniture, and a narrow threshold before the transition to Mara.
-- Spawn orientation is synchronized for new, moved, and late-joined players; the opening and long corridor face players toward their intended routes.
-- Main-state smoke now guards opening spawn direction, evidence ordering, threshold geometry, independent final-journal requirements, and the rumor source.
-- The full local suite passed after these changes, including the temporary dedicated server/client scenario for exact fact + rumor sync, reset, and disconnect cleanup. A fresh local Web export also completed; no server deploy or GitHub push followed this block.
-- The journal now includes a third three-fact entry, `The False Door`, bringing the current victory requirement to 9 independent verified facts across 3 creatures.
-- A reusable `mimic_door_basic.tscn` provides a static disguised-exit threat with a subtle red seam, two close purple light pulses, safe observation range, and lethal entry trigger.
-- False Door knowledge is split across a found voice record in Room 2, an explicit hanging-thread inspection in the final room, and a final record explaining its double-pulse tell.
-- The final room now runs the Watcher and False Door simultaneously without sharing movement, targeting, or activation state.
-- The dedicated False Door smoke verifies its observation signal, double-pulse contrast, multiplayer body filtering, and one-shot trap behavior.
-- Room 2 was reduced from seven repeated fragment pickups to three evidence records using Match Dots, Sequence Lock, and Polarity Switch, followed by the existing pressure-plate stabilization step.
-- Main-state smoke now verifies all three False Door clue sources, exact observation interaction, two simultaneous final-room threats, and the 3-creature victory gate.
-- The full local suite and temporary dedicated server/client scenario passed after the third creature and Room 2 evidence changes; no deploy or GitHub push was performed.
-- `BackroomsBuilder` now exposes floor, wall, ceiling, light, and low-barrier scenes as inspector-editable `PackedScene` slots while retaining the Backrooms scenes as defaults.
-- Builder symbol `M` now creates a reusable False Door, and the existing variant smoke protects that generation path alongside chasers, Watchers, notes, and pressure switches.
-- A native Endless House kit now provides 4 m floor/ceiling modules, 3.2 m trimmed walls, a warm flickering ceiling fixture, and low sideboard cover under `scenes/endless_house/kit/`.
-- `endless_house_builder_demo.tscn` assembles a generated residential hall with a spawn, evidence record, cover, two lights, real exit, and False Door using the shared builder.
-- The new House builder smoke verifies visual-kit resource overrides, generated geometry, gameplay markers, False Door behavior contract, and rebuild idempotence.
-- Physical local debug `F9` opens the generated House survey without changing the production level sequence; it is disabled for release, dedicated, and multiplayer sessions.
-- Local Web debug screenshots confirmed readable cold wall/floor separation, warm route lighting, a visible distant doorway, coherent HUD, and no game-script console errors. Automated pointer lock remained unavailable inside the test browser only.
-- The preview test exposed unguarded `multiplayer.is_server()` calls after `Play Offline` clears the peer; server checks now short-circuit through `_is_network_server()` and offline monster/journal events run without engine errors.
-- Full local smoke passed after the builder and offline guard work, including Backrooms regressions and the temporary dedicated WebSocket server/client scenario; no deploy or GitHub push was performed.
-- A deterministic House Survey render exposed that the shared builder replaced every kit root position with the grid coordinate. Authored floor, wall, ceiling, light, and cover heights were therefore lost in every generated visual kit, including the low Backrooms walls reported during playtesting.
-- `BackroomsBuilder` now adds the cell translation to each instantiated kit root, preserving the Backrooms 4.2 m walls/ceiling and the House 3.2 m walls/ceiling as well as floor, barrier, sideboard, and fixture offsets.
-- Both builder smokes now assert exact floor, wall, ceiling, and cover root heights. Fresh House and Backrooms captures under `build/house_survey_capture_offsets_fixed/` and `build/backrooms_capture_offsets_fixed/` visually confirm full-height corridors, mounted lights, readable threats, and distinct opened exits.
-- The complete local gameplay, UI, builder, monster, dedicated-network, Restart, and two-session suite passed after the transform fix; no deploy or GitHub push followed.
-- Real exits now reveal a small animated floor-draft cue only while open. False Doors never receive it, turning the House Survey's missing-draft record into a directly checkable environmental rule instead of text-only lore.
-- The House record explicitly identifies moving floor dust and absent room tone as physical-copy tests. House smoke protects cue visibility, motion, closed-state cleanup, and the False Door's missing cue; a tuned deterministic frame lives under `build/house_survey_capture_draft_cue_tuned/`.
-- The shared `LevelExit` script treats the draft child as an optional capability, preserving older hand-authored exits while reusable builder exits expose the cue. The complete local gameplay, UI, builder, monster, dedicated-network, House transition, Restart, and two-session suite passed after this compatibility fix; no deploy or GitHub push followed.
-- The Unlit breaker now has a staged server-authoritative request path. Online clients defer local mutation; the server accepts only the exact generated source while the session's bounded player position is at the panel, marks it spent, grants optional fact 3, and broadcasts the approved mechanic snapshot.
-- The server stores an absolute outage deadline instead of a client countdown. Restart snapshots derive the remaining outage, late joins after expiry receive zero, and both retain the one-shot spent breaker. The staged exit requires its single record plus that spent state rather than a permanently held plate.
-- The physical F8 preview now keeps the exit closed after solving the record, advances the objective to the breaker crossing, and opens only after the actual breaker fires. Its solo plate assist remains limited to local debug.
-- Main-state smoke aligns the staged record, plate, creature observation, breaker, work-light, and exit definitions with generated paths; it covers out-of-range rejection, accepted proximity, duplicate rejection, journal evidence, deadline math, Restart restore, and late-join expiry. Dedicated smoke proves Room 1 cannot replay the staged breaker path.
-- The complete local gameplay, UI, builder, monster, dedicated-network, Restart, and two-session suite passed after the Unlit authority staging; no deploy or GitHub push followed.
-- The Unlit now has per-session server-owned position, target selection, grid navigation, player/work-light illumination, wall occlusion, and 10 Hz client snapshots. Authoritative clients stop local AI and apply the approved state silently, while the first server-approved illumination grants direct-observation fact 2.
-- Main-state smoke covers authored 2.2 m/s movement, clear flashlight hold, wall occlusion, work-light hold, active outage, deadline recovery, Restart/late-join restoration, and cross-session target isolation. The existing dedicated create/Restart/full-route smoke and two-session isolation smoke pass with the expanded session snapshot.
-- The Unlit contact/death decision is now server-owned. A per-session latch sends one reliable death RPC on contact, ignores sustained duplicates, and clears after separation or Restart; authoritative clients ignore their local kill `Area3D`.
-- The Unlit chamber now follows House Survey and precedes Corridor in both offline and `SESSION_LEVEL_PATHS` routes. It remains a short one-record plus one-breaker task, and its three facts remain optional for the current victory count.
-- Dedicated smoke enters the room alive, verifies authoritative creature state, receives a real `session_monster_contact`, Restarts in the same room with the threat reset, rejects the breaker from range, accepts it at the panel, restores the spent trigger/outage state, and reaches Corridor.
-- The extended route also exposed a smoke-only failure mode where a Backrooms chaser killed a client while long RPC assertions left it standing still. Network traversal now recovers and stops local chasers only after their separate behavior and Restart checks; `Main` also rejects a queued death signal whose source no longer belongs to the current level.
-- The complete local parse, physical-input, gameplay, UI, journal, builder, monster, dedicated full-route, Restart, and two-session isolation gate passed after production integration in 192 seconds. No export, deployment, or GitHub push was performed.
-- Production-facing copy no longer labels The Unlit as a prototype: the room banner is `The Unlit: Maintenance Wing`, the hidden optional journal entry is `The Unlit`, and targeted journal/Main smoke rejects a returning prototype label.
-- The shared survey-panel evidence visual now has a lighter metal finish, subtle emission, and a slightly wider local cyan pool, keeping The Unlit's first record readable against its dark floor without turning it into a generic quest marker. Fresh deterministic frames under `build/unlit_evidence_capture_readability/` and targeted evidence/chamber smokes passed.
-- Procedural room ambience now loops continuously instead of ending after its first 24-second buffer. Loop-period modulation keeps the generated seam quiet, while House Survey and The Unlit have distinct restrained profiles; synchronized work-light outage/recovery changes add short non-modal power cues. A dedicated ambience smoke protects profiles, sample length, loop boundaries, and seam continuity.
-- Online session reassignment now deletes the previous room once its last member moves, preventing invisible empty rooms from consuming the server's session limit. Empty and completed rooms are omitted from the join browser, rejoining the same room preserves it, and `Retry` after online victory resets the shared run to Room 1 while death `Restart` still respawns in the current room. Main-state and UI end-state smoke cover these lifecycle distinctions.
-- The complete local parse, physical-input, gameplay, ambience, UI, builder, monster, dedicated full-route, Restart, and two-session isolation gate passed after the ambience and session-lifecycle block in 194 seconds. No export, deployment, or GitHub push was performed.
-- Live reassignment now updates an existing Player node's session identity, spawn transform, sync baseline, and visibility on every client instead of leaving it attached to its old room. The server rejects stale direct joins to completed rooms, and the expanded two-client smoke proves `S002 -> S003` reassignment while the independent owner session retains its progress.
-- Open real exits now emit a quiet looping positional room tone alongside their animated floor draft. False Doors copy neither cue, making the House Survey's air-and-sound evidence physically testable; headless stream checks and a rendered audio-driver smoke cover loop boundaries plus `open()`/`close()` playback.
-- Online gameplay now shows one restrained top-left status line with the active session ID and synchronized player count. It stays hidden offline and behind the connection menu, follows live reassignment/removal, and passed UI/Main smoke plus a `1152x648` frame under `build/hud_session_capture/`.
-- A deterministic first-room capture now covers the route view and the post-record Listener reveal. It exposed that chasers kept their authored rotation while moving: the opening Listener faced the wall and patrol/search/chase motion could slide sideways. Listener instances now face their horizontal movement in every mode, the opening instance initially faces the co-op spawn center, and behavior/Main smoke protect both rules.
-- The first Listener activation now leaves a concise visible HUD warning after the recovered-record text instead of writing only to the hidden menu status. The entry radio also establishes that the copied front room leads into a house with no reliable outside, strengthening the opening without another modal or cutscene. Verified reveal frames live under `build/opening_capture_listener_activated/`.
-- Rapid server session-list updates now remove old UI rows from the container immediately and keep the authoritative session ID as row metadata instead of deriving it from collision-prone Node names. A back-to-back list smoke protects stale-row replacement, and rejected direct joins now leave a diagnostic server event.
-- Client session selection and loaded world state now use separate IDs. Switching from an in-progress room to a clean session on the same `level_path` rebuilds the scene, restoring evidence nodes removed in the previous room; Main-state smoke and a live owner/guest flow prove join-with-progress, `2 players`, two clean reassignments, fresh Note1 collection, isolated reset, and retained owner progress.
-- The complete local parse, physical-input, gameplay, ambience, UI, builder, monster, dedicated full-route, death/Restart, rapid session reassignment, and two-session isolation gate passed after the opening and loaded-session fixes in 177 seconds. The run was captured in `build/final_local_smoke_2026-08-01.log`; no export, deployment, or GitHub push was performed.
-
-## 1. Game Loop
-
-Make the player's objective clear and satisfying:
-
-- Add a stronger opening: where the player is and why they are there.
-- Make each level objective obvious: collect fragments, solve the local problem, open the exit.
-- Make level completion feel like progress, not just a scene swap.
-- Add an ending: win screen, final reveal, or multiple endings.
-
-The target is a complete 5-10 minute playable session before expanding scope.
-
-## 2. Multiplayer Stability
-
-The server should be the authority for the session.
-
-Needed work:
-
-- Stable join and reconnect behavior.
-- Late-joining players receive the current level state.
-- Disconnected players are removed cleanly.
-- Collected notes sync correctly.
-- Opened doors and portals sync correctly.
-- Level transitions are initiated and approved by the server.
-- Duplicate RPC calls are ignored safely.
-- Game state lives on the server instead of being scattered across clients.
-
-Rule of thumb: clients request actions; the server decides and broadcasts the result.
-
-## 3. Web Entry UX
-
-The browser version should be almost frictionless:
-
-- Show one primary button: `Play Online`.
-- Hide manual server address input in Web builds.
-- Hide or remove `Host` in Web builds.
-- Show a loading/connecting state.
-- Show useful connection errors.
-- Add a reconnect button.
-- Add fullscreen support.
-- Add a clear "click to control mouse" hint after joining.
-- Keep desktop browser as the intended platform.
-
-The player should not need to understand `wss://`, ports, or hosting.
-
-## 4. Atmosphere
-
-Raise the horror quality with sound and environmental detail:
-
-- Footstep sounds.
-- Ambient loops.
-- Note pickup sounds.
-- Portal and door sounds.
-- Light changes based on player progress.
-- More room detail and silhouettes.
-- Carefully paced scares, not constant jumpscares.
-- Unique mood for every level.
-
-The goal is tension and anticipation before direct danger.
-
-## 5. Monster And Threat Design
-
-Define what the danger actually is.
-
-Possible directions:
-
-- Monster patrols.
-- Monster hears sprinting.
-- Monster appears after notes are collected.
-- Monster reacts to being looked at.
-- Monster targets the nearest or loudest player.
-- One player can accidentally endanger both players.
-
-For co-op horror, the strongest design is often asymmetric information: one player notices something the other does not.
-
-## 6. Puzzles
-
-Keep puzzles short and cooperative:
-
-- Code doors.
-- Symbol sequences.
-- Split clues between players.
-- Carry or place items.
-- One player holds a switch while another moves.
-- Environmental clues tied to notes.
-
-Avoid long puzzle pauses that kill horror pacing.
-
-## 7. Level Structure
-
-Give each level a distinct purpose:
-
-- Level 1: onboarding and basic fear.
-- Level 2: first real co-op interaction.
-- Corridor: tension and pursuit.
-- Fourth room: escalation or twist.
-- Final level: payoff and ending.
-
-Each level should introduce either a new mechanic, a new threat behavior, or a new narrative beat.
-
-## 8. UI And Onboarding
-
-Minimum polish needed:
-
-- Clear start menu.
-- `Play Online` for Web.
-- Loading/connecting UI.
-- Connection failed UI.
-- Reconnect option.
-- Death screen.
-- Victory/end screen.
-- Control hints.
-- Small player/session status display.
-- Build version visible somewhere unobtrusive.
-
-## 9. Technical Reliability
-
-Before wider playtesting:
-
-- Add build version to client and server.
-- Add server event logs.
-- Keep Web client and dedicated server built from the same commit.
-- Keep deploy as close to one command as possible.
-- Add smoke checks after deploy.
-- Add rollback notes or rollback script.
-- Improve browser cache handling.
-- Document known failure signals and fixes.
-
-Existing workflow source of truth: `docs/workflow.md`.
-
-## 10. Browser Polish
-
-Needed for a smoother public build:
-
-- Fullscreen button.
-- Better pointer-lock UX.
-- Cache-control headers in Caddy.
-- Desktop browser recommendation.
-- Autoconnect or one-click connect in Web.
-- No exposed host/server setup controls for normal players.
-
-## Recommended Order
-
-1. Make Web entry one-click: `Play Online`, hidden address field, no Host button, clear connection states.
-2. Add build version and improve deploy confidence.
-3. Strengthen server-authoritative multiplayer state.
-4. Run a full two-player browser playtest and list all desyncs.
-5. Build one complete 5-10 minute game loop with a start, middle, and ending.
-6. Add sound and stronger atmosphere.
-7. Add one memorable co-op puzzle.
-8. Prepare a public playtest build.
-
-## Definition Of "Close To Ideal"
-
-The game is close to ideal when:
-
-- A player opens the website and starts without technical knowledge.
-- Two players can finish a full session without reconnecting or desyncing.
-- Every level has a clear purpose.
-- The horror comes from pacing, sound, space, and uncertainty.
-- The server and browser build are always in sync.
-- Bugs can be reproduced, fixed, deployed, and verified quickly.
+# Creepy Pasta — Active Roadmap
+
+This file is the **operational source of truth for what to work on now**. Keep it short. It is not a changelog and it does not replace feature documentation.
+
+## MISSION LOCK — ARCHITECTURE + VISUAL CLEANUP
+
+**Current project mission: make the existing online horror game easier to extend, then improve its placeholder models and interface without breaking runtime contracts.**
+
+The gameplay/networking foundation already exists. Organize dense scene trees into readable gameplay/collision/visual layers, isolate pure helpers from the runtime coordinator, preserve RPC and level-relative paths, then replace selected visual placeholders and apply restrained UI polish.
+
+During this mission, do **not** redesign gameplay or networking behavior. Structural changes must preserve existing session, RPC, collision, and builder contracts and be verified before moving to visual replacements.
+
+## Current Focus — ONE TASK ONLY
+
+**PAUSED — the requested architecture batch is complete; do not start another improvement until the user explicitly resumes it.**
+
+The connection/account UI remains owned by another chat and was deliberately excluded from this batch.
+
+Do **not** begin a second target in parallel.
+
+## Working Loop
+
+For every meaningful visual batch:
+
+1. Read this file.
+2. Inspect the real project state/diff and current scene/capture.
+3. Read only the relevant docs from `docs/document_map.md`.
+4. Keep exactly one `Current Focus`.
+5. Research candidates only for that focus.
+6. Record the known source/provenance; license restrictions do not block smoke-build selection.
+7. Download only selected assets.
+8. Import/integrate using wrappers or visual-child replacement; preserve gameplay contracts.
+9. Check scale, pivot, axis, materials, textures, shadows, animation, collision interference, and Web cost as relevant.
+10. Visually inspect from a player-like camera and run the appropriate local checks.
+11. Update `docs/asset_needs.md` and `docs/asset_credits.md`; add any unresolved/non-distributable model to `docs/publication_asset_clearance.md` as `CHECK` or `REPLACE`.
+12. Move the finished batch into `Recently Completed` and set the next single focus.
+
+If context is lost: **do not guess**. Re-read this file, inspect the real project state/diff, then open the relevant feature doc.
+
+## Definition of Done — Visual Batch
+
+A batch is not complete at `DOWNLOADED` or `IMPORTED`. It is complete only when:
+
+- known provenance is recorded, and any unresolved publication action is in the clearance queue;
+- the chosen asset is imported successfully;
+- scale/orientation/pivot/material/texture/animation checks are complete where relevant;
+- it is placed in the actual production scene/kit or verified reusable scene;
+- stable gameplay roots, collisions, triggers, signals, RPC paths, generated paths, and server-owned state remain intact;
+- the relevant scene starts without script/load errors;
+- the result is visually inspected from player eye level/capture;
+- obvious Compatibility/Web performance regressions are avoided;
+- roadmap + asset status are updated.
+
+## Visual Priority Order
+
+Use this as tie-break guidance, not permission to work on several items at once:
+
+1. Modular Endless House / worn residential environment kit and production-route environment placeholders.
+2. Mara / survivor visual.
+3. Listener/chaser final visual quality and animation review (current Quaternius Demon is a temporary integrated candidate).
+4. The Unlit final silhouette/material solution while preserving cyan-held/red-moving readability.
+5. Watcher silhouette/face readability.
+6. Real/False Door visual pair, work light, breaker, pressure plate, maintenance props.
+7. Room dressing, decals, grime, environmental storytelling props.
+8. Materials, Web-safe atmosphere, lighting, mist/fog alternatives, restrained environmental motion.
+9. Final consistency/performance pass across production scenes.
+
+## Hard Constraints
+
+- Engine: **Godot 4.6**.
+- Browser target: **Compatibility renderer**.
+- Do not design around volumetric fog or screen-space reflections for the Web target; use supported alternatives from `docs/branch_research.md`.
+- Preserve gameplay roots, scripts, gameplay collision, trigger areas, signals, RPC signatures/paths, stable generated paths, spawn/exit markers, and server authority.
+- Prefer `stable gameplay root -> visual wrapper Node3D -> imported model/mesh/armature`.
+- Preserve the shared builder contracts (including the 4 m grid); adapt art to the contract, not the gameplay contract to the art.
+- Character target after wrapper correction: ground pivot, forward `-Z`.
+- Smoke builds may use any legally obtained local asset that fits the prototype. Unknown, restrictive, paid-seat, branded, or non-distributable publication terms require an immediate `CHECK`/`REPLACE` entry; such files must not enter a public release until cleared or replaced.
+- Prefer practical Web-sized textures and reusable instances; avoid importing huge unused collections into `res://`.
+- Follow `docs/workflow.md` for test/release cadence. Do not deploy/push after every tiny visual edit.
+
+## Recently Completed / Existing Visual State
+
+Keep only the most useful recent visual context here; older history belongs in `docs/roadmap_history.md`.
+
+- Initial-room constrained architecture pass completed: ordinary shell, lighting, and obstacle dressing now collapse below `Environment`, while threshold walls/light, safe/spawn markers, dialogue, Listener, notes, and `LevelExit` retain their exact direct paths. The common exit prefab keeps the original `2.2 × 2.3 × 1.0` collision override. Level/Main parse, Main-state, Listener behavior, and player-flashlight visual capture passed.
+- Next-place and corridor architecture pass completed: both static shells now use `Environment/{Geometry,Lighting}` while network-addressed gameplay nodes stay at their original paths. Next Place reuses the common LevelExit; Corridor now instances one photo-chaser prefab twice with its second pacing/tint override preserved and also reuses the common exit. Main-state, Listener behavior, scene parse, and player-flashlight captures passed.
+- Fourth-room architecture/prefab pass completed: static shell nodes now live under `Environment/{Geometry,Lighting}` while all network-addressed gameplay paths remain stable. The duplicated Watcher and LevelExit were replaced with reusable common scene instances at the same `Monsters/WatcherMonster` and `LevelExit` paths. Production scene parse, Main-state, Watcher, and Mimic smoke checks passed; a player-flashlight capture verified the improved silhouette and real/false-door distinction.
+- Architecture/model/UI cleanup batch completed: the dense sideboard scene now has explicit visual groups; pure level-tree discovery lives in `LevelRuntimeQuery`; `main.gd` has foldable responsibility regions; the primitive radio gained a project-owned Kenney model wrapper; the connection menu has a reusable dark theme and no HUD bleed-through; and temporary model publication actions have a dedicated clearance queue. The complete `deploy/local_smoke.ps1` suite, rendered menu/house captures, and `git diff --check` passed.
+- The ordinary chaser already uses an animated CC0 Quaternius Demon visual child as a **temporary** candidate while project-owned AI/collision/network paths remain stable.
+- Dreamcore and Poolrooms studies already have reusable visual kits, selected CC0 environment props/materials, Web-compatible atmosphere profiles, and tuned captures; they are not a reason to expand branch scope during this mission.
+- House Survey is production and already uses distinct real-vs-False-Door air/sound cues; preserve those gameplay-readable visual/audio differences when replacing door art.
+- The Unlit Maintenance Wing is production/server-authoritative and already has readability tuning/captures; visual replacement must preserve its cyan-held/red-moving state and light gameplay.
+- Endless House core visual kit batch verified: floor/wall material tuning, a restrained ceiling inset panel, and the existing CC0 Kenney `desk.glb` as a scaled low-cover visual child in `house_low_sideboard.tscn`. Builder roots, collision, generated paths, route semantics, and 4 m / 3.2 m dimensions were preserved. Verified by headless startup, Endless House builder smoke, and player-eye-level capture including the `B` low-cover cell.
+- Post-storage-basket and shoe-pair dressing audit verified: Endless House builder smoke and player-eye-level capture passed after the floor-pivoted basket, radio cable coil, and shoe pair batch. No collision, route, stable-path, or Web-cost regression was observed; the next focus is a single low-cost wall-mounted residential story prop.
+- Wall-portrait story prop batch verified: reused low-cost frame/photo meshes are mounted above the sideboard without collision or gameplay wiring changes. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; the next focus is a consistency/performance audit.
+- Wall-portrait consistency/performance audit completed with scoped evidence: Endless House builder, Main state, Listener, Mara, Watcher, Unlit, and False Door checks passed, as did the player-eye-level capture and `git diff --check`. The broad `deploy/local_smoke.ps1` harness exceeded 240 seconds without producing a visual-scene failure; it remains a tooling follow-up, not a blocker for this visual batch. Next focus is one restrained utility/maintenance wall prop.
+- Wall-intercom utility prop batch verified: the compact visual-only intercom and dial reuse existing low-cost meshes and add no collision or gameplay wiring. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall-intercom scoped audit completed: Endless House builder, Main state, False Door, Watcher, and The Unlit smoke checks passed, as did the player-eye-level capture and `git diff --check`. No stable-path, route, collision, or Web-cost regression observed. Next focus is one restrained low-cost residential utility detail.
+- Wall switch utility detail batch verified: the visual-only panel and toggle reuse existing low-cost meshes and add no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall switch scoped audit completed: Endless House builder, Main state, False Door, Watcher, The Unlit, and Listener checks passed, as did the player-eye-level capture and `git diff --check`. No route, collision, stable-path, or Web-cost regression observed. Next focus is one restrained low-cost residential detail.
+- Wall mail-slot detail batch verified: the visual-only slot and paper reuse existing low-cost meshes and add no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall mail-slot scoped audit completed: Endless House builder, Main state, False Door, Watcher, The Unlit, and Listener checks passed, as did the player-eye-level capture and `git diff --check`. No route, collision, stable-path, or Web-cost regression observed. Next focus is one restrained low-cost residential detail.
+- Wall key-hook detail batch verified: the visual-only hook and key reuse existing low-cost meshes and add no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall key-hook scoped audit completed: Endless House builder, Main state, False Door, Watcher, The Unlit, and Listener checks passed, as did the player-eye-level capture and `git diff --check`. No route, collision, stable-path, or Web-cost regression observed. Next focus is one restrained low-cost residential detail.
+- Wall thermometer detail batch verified: the visual-only thermometer and red marker reuse existing low-cost meshes and add no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall thermometer scoped audit completed: Endless House builder, Main state, False Door, Watcher, The Unlit, and Listener checks passed, as did the player-eye-level capture and `git diff --check`. No route, collision, stable-path, or Web-cost regression observed. Next focus is one restrained low-cost residential detail.
+- Wall room-label detail batch verified: the visual-only plaque and marker reuse existing low-cost meshes and add no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall room-label scoped audit completed: Endless House builder, Main state, False Door, Watcher, The Unlit, and Listener checks passed, as did the player-eye-level capture and `git diff --check`. No route, collision, stable-path, or Web-cost regression observed. The next focus is a route-level Web-safe material/lighting review.
+- Endless House Web-safe material/lighting review completed: Compatibility fog and roughness/material settings remain practical; no volumetric fog, screen-space reflection, or transparent material usage was found in the route kit. Builder smoke, player-eye-level capture, and `git diff --check` passed. Next focus is one restrained environmental-motion cue.
+- Ceiling-lamp motion cue batch verified: existing `light_flicker.gd` was tuned modestly for readable ambient movement without new geometry, draw calls, gameplay wiring, or route changes. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Ceiling-lamp motion scoped audit completed: Endless House builder, Main state, False Door, Watcher, The Unlit, and Listener checks passed, as did the player-eye-level capture and `git diff --check`. No route, collision, stable-path, or Web-cost regression observed. Next focus is a final cross-scene consistency/performance audit.
+- Cross-scene visual consistency/performance audit completed: Endless House, Backrooms, The Unlit, journal, Listener, Mara, and Watcher captures/smoke checks passed; capture artifacts were present and `git diff --check` was clean. No stable-path, gameplay, route, or Web-cost regression observed. Next focus is one final restrained Endless House environment-polish detail.
+- Endless House paint-wear polish batch verified: one visual-only worn wall mark reuses an existing low-cost mesh and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is the final scoped consistency/performance audit.
+- Final scoped consistency/performance audit completed: Endless House, Backrooms, The Unlit, journal, Listener, Mara, Watcher, and Main-state checks/captures passed; Web-safe forbidden-feature scan and `git diff --check` were clean. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is one restrained maintenance/decal cue.
+- Maintenance decal batch verified: one visual-only wall decal reuses an existing low-cost note mesh and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Maintenance decal scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is one restrained route-readable maintenance cue.
+- Route maintenance-arrow batch verified: one visual-only cyan maintenance marker reuses an existing low-cost note mesh and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Route maintenance-arrow scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is one restrained route-readable residential cue.
+- Room-number residential cue batch verified: one visual-only plaque reuses an existing low-cost note mesh and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Room-number scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is one restrained low-cost residential detail.
+- Wall coat-hook detail batch verified: one visual-only coat hook reuses an existing low-cost key-ring mesh and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall doorbell utility detail batch verified: one visual-only doorbell button reuses an existing low-cost radio-dial mesh and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall doorbell scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is one restrained low-cost residential detail.
+- Wall emergency-tag detail batch verified: one visual-only red utility tag reuses an existing low-cost note mesh and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall emergency-tag scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is a substantive Mara/Survivor candidate review.
+- Mara/Survivor candidate review completed: official Quaternius Universal Base Characters source remains CC0, glTF/FBX-compatible, humanoid-rigged, and Godot-compatible, but no local candidate was present and the existing project-owned fallback already passed player-eye-level capture and gameplay smoke. The external replacement is therefore deferred until it provides a measurable visual gain; stable dialogue, interaction, collision, and node paths remain unchanged. Next focus is Listener/chaser candidate review.
+- Listener/chaser candidate review completed: official Quaternius Ultimate Monsters source remains CC0 and offers FBX/OBJ/Blend/glTF, while the local Demon import is retained reversibly but hidden because its player-like capture was less readable than the project-owned fallback. AI, collision, network, and stable paths remain unchanged; blind replacement is deferred. Next focus is The Unlit visual candidate review.
+- The Unlit candidate review completed: the production project-owned silhouette already provides separately addressable four-sided cyan-held/red-moving markers and a readable head/arm profile. No external replacement demonstrated equivalent warning readability; the server-authoritative root, illumination/contact behavior, collision, and stable paths remain unchanged. Next focus is Watcher visual candidate review.
+- Watcher candidate review completed: the production project-owned static silhouette, head, hanging arms, and enlarged emissive eye already meet the medium-distance face/eye readability contract. No external candidate was justified without risking observation clarity; observation, collision, network, and stable paths remain unchanged. Next focus is Field Journal visual presentation review.
+- Field Journal visual review completed: the warm framed paper surface, accent title, shadow, scrollable content, input, and persistence path remain coherent and capture-tested. Journal state/content/input contracts were preserved; smoke checks passed without scene changes. Next focus is the Real Exit / False Door visual pair.
+- Real Exit / False Door review completed: paired smoke, Endless House builder, and Main-state checks passed; the real exit retains its warm/DraftCue presentation while False Door retains separate purple pulse/red seam cues. Interaction, collision, network, and stable paths remain unchanged. Next focus is maintenance props and utility readability.
+- Maintenance props review completed: work-light housing, breaker panel/indicator, and pressure-plate visual footprint remain readable without changing trigger roots, outage behavior, collision, network, or stable paths. Paired-Unlit, evidence chamber, and Main-state smoke passed. Next focus is a final cross-scene consistency/performance pass.
+- Final cross-scene consistency/performance pass completed: Endless House, Backrooms, The Unlit, journal, Listener, Mara, Watcher, Main state, False Door, and paired-Unlit captures/smoke passed; Web-safe forbidden-feature scan and `git diff --check` were clean. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is selecting one next visual priority from remaining production gaps.
+- Wall coat-hook scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is one restrained low-cost residential detail.
+- Wall survey-map story cue batch verified: a larger visual-only framed map reuses existing low-cost frame/photo meshes and adds no gameplay wiring or collision. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall survey-map scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is selecting the next remaining production visual priority.
+- Wall-curtain residential cue batch verified: one narrow low-poly curtain uses a practical rough material and adds no gameplay wiring, collision, or route footprint. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall-curtain scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is selecting the next remaining production visual priority.
+- Branch-specific atmosphere review completed: Dreamcore, Poolrooms, Empty Mall, and Endless Hotel captures passed; Web-safe forbidden-feature scan was clean and no new branch scope or gameplay work was introduced. Existing branch identities remain distinct and stable. Next focus is one remaining visual-upgrade priority selected from current production evidence.
+- Modular old-house candidate review completed: official Quaternius Ultimate House Interior source is current CC0 with 123 FBX/OBJ/Blend models, but no specific missing slot justified importing the pack into `res://`; the verified project-owned Endless House kit remains production. Builder dimensions, route semantics, stable generated paths, and Web budget remain unchanged. Next focus is one specific remaining visual slot selected from production evidence.
+- Wall telephone utility slot batch verified: compact visual-only telephone and dial reuse existing low-cost meshes and add no gameplay wiring, collision, or route footprint. Endless House builder smoke, player-eye-level capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Wall telephone scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is accumulated Endless House dressing route-readability/clutter review.
+- Accumulated dressing review completed: player-eye capture showed no route/clutter regression; ambient light energy was raised modestly from 0.68 to 0.74 to recover small prop/silhouette readability while preserving cool fog and route mood. Builder smoke, capture, and `git diff --check` passed; next focus is a scoped consistency/performance audit.
+- Ambient readability scoped audit completed: cross-scene captures/smoke checks passed, Web-safe forbidden-feature scan was clean, and `git diff --check` passed. No stable-path, gameplay, route, collision, or Web-cost regression observed. Next focus is a targeted alternate player-eye capture around the accumulated dressing.
+- Wall-clock/survey-map hierarchy audit completed: both valid rendered player-eye views show the warm clock hands and survey map as readable authored anchors without route or clutter regression. Builder and Main-state smoke checks exited `0`, `git diff --check` passed, and no headless Godot process remained. Next focus is one targeted Endless House visual priority.
+- Sideboard silhouette pass completed: raised the body material value modestly so the dressed unit separates from the lower room shadow while preserving the warm landmark cluster, geometry, collision, and route contracts. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, `git diff --check` passed, and no headless Godot process remained. Next focus is the scoped sideboard audit.
+- Sideboard silhouette audit completed: both current rendered player-eye captures remained valid, Builder/Main-state smoke exited `0`, the Web-safe forbidden-feature scan was clean, `git diff --check` passed, and no headless Godot process remained. No route, collision, gameplay, or Web-cost regression observed. Next focus is the ceiling-lamp fixture material.
+- Ceiling-lamp fixture material pass completed: lifted the fixture albedo modestly from `(0.16, 0.17, 0.18)` to `(0.22, 0.23, 0.24)` so the housing separates from the dark ceiling while preserving the existing glass emission, light energy, range, flicker, and route contracts. Valid player-eye capture was inspected; Builder/Main-state smoke exited `0`, `git diff --check` passed, and no headless Godot process remained. Next focus is the scoped lamp audit.
+- Ceiling-lamp scoped audit completed: both capture artifacts remained valid, Web-safe scan returned clean, Builder/Main-state smoke exited `0`, `git diff --check` passed, and no headless Godot process remained. No route, gameplay, collision, flicker, or Web-cost regression observed. Next focus is ceiling-tile separation around the practical light.
+- Ceiling-tile material pass completed: raised the inset-panel albedo modestly from `(0.24, 0.25, 0.24)` to `(0.28, 0.29, 0.28)` so the panel edge separates around the practical light without lifting the overall dark ceiling mood. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped ceiling-tile audit.
+- Ceiling-tile scoped audit completed: current capture artifacts are valid, Builder/Main-state smoke exited `0`, `git diff --check` passed, and no Godot process remained. The tuned panel retains the dark ceiling mood with readable edge separation and no route, gameplay, collision, or Web-cost regression. Next focus is floor-tile separation beneath the dressed sideboard.
+- Floor-tile material pass completed: raised the floor albedo modestly from `(0.24, 0.26, 0.25)` to `(0.27, 0.29, 0.28)` so the sideboard footprint and runner separate from the surrounding floor without flattening the dark route mood. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped floor-tile audit.
+- Floor-tile scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The modest floor lift preserves the dark route mood with clearer sideboard footprint separation and no route, gameplay, collision, or Web-cost regression. Next focus is wall-trim separation around the sideboard bay.
+- Wall-trim material pass completed: raised the main trim albedo modestly from `(0.2, 0.09, 0.105)` to `(0.24, 0.11, 0.12)` so the bay boundary reads as a restrained warm guide without flattening the dark route mood. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped wall-trim audit.
+- Wall-trim scoped audit completed: after an isolated retry, Builder and Main-state smoke both exited `0`; capture artifacts remained valid, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The transient combined-run timeout was tooling/process timing only and did not reproduce in isolated checks; no route, gameplay, collision, or Web-cost regression observed. Next focus is upper wall-trim separation.
+- Upper wall-trim material pass completed: raised the upper trim albedo modestly from `(0.14, 0.07, 0.08)` to `(0.18, 0.085, 0.095)` so the layered bay frame reads above the warm lower trim while preserving the dark route mood. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped upper-trim audit.
+- Upper wall-trim scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The layered frame reads without route, gameplay, collision, or Web-cost regression. Next focus is sideboard lamp-base readability.
+- Sideboard lamp-base material pass completed: lifted the shared lamp material from `(0.36, 0.24, 0.14)` to `(0.4, 0.26, 0.15)` so the practical prop reads as a grounded warm accent beside the evidence wall without changing its light energy or range. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped lamp-base audit.
+- Sideboard lamp-base scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The practical accent reads without route, gameplay, collision, flicker, or Web-cost regression. Next focus is separating the lamp shade from its base.
+- Sideboard lamp-shade separation pass completed: assigned the shade its own darker warm material `(0.3, 0.18, 0.1)` while retaining the base material and LampGlow contract. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped shade/base audit.
+- Sideboard lamp shade/base scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The two-part lamp reads without route, gameplay, collision, flicker, or Web-cost regression. Next focus is sideboard runner separation.
+- Sideboard runner material pass completed: lifted the worn runner albedo modestly from `(0.17, 0.065, 0.085)` to `(0.2, 0.075, 0.1)` so the lamp and evidence cluster sit on a readable grounded surface without competing with the wall anchors. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped runner audit.
+- Sideboard runner scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The runner supports the landmark hierarchy without route/clutter, gameplay, collision, or Web-cost regression. Next focus is an accumulated sideboard landmark-cluster audit.
+- Accumulated sideboard landmark-cluster audit completed: both player-eye views show a coherent clock/map/evidence/lamp hierarchy with no route or clutter regression; the alternate view preserves readable approach context. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is a scoped cross-scene visual consistency audit.
+- Cross-scene visual consistency audit completed: Endless House Builder, Main-state, and Backrooms visual-capture smoke all exited `0`; Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Existing branch identities and route contracts remain stable. Next focus is restrained sideboard wall-light reach in the alternate approach.
+- Sideboard wall-light reach pass completed: raised the local LampGlow modestly from `0.46/3.0` to `0.5/3.2` so the alternate approach retains practical evidence-wall readability without broad corridor wash. Both captures were valid and the alternate view was inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped wall-light audit.
+- Sideboard wall-light scoped audit completed: the player-eye capture remains balanced with practical local reach and no corridor wash; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. No route, gameplay, collision, flicker, or Web-cost regression observed. Next focus is restrained plant-material readability.
+- Sideboard plant-material pass completed: lifted the leaf material modestly from `(0.11, 0.22, 0.12)` to `(0.14, 0.26, 0.14)` so the organic counterpoint reads in the cool/warm mix without competing with the clock/map anchors. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped plant audit.
+- Sideboard plant scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Leaf readability supports the landmark cluster without route, clutter, gameplay, collision, or Web-cost regression. Next focus is plant-pot separation.
+- Plant-pot material pass completed: raised the pot albedo modestly from `(0.2, 0.1, 0.065)` to `(0.25, 0.12, 0.07)` so the pot separates from runner/floor while remaining secondary to the green leaves and wall anchors. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped pot audit.
+- Plant-pot scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Pot separation remains restrained with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is lower stool-silhouette separation.
+- Stool material pass completed: lifted the shared stool material from `(0.22, 0.09, 0.055)` to `(0.27, 0.11, 0.065)` so the lower seat/legs read against the floor without creating a new route cue. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped stool audit.
+- Stool scoped audit completed: both capture artifacts remained valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The lower silhouette reads without route, clutter, gameplay, collision, or Web-cost regression. Next focus is draped-coat material readability.
+- Draped-coat material pass completed: shifted the coat from `(0.065, 0.085, 0.1)` to `(0.08, 0.105, 0.12)` for a restrained cool fabric separation from the warm stool and floor. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, `git diff --check` passed, and no Godot process remained. Next focus is the scoped coat audit.
+- Draped-coat scoped audit completed: both capture artifacts exist and remain valid, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The cool fabric cue remains secondary to the landmark wall cluster with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is a final accumulated sideboard consistency audit.
+- Final accumulated sideboard consistency audit completed: both player-eye views preserve clock/map/evidence/lamp hierarchy, lower-prop layering, and alternate approach readability; Builder/Main-state/Backrooms smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. No route, gameplay, collision, or Web-cost regression observed. Next focus is the small radio-receiver utility detail.
+- Radio-receiver material pass completed: lifted the shared utility material from `(0.075, 0.084, 0.088)` to `(0.095, 0.105, 0.11)` so the radio and related dark utility forms read without competing with the clock/map wall anchors. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped radio audit.
+- Radio-receiver scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Utility readability improved without route, clutter, gameplay, collision, or Web-cost regression. Next focus is the radio-dial accent.
+- Radio-dial accent pass completed: assigned the dial a restrained warm material `(0.32, 0.24, 0.12)` while leaving the radio body/antenna material and route contracts unchanged. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped dial audit.
+- Radio-dial scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The small warm dial remains subordinate to the clock/map anchors with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is utility-detail consistency across the sideboard/route dressing.
+- Utility-detail consistency audit completed: both player-eye views retain consistent dark utility forms, warm anchor hierarchy, and readable alternate approach; Endless House Builder/Main-state/Backrooms smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the small key-ring maintenance accent.
+- Key-ring utility accent pass completed: gave the primary sideboard key ring a dedicated slightly brighter brass material `(0.62, 0.4, 0.14)` while leaving shared wall key forms unchanged. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped key-ring audit.
+- Key-ring scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The brass cue remains a small maintenance detail subordinate to clock/map anchors with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is maintenance-clipboard readability.
+- Maintenance-clipboard material pass completed: assigned the primary clipboard a slightly lighter warm material `(0.36, 0.22, 0.11)` while leaving shared wall clipboard forms unchanged. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped clipboard audit.
+- Maintenance-clipboard scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The primary clipboard remains a restrained utility cue with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is clipboard-paper readability.
+- Clipboard-paper material pass completed: assigned the primary maintenance note a dedicated lighter paper material `(0.5, 0.45, 0.34)` while leaving shared wall-paper forms unchanged. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped paper audit.
+- Clipboard-paper scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The lighter note remains an evidence cue without route, clutter, gameplay, collision, or Web-cost regression. Next focus is the maintenance-note red accent.
+- Maintenance-note red-accent pass completed: assigned the primary sideboard red note a dedicated slightly brighter material `(0.56, 0.14, 0.11)` while leaving shared wall-note forms unchanged, preserving a local warning cue rather than a route beacon. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped red-note audit.
+- Maintenance-note red-accent scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The warning cue remains local and subordinate to the landmark wall with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is the paired cyan maintenance cue.
+- Paired cyan maintenance-note pass completed: assigned the primary cyan note a dedicated slightly brighter material `(0.15, 0.5, 0.52)` while leaving shared wall-cyan forms unchanged, completing a coherent local red/cyan utility pair. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped red/cyan audit.
+- Red/cyan pair scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The paired cues remain local and subordinate to the wall landmarks with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is the yellow maintenance cue.
+- Yellow maintenance-note pass completed: assigned the primary yellow note a dedicated slightly brighter material `(0.7, 0.52, 0.14)` while leaving shared wall-yellow forms unchanged, completing a restrained three-color local utility set. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped three-color audit.
+- Three-color utility-set scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Red/cyan/yellow cues remain local and subordinate to clock/map landmarks with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is room-label readability.
+- Room-label material pass completed: lifted the authored label albedo modestly from `(0.5, 0.43, 0.3)` to `(0.56, 0.47, 0.32)` so the residential cue reads without becoming a UI beacon. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped room-label audit.
+- Room-label scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The warmer sign remains residential and subordinate to the wall landmarks with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is room-label mark separation.
+- Room-label mark pass completed: assigned the mark a dedicated darker warm material `(0.36, 0.28, 0.16)` so it groups with the brighter room label as one authored residential sign; no shared utility forms or route contracts changed. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the combined label/mark audit.
+- Combined room-label/mark audit completed: player-eye capture shows the label and darker mark reading as one residential sign; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. No route, clutter, gameplay, collision, or Web-cost regression observed. Next focus is wall-paint wear.
+- Wall-paint-wear material pass completed: separated the wear cue into a dedicated subdued red-brown material `(0.32, 0.12, 0.1)` so it reads as surface wear rather than another warning marker. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped paint-wear audit.
+- Wall-paint-wear scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Surface wear remains subordinate to the utility cues with no route, clutter, gameplay, collision, or Web-cost regression. Next focus is maintenance-decal integration.
+- Maintenance-decal material pass completed: lifted the dedicated decal albedo modestly from `(0.52, 0.36, 0.1)` to `(0.58, 0.4, 0.11)` so the route-readable cue survives the worn surface while remaining subdued. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped decal audit.
+- Maintenance-decal scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The decal remains route-readable without clutter or gameplay/collision/Web-cost regression. Next focus is the paired maintenance arrow.
+- Maintenance-arrow material pass completed: assigned the arrow a dedicated subdued amber material `(0.5, 0.32, 0.08)` so it aligns with the decal and worn surface rather than reading as a cyan utility marker. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped decal/arrow audit.
+- Decal/arrow pair scoped audit completed: both capture artifacts exist, Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The amber route cue reads as one integrated maintenance detail without route, clutter, gameplay, collision, or Web-cost regression. Next focus is room-number readability.
+- Room-number material pass completed: assigned the number a dedicated subdued yellow-amber material `(0.58, 0.43, 0.12)` so it reads as a residential marker without competing with the brighter utility notes. Both player-eye captures were valid and inspected; Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the scoped room-number audit.
+- Room-number scoped audit completed: both player-eye captures exist and were inspected; the dedicated amber material remains readable as a residential marker without competing with the maintenance cues. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the wall key-tag utility landmark.
+- Wall key-tag scoped audit completed: both player-eye captures exist and were inspected; the dedicated amber tag separates from the wall cluster without becoming a false interaction cue. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the wall thermometer marker.
+- Wall thermometer material pass completed: assigned dedicated practical materials to the body and red marker so the utility detail separates from the warm wall notes without changing geometry, route, collision, or gameplay. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped thermometer audit.
+- Wall thermometer scoped audit completed: both player-eye captures exist and were inspected; the neutral body and restrained red marker remain readable without competing with the room label or maintenance cues. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the wall coat-hook accent.
+- Wall coat-hook material pass completed: assigned a dedicated dark metal material `(0.18, 0.08, 0.07)` with moderate metallic response so the hook separates from the warm key tag while remaining a restrained utility detail. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped coat-hook audit.
+- Wall coat-hook scoped audit completed: both player-eye captures exist and were inspected; the dark hook separates from the key tag without adding a competing bright marker. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the wall doorbell accent.
+- Wall doorbell material pass completed: assigned a dedicated muted brass material `(0.42, 0.28, 0.09)` with moderate metallic response so the small call point reads independently from the hook and intercom. Both player-eye captures were inspected; Builder/Main-state smoke exited `0`. Next focus is the wall emergency tag.
+- Wall emergency-tag material pass completed: lifted the dedicated red tag to `(0.68, 0.12, 0.08)` with roughness `0.82` for restrained emergency readability without turning the wall cluster into a bright warning panel. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped emergency-tag audit.
+- Wall emergency-tag scoped audit completed: both player-eye captures exist and were inspected; the red tag remains a legible emergency cue without overpowering the surrounding evidence board. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the survey-map frame.
+- Survey-map frame material pass completed: assigned a dedicated dark wood material `(0.22, 0.12, 0.07)` with roughness `0.7` so the frame grounds the map without merging into the wall or competing with the emergency cue. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped survey-map-frame audit.
+- Survey-map-frame scoped audit completed: both player-eye captures exist and were inspected; the darker frame remains visually grounded around the map without obscuring the evidence-board cluster. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the survey-map surface.
+- Survey-map surface material pass completed: warmed the dedicated map material to `(0.52, 0.4, 0.23)` and raised roughness to `0.94` for an aged-paper read that remains distinct from the darker frame. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped survey-map-surface audit.
+- Survey-map surface scoped audit completed: both player-eye captures exist and were inspected; the aged-paper surface remains legible inside its dark frame without competing with the emergency cue. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the wall curtain accent.
+- Wall curtain material pass completed: deepened the dedicated curtain albedo to `(0.14, 0.07, 0.1)` while retaining high roughness for a quiet depth cue that does not compete with the evidence board. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped curtain audit.
+- Wall curtain scoped audit completed: both player-eye captures exist and were inspected; the dark curtain reads as a quiet depth cue without competing with the evidence-board silhouettes. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the wall telephone accent.
+- Wall telephone material pass completed: assigned dedicated dark body and warm dial materials so the telephone separates from the curtain while remaining a grounded, quiet prop. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped telephone audit.
+- Wall telephone scoped audit completed: both player-eye captures exist and were inspected; the dark body and warm dial remain readable without competing with the nearby evidence-board details. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the storage basket accent.
+- Storage-basket material pass completed: warmed the shared basket/rim material to `(0.32, 0.18, 0.09)` while retaining roughness `0.98` for a grounded woven-prop read. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped storage-basket audit.
+- Storage-basket scoped audit completed: both player-eye captures exist and were inspected; the warmer basket/rim remains a grounded prop without competing with the sideboard silhouette. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the radio cable coil.
+- Radio cable-coil material pass completed: cooled and darkened the dedicated cable material to `(0.1, 0.11, 0.12)` with roughness `0.92` so the coil reads as a subtle technical detail against the warm basket. Both player-eye captures were regenerated and inspected; Builder/Main-state smoke exited `0`. Next focus is the scoped cable-coil audit.
+- Radio cable-coil scoped audit completed: both player-eye captures exist and were inspected; the cool dark coil remains a subtle technical detail without competing with the sideboard dressing. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the shoe pair.
+- Shoe-pair material pass completed: lifted the shared dark shoe material to `(0.07, 0.075, 0.085)` with roughness `0.98` so both low props retain a readable silhouette without becoming visual accents. Both player-eye captures were regenerated and inspected; Main-state smoke exited `0`, and the Builder retry exited `0` after one transient crash code. Next focus is the scoped shoe-pair audit.
+- Shoe-pair scoped audit completed: both player-eye captures exist and were inspected; the shoes remain readable as grounded low-plane props without competing with the runner, basket, or sideboard silhouette. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the accumulated lower-plane dressing audit.
+- Accumulated lower-plane dressing audit completed: both player-eye captures exist and were inspected; shoes, runner, basket, and cable remain separated enough to read as grounded props without route or clutter regression. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the wall-cluster color hierarchy audit.
+- Wall-cluster color-hierarchy audit completed: both player-eye captures exist and were inspected; warm evidence notes, amber utility cues, cool hardware, and dark depth accents remain differentiated without a competing neon focal point. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the upper-plane readability audit.
+- Upper-plane readability audit completed: both player-eye captures exist and were inspected; map/frame, curtain, telephone, and wall markers remain readable across the upper composition without route or clutter regression. Builder/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is the complete two-view dressing pass.
+- Complete two-view dressing pass completed: both player-eye captures were regenerated and inspected; Builder/Main-state smoke and the backrooms visual capture exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. The accumulated dressing reads coherently across both angles without route, clutter, or gameplay changes. Next focus is cross-scene visual consistency.
+- Cross-scene visual consistency audit completed: Endless House Builder/Main-state and Backrooms capture all exited `0`; both Endless House player-eye artifacts exist, the combined Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. No route, collision, gameplay, or renderer-contract regression observed. Next focus is the renderer-safe visual baseline audit.
+- Renderer-safe visual baseline audit completed: `project.godot` uses `gl_compatibility` for desktop and mobile; forbidden renderer-feature scan returned no matches; Builder/Main-state/Backrooms smoke all exited `0`; `git diff --check` passed and no Godot process remained. Next focus is final visual-artifact/documentation alignment.
+- Final visual-artifact/documentation alignment audit completed: the saved prompt, `docs/roadmap.md`, and `docs/asset_credits.md` exist; exactly one operational Current Focus is present; both Endless House captures exist; and `git diff --check` is clean. The batch evidence is documented without route/gameplay/collision changes. Next focus is Backrooms prop/light contrast.
+- Backrooms fluorescent-light material pass completed: reduced the panel green cast and emission multiplier to `(0.78, 0.87, 0.7)` / `1.1`, and lowered light energy to `1.2` while preserving the existing flicker script and light color contract. Backrooms/Builder/Main-state smoke exited `0`; Web-safe scan was clean. Next focus is the scoped Backrooms light audit.
+- Backrooms fluorescent-light scoped audit completed: Backrooms/Builder/Main-state smoke exited `0`, the combined Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. Flicker behavior and route/gameplay contracts remain intact. Next focus is floor/ceiling value contrast.
+- Backrooms floor/ceiling contrast pass completed: lifted the floor albedo to `(0.49, 0.45, 0.33)` and lowered the ceiling to `(0.39, 0.36, 0.27)` so fluorescent pools separate from the upper plane without renderer-heavy features. Backrooms/Builder/Main-state smoke exited `0`; Web-safe scan was clean. Next focus is the scoped floor/ceiling audit.
+- Backrooms floor/ceiling scoped audit completed: Backrooms/Builder/Main-state smoke exited `0`, Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. The value separation preserves readable light pools without changing geometry, route, collision, or gameplay. Next focus is wall value/hue.
+- Backrooms wall value/hue pass completed: lowered the dedicated wall albedo to `(0.58, 0.54, 0.38)` so the warm corridor shell separates from the tuned floor/ceiling planes without renderer-heavy features. Backrooms/Builder/Main-state smoke exited `0`; Web-safe scan was clean. Next focus is the scoped wall audit.
+- Backrooms wall value/hue scoped audit completed: Backrooms/Builder/Main-state smoke exited `0`, Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. The warm wall shell remains separated from the floor/ceiling planes with route, collision, and gameplay contracts intact. Next focus is the floor/wall/ceiling triad audit.
+- Backrooms floor/wall/ceiling triad audit completed: Backrooms/Builder/Main-state smoke exited `0`, Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. Floor, wall, and ceiling values remain separated under the tuned fluorescent light without route, collision, or gameplay changes. Next focus is the pressure-powered spotlight accent.
+- Pressure-powered spotlight material pass completed: lifted the housing albedo to `(0.15, 0.16, 0.17)`, reduced metallic to `0.58`, and raised roughness to `0.48` for a readable but restrained work-light prop; spotlight color, script, and pressure behavior remain unchanged. Backrooms/Builder/Main-state smoke exited `0`; Web-safe scan was clean. Next focus is the scoped spotlight audit.
+- Pressure-powered spotlight scoped audit completed: Backrooms/Builder/Main-state smoke exited `0`, the Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. The housing remains readable while pressure activation and flicker contracts stay intact. Next focus is the generated work-light cluster.
+- Generated work-light cluster audit completed: Backrooms/Builder/Main-state smoke exited `0`, Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. Generated housings remain readable with pressure activation/flicker behavior intact and no route/collision/gameplay regression. Next focus is the breaker/outage cue.
+- Breaker/outage cue material pass completed: reduced the indicator albedo to `(0.36, 0.18, 0.03)`, emission to `(0.9, 0.5, 0.08)`, and multiplier to `1.15` so the powered state remains legible without becoming a dominant neon marker. Backrooms, unlit-pairs, Builder, and Main-state smoke exited `0`; Web-safe scan was clean. Next focus is the scoped breaker/outage audit.
+- Breaker/outage cue scoped audit completed: Backrooms, unlit-pairs, Builder, and Main-state smoke exited `0`; Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. Powered indicator readability and outage trigger contracts remain intact. Next focus is the powered/dark-state transition audit.
+- Powered/dark-state transition audit completed: unlit-pairs and audio-cues smoke both exited `0`, Backrooms/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Trigger, restore, flicker, and audio contracts remain intact. Next focus is the unlit-target marker.
+- Unlit-target marker material pass completed: reduced the face glow albedo to `(0.3, 0.025, 0.02)`, emission to `(0.68, 0.06, 0.045)`, and multiplier to `1.35` so the dark-state target remains readable without neon clutter. Unlit-pairs, Backrooms, Builder, and Main-state smoke exited `0`; Web-safe scan was clean. Next focus is the scoped unlit-target audit.
+- Unlit-target marker scoped audit completed: unlit-pairs, Backrooms, Builder, and Main-state smoke exited `0`; Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. The face remains a readable subordinate cue over the dark silhouette, with target/illumination behavior intact. Next focus is the silhouette/face hierarchy audit.
+- Unlit-target silhouette/face hierarchy audit completed: unlit-pairs, Backrooms, Builder, and Main-state smoke exited `0`; Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. Face remains subordinate to the silhouette while preserving the target/illumination contract. Next focus is the tell-light accent.
+- Tell-light material pass completed: reduced the local light color to `(0.7, 0.06, 0.045)` and energy to `0.1` so the red read supports face readability without overpowering the dark silhouette. Unlit-pairs, Backrooms, Builder, and Main-state smoke exited `0`; Web-safe scan was clean. Next focus is the scoped tell-light audit.
+- Tell-light scoped audit completed: unlit-pairs, Backrooms, Builder, and Main-state smoke exited `0`; Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. The tell-light supports face readability without overpowering powered/dark/recovery behavior. Next focus is the complete generated encounter hierarchy.
+- Complete generated encounter hierarchy audit completed: unlit-pairs, audio-cues, Backrooms, and Main-state smoke all exited `0`; Web-safe scan returned no matches, `git diff --check` passed, and no Godot process remained. Powered, dark, recovery, trigger, flicker, audio, silhouette, and face cues remain coherent. Next focus is encounter evidence/documentation alignment.
+- Encounter evidence/documentation alignment audit completed: roadmap and credits contain the powered/dark-state pass history, the saved prompt/docs remain present, and the current visual contracts are backed by the specialized smoke results above. `git diff --check` is clean and no route, gameplay, collision, or Web-safe contract changed. Next focus is the current Backrooms visual-batch contract audit.
+- Current Backrooms visual-batch contract audit completed: saved prompt and docs exist; one operational Current Focus is present; unlit-pairs/audio-cues/Backrooms/Builder/Main-state smoke all exited `0`; combined Web-safe scan was clean; `git diff --check` passed; and no Godot process remained. Next focus is Backrooms visual-baseline regression.
+- Backrooms visual-baseline regression audit completed: Backrooms, Builder, and Main-state smoke all exited `0`; Web-safe scan returned no matches; `git diff --check` passed; no Godot process remained; and the current diff contains only project visual/documentation work in scope for this roadmap. Next focus is the final Backrooms visual-batch handoff audit.
+- Final Backrooms visual-batch handoff audit completed: prompt/docs and both Endless House captures exist; Backrooms/Builder/Main-state smoke exited `0`; Web-safe scan returned no matches; `git diff --check` passed; and no Godot process remained. The handoff evidence is complete without route, gameplay, collision, or renderer-contract changes. Next focus is the shared Endless House/Backrooms visual baseline.
+- Shared Endless House/Backrooms visual baseline audit completed: both captures exist, renderer config remains `gl_compatibility` for desktop/mobile, Endless House capture/Backrooms/Main-state smoke exited `0`, Web-safe scan was clean, `git diff --check` passed, and no Godot process remained. Next focus is artifact freshness/documentation completeness.
+
+## Blockers / Risks — NON-BLOCKING UNLESS STATED
+
+- Final global house art direction (realistic worn residential vs low-poly stylized vs PSX/retro) is not locked. Until the user decides, prefer reversible wrappers/material work and respect each branch's existing identity.
+- Previously listed Sketchfab creature candidates require manual verification of current download availability/license before use.
+- Browser/Compatibility limits mean some desktop rendering techniques are unavailable; verify effects against `docs/branch_research.md`.
+
+## Backlog — DO NOT START DURING CURRENT MISSION
+
+- grow environment studies toward 20 branches;
+- new monster mechanics/abilities unrelated to visual replacement;
+- new puzzle systems;
+- day/night redesign;
+- broad UI/onboarding redesign;
+- networking/server architecture refactors;
+- deployment/infrastructure redesign;
+- speculative cleanup/refactoring.
+
+## Documentation Precedence
+
+When documents disagree:
+
+1. `docs/roadmap.md` — **what to work on now**.
+2. `docs/workflow.md` — **how to test/release and protect network contracts**.
+3. Relevant current feature doc — **technical contract of that feature/scene**.
+4. `docs/asset_needs.md` + `docs/asset_credits.md` — **asset status, requirements, source/license**.
+5. `docs/branch_research.md` — **renderer/research constraints**.
+6. `docs/roadmap_history.md` — history only; never current instructions.

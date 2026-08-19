@@ -10,10 +10,17 @@
 
 [sub_resource type="Environment" id="Environment_house"]
 background_mode = 1
-background_color = Color(0.012, 0.015, 0.018, 1)
+background_color = Color(0.008, 0.012, 0.018, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.28, 0.32, 0.32, 1)
-ambient_light_energy = 0.68
+ambient_light_color = Color(0.25, 0.3, 0.33, 1)
+ambient_light_energy = 0.71
+fog_enabled = true
+fog_light_color = Color(0.08, 0.14, 0.22, 1)
+fog_light_energy = 0.15
+fog_density = 0.0028
+fog_height = 0.65
+fog_height_density = 0.15
+fog_sky_affect = 0.12
 
 [sub_resource type="Resource" id="Resource_house_record"]
 script = ExtResource("7_evidence")

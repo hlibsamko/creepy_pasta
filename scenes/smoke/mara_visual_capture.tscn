@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/common/survivor_npc_basic.tscn" id="1_mara"]
+[ext_resource type="Script" path="res://scripts/mara_visual_capture.gd" id="2_capture"]
+
+[sub_resource type="Environment" id="Environment_capture"]
+background_mode = 1
+background_color = Color(0.008, 0.012, 0.016, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.28, 0.34, 0.38, 1)
+ambient_light_energy = 0.72
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+size = Vector3(14, 0.2, 14)
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.06, 0.07, 0.075, 1)
+roughness = 0.92
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(14, 0.2, 14)
+
+[node name="MaraVisualCapture" type="Node3D"]
+script = ExtResource("2_capture")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_capture")
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("Shape_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("Mesh_floor")
+surface_material_override/0 = SubResource("Mat_floor")
+
+[node name="Level" type="Node3D" parent="."]
+
+[node name="DialogueNpcs" type="Node3D" parent="Level"]
+
+[node name="Mara" parent="Level/DialogueNpcs" instance=ExtResource("1_mara")]
+position = Vector3(0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 72.0
+
+[node name="Flashlight" type="SpotLight3D" parent="Camera3D"]
+light_color = Color(0.82, 0.9, 1, 1)
+light_energy = 5.0
+shadow_enabled = true
+spot_range = 16.0
+spot_angle = 34.0
+spot_angle_attenuation = 1.7
+
+[node name="MaraFill" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.5, 0)
+light_color = Color(0.55, 0.68, 0.78, 1)
+light_energy = 3.0
+omni_range = 8.0

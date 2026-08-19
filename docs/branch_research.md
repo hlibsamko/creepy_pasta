@@ -1,5 +1,8 @@
 # Environment Branch Research
 
+> **Visual-upgrade mission note:** use this file primarily for renderer/effect constraints and already-evaluated asset references. Do not use the branch list as permission to expand scope. The Web target uses Compatibility; volumetric fog and screen-space reflections are unavailable there, so visual upgrades must use supported alternatives.
+
+
 Research checked on 2026-08-02 before the first branch batch.
 
 ## Godot Technical Baseline

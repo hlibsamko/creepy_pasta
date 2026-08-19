@@ -1,0 +1,42 @@
+[Unit]
+Description=Creepy Pasta account API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=creepy-pasta-account
+Group=creepy-pasta-account
+WorkingDirectory=/opt/creepy-pasta-account/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+Environment=CREEPY_ACCOUNT_BIND_HOST=127.0.0.1
+Environment=CREEPY_ACCOUNT_PORT=8080
+Environment=CREEPY_ACCOUNT_DB_PATH=/var/lib/creepy-pasta/accounts.db
+EnvironmentFile=/etc/creepy-pasta/account.env
+ExecStart=/usr/bin/python3 -m creepy_accounts
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=30
+TimeoutStopSec=20
+UMask=0077
+MemoryMax=256M
+TasksMax=128
+
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/creepy-pasta
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictRealtime=true
+LockPersonality=true
+CapabilityBoundingSet=
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

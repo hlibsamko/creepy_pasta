@@ -7,8 +7,8 @@ size = Vector3(4, 0.2, 4)
 size = Vector3(4, 0.2, 4)
 
 [sub_resource type="StandardMaterial3D" id="Mat_floor"]
-albedo_color = Color(0.47, 0.43, 0.31, 1)
-roughness = 0.96
+albedo_color = Color(0.47, 0.45, 0.36, 1)
+roughness = 0.92
 
 [node name="BackroomsFloorTile" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)

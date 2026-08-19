@@ -1,8 +1,7 @@
-[gd_scene format=3 uid="uid://c3jsnj2kk07dj"]
+[gd_scene load_steps=14 format=3 uid="uid://c3jsnj2kk07dj"]
 
-[ext_resource type="Script" uid="uid://dhkx2agoergve" path="res://scripts/level_exit.gd" id="1_exit"]
-[ext_resource type="Script" uid="uid://cffodd3g7fn10" path="res://scripts/corridor_monster.gd" id="2_monster"]
-[ext_resource type="Texture2D" uid="uid://c67cvpbl8luxt" path="res://images/corridor_monster.png" id="3_monster_photo"]
+[ext_resource type="PackedScene" path="res://scenes/common/level_exit_basic.tscn" id="1_exit"]
+[ext_resource type="PackedScene" path="res://scenes/common/corridor_photo_chaser_basic.tscn" id="2_monster"]
 [ext_resource type="Script" path="res://scripts/light_flicker.gd" id="4_flicker"]
 
 [sub_resource type="Environment" id="Environment_corridor"]
@@ -38,37 +37,21 @@ size = Vector3(5, 3.2, 0.25)
 [sub_resource type="BoxMesh" id="Mesh_wall_end"]
 size = Vector3(5, 3.2, 0.25)
 
-[sub_resource type="BoxShape3D" id="Shape_monster"]
-size = Vector3(1, 1.4, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_monster_kill_zone"]
-size = Vector3(1.35, 1.7, 3.55)
-
 [sub_resource type="BoxShape3D" id="Shape_exit"]
 size = Vector3(2, 2.3, 1.2)
 
-[sub_resource type="BoxMesh" id="Mesh_exit_door"]
-size = Vector3(2, 2.3, 0.18)
-
-[sub_resource type="StandardMaterial3D" id="Mat_exit_door"]
-albedo_color = Color(0.05, 0.045, 0.04, 1)
-roughness = 0.88
-
-[sub_resource type="BoxMesh" id="Mesh_exit_glow"]
-size = Vector3(1.9, 2.15, 0.08)
-
-[sub_resource type="StandardMaterial3D" id="Mat_exit_glow"]
-albedo_color = Color(0.23, 0.23, 0.18, 1)
-emission_enabled = true
-emission = Color(1, 0.77, 0.35, 1)
-emission_energy_multiplier = 1.3
-
 [node name="Corridor" type="Node3D" unique_id=136761285]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=55825505]
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Geometry" type="Node3D" parent="Environment"]
+
+[node name="Lighting" type="Node3D" parent="Environment"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=55825505]
 environment = SubResource("Environment_corridor")
 
-[node name="DimLightA" type="OmniLight3D" parent="." unique_id=1316255091]
+[node name="DimLightA" type="OmniLight3D" parent="Environment/Lighting" unique_id=1316255091]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 2.3, -20)
 light_color = Color(0.75, 0.78, 1, 1)
 light_energy = 0.75
@@ -78,7 +61,7 @@ intensity = 0.12
 speed = 2.7
 pulse_chance = 0.025
 
-[node name="DimLightB" type="OmniLight3D" parent="." unique_id=1957008098]
+[node name="DimLightB" type="OmniLight3D" parent="Environment/Lighting" unique_id=1957008098]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 2.2, 4)
 light_color = Color(0.9, 0.55, 0.35, 1)
 light_energy = 0.45
@@ -88,7 +71,7 @@ intensity = 0.22
 speed = 5.2
 pulse_chance = 0.05
 
-[node name="ExitLight" type="OmniLight3D" parent="." unique_id=861048213]
+[node name="ExitLight" type="OmniLight3D" parent="Environment/Lighting" unique_id=861048213]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 33)
 light_color = Color(1, 0.75, 0.35, 1)
 light_energy = 0.95
@@ -98,68 +81,53 @@ intensity = 0.08
 speed = 1.8
 pulse_chance = 0.015
 
-[node name="Floor" type="StaticBody3D" parent="." unique_id=1384806282]
+[node name="Floor" type="StaticBody3D" parent="Environment/Geometry" unique_id=1384806282]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=498639083]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/Floor" unique_id=498639083]
 shape = SubResource("Shape_floor")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=348316422]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/Floor" unique_id=348316422]
 mesh = SubResource("Mesh_floor")
 surface_material_override/0 = SubResource("Mat_floor")
 
-[node name="LeftWall" type="StaticBody3D" parent="." unique_id=643895805]
+[node name="LeftWall" type="StaticBody3D" parent="Environment/Geometry" unique_id=643895805]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LeftWall" unique_id=75965000]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/LeftWall" unique_id=75965000]
 shape = SubResource("Shape_wall_long")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="LeftWall" unique_id=1709725295]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/LeftWall" unique_id=1709725295]
 mesh = SubResource("Mesh_wall_long")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="RightWall" type="StaticBody3D" parent="." unique_id=1294715916]
+[node name="RightWall" type="StaticBody3D" parent="Environment/Geometry" unique_id=1294715916]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RightWall" unique_id=225478994]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/RightWall" unique_id=225478994]
 shape = SubResource("Shape_wall_long")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RightWall" unique_id=1518645656]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/RightWall" unique_id=1518645656]
 mesh = SubResource("Mesh_wall_long")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="BackWall" type="StaticBody3D" parent="." unique_id=1606701210]
+[node name="BackWall" type="StaticBody3D" parent="Environment/Geometry" unique_id=1606701210]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -36)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BackWall" unique_id=2028975768]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/BackWall" unique_id=2028975768]
 shape = SubResource("Shape_wall_end")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BackWall" unique_id=1335524726]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/BackWall" unique_id=1335524726]
 mesh = SubResource("Mesh_wall_end")
 surface_material_override/0 = SubResource("Mat_wall")
 
 [node name="Monsters" type="Node3D" parent="." unique_id=1600099524]
 
-[node name="CorridorMonster" type="CharacterBody3D" parent="Monsters" unique_id=278489653]
+[node name="CorridorMonster" parent="Monsters" unique_id=278489653 instance=ExtResource("2_monster")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -34.5)
-script = ExtResource("2_monster")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Monsters/CorridorMonster" unique_id=631145858]
-shape = SubResource("Shape_monster")
-
-[node name="KillZone" type="Area3D" parent="Monsters/CorridorMonster" unique_id=1182995707]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Monsters/CorridorMonster/KillZone" unique_id=247136648]
-shape = SubResource("Shape_monster_kill_zone")
-
-[node name="PhotoSprite" type="Sprite3D" parent="Monsters/CorridorMonster" unique_id=1442437962]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1.3251953, 1.6300011)
-billboard = 1
-texture = ExtResource("3_monster_photo")
-
-[node name="CorridorMonster2" type="CharacterBody3D" parent="Monsters"]
+[node name="CorridorMonster2" parent="Monsters" instance=ExtResource("2_monster")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.25, 0.7, -18)
-script = ExtResource("2_monster")
 move_speed = 3.9
 kill_distance = 0.75
 start_delay = 7.0
@@ -167,39 +135,18 @@ death_reason = "The quiet shape found you in the corridor"
 sprint_hearing_range = 24.0
 sprint_speed_bonus = 1.6
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Monsters/CorridorMonster2"]
-shape = SubResource("Shape_monster")
-
-[node name="KillZone" type="Area3D" parent="Monsters/CorridorMonster2"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Monsters/CorridorMonster2/KillZone"]
-shape = SubResource("Shape_monster_kill_zone")
-
-[node name="PhotoSprite" type="Sprite3D" parent="Monsters/CorridorMonster2"]
+[node name="PhotoSprite" parent="Monsters/CorridorMonster2" index="2"]
 transform = Transform3D(0.32, 0, 0, 0, 0.48, 0, 0, 0, 0.32, 0, 1.325, 1.63)
-billboard = 1
 modulate = Color(0.75, 0.88, 1, 1)
-texture = ExtResource("3_monster_photo")
 
-[node name="LevelExit" type="Area3D" parent="." unique_id=720366234]
+[node name="LevelExit" parent="." unique_id=720366234 instance=ExtResource("1_exit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 34.5)
-script = ExtResource("1_exit")
 closed = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelExit" unique_id=2015147696]
+[node name="CollisionShape3D" parent="LevelExit" index="0"]
 shape = SubResource("Shape_exit")
 
-[node name="Door" type="MeshInstance3D" parent="LevelExit" unique_id=1157682661]
-mesh = SubResource("Mesh_exit_door")
-surface_material_override/0 = SubResource("Mat_exit_door")
-
-[node name="Glow" type="MeshInstance3D" parent="LevelExit" unique_id=1395210869]
-mesh = SubResource("Mesh_exit_glow")
-surface_material_override/0 = SubResource("Mat_exit_glow")
-
-[node name="PortalLight" type="OmniLight3D" parent="LevelExit/Glow" unique_id=75943942]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.5)
-light_color = Color(1, 0.75, 0.35, 1)
-omni_range = 4.0
-
 [node name="Notes" type="Node3D" parent="." unique_id=753989612]
+
+[editable path="Monsters/CorridorMonster2"]
+[editable path="LevelExit"]

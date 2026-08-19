@@ -23,6 +23,45 @@ func _ready() -> void:
 func _on_connected() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
+	# Prove that the dedicated server ignores gameplay RPCs before a ticket is
+	# accepted, then authenticate through the same first-message gate as release.
+	main._server_create_online_session.rpc_id(1)
+	await get_tree().create_timer(0.2).timeout
+	if str(main.active_session_id) != "":
+		_fail("Unauthenticated client created an online session")
+		return
+	main._server_authenticate_game_ticket.rpc_id(1, "smoke-network-note")
+	for _attempt in range(40):
+		if bool(main.game_account_authenticated):
+			break
+		await get_tree().create_timer(0.05).timeout
+	if not bool(main.game_account_authenticated):
+		_fail("Game ticket authentication did not complete")
+		return
+	# Authentication alone grants lobby access, not a legacy global game state.
+	# Prove that a signed-in peer must join an explicit online session first.
+	main._request_spawn.rpc_id(1, multiplayer.get_unique_id())
+	main._request_collect_note.rpc_id(1, "Note1")
+	main._request_session_reset.rpc_id(1)
+	main._request_next_level_transition.rpc_id(1)
+	main._request_complete_game.rpc_id(1)
+	main._request_journal_discovery.rpc_id(
+		1,
+		"DialogueNpcs/EntryRadio",
+		false,
+		"listener",
+		0,
+		"light_barrier"
+	)
+	await get_tree().create_timer(0.3).timeout
+	if (
+		main.players.has_node(str(multiplayer.get_unique_id()))
+		or int(main.collected_notes) != 0
+		or main.monster_journal.unlocked
+		or main.monster_journal.has_rumor("listener", "light_barrier")
+	):
+		_fail("Authenticated lobby peer mutated legacy global game state")
+		return
 	main._server_create_online_session.rpc_id(1)
 	await get_tree().create_timer(0.75).timeout
 	if str(main.active_session_id) == "":

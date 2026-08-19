@@ -21,3 +21,6 @@ func _process(_delta: float) -> void:
 	frame_index += 1
 	if frame_index == 15:
 		ui.journal_body.scroll_to_line(9)
+	if frame_index == 18:
+		get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path("res://build/journal_visual_capture.png"))
+		get_tree().quit()

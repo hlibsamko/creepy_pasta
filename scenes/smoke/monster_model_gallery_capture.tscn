@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/monster_model_gallery_capture.gd" id="1_capture"]
+[ext_resource type="PackedScene" path="res://assets/third_party/quaternius_ultimate_monsters/Alien.fbx" id="2_alien"]
+[ext_resource type="PackedScene" path="res://assets/third_party/quaternius_ultimate_monsters/Demon.fbx" id="3_demon"]
+[ext_resource type="PackedScene" path="res://assets/third_party/quaternius_ultimate_monsters/Orc_Skull.fbx" id="4_orc"]
+
+[sub_resource type="PlaneMesh" id="Mesh_floor"]
+size = Vector2(14, 10)
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.035, 0.04, 0.045, 1)
+roughness = 0.96
+
+[node name="MonsterModelGalleryCapture" type="Node3D"]
+script = ExtResource("1_capture")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_floor")
+surface_material_override/0 = SubResource("Mat_floor")
+
+[node name="Models" type="Node3D" parent="."]
+
+[node name="Alien" parent="Models" instance=ExtResource("2_alien")]
+position = Vector3(-2.35, -0.85, 0)
+rotation_degrees = Vector3(0, 0, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="Demon" parent="Models" instance=ExtResource("3_demon")]
+position = Vector3(0, -0.85, 0)
+rotation_degrees = Vector3(0, 0, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="OrcSkull" parent="Models" instance=ExtResource("4_orc")]
+position = Vector3(2.35, -0.85, 0)
+rotation_degrees = Vector3(0, 0, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(0, 1.5, 8.5)
+current = true
+fov = 62.0
+
+[node name="KeyLight" type="OmniLight3D" parent="."]
+position = Vector3(-2.5, 3.5, 4.0)
+light_color = Color(0.72, 0.82, 1, 1)
+light_energy = 4.0
+omni_range = 12.0
+shadow_enabled = true
+
+[node name="RimLight" type="OmniLight3D" parent="."]
+position = Vector3(3.0, 2.0, -2.0)
+light_color = Color(1, 0.18, 0.08, 1)
+light_energy = 2.0
+omni_range = 10.0

@@ -4,8 +4,8 @@
 size = Vector3(4, 0.14, 4)
 
 [sub_resource type="StandardMaterial3D" id="Mat_ceiling"]
-albedo_color = Color(0.42, 0.39, 0.29, 1)
-roughness = 0.97
+albedo_color = Color(0.32, 0.35, 0.34, 1)
+roughness = 0.93
 
 [node name="BackroomsCeilingTile" type="MeshInstance3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.12, 0)

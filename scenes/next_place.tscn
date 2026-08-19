@@ -1,8 +1,8 @@
-[gd_scene load_steps=21 format=3 uid="uid://creepy_next_place"]
+[gd_scene load_steps=15 format=3 uid="uid://creepy_next_place"]
 
 [ext_resource type="Script" path="res://scripts/next_place.gd" id="1_next"]
 [ext_resource type="PackedScene" path="res://scenes/note.tscn" id="2_note"]
-[ext_resource type="Script" path="res://scripts/level_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/common/level_exit_basic.tscn" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/common/pressure_plate_basic.tscn" id="4_plate"]
 [ext_resource type="PackedScene" path="res://scenes/common/survivor_npc_basic.tscn" id="5_survivor"]
 
@@ -39,127 +39,95 @@ size = Vector3(0.25, 3.2, 10)
 [sub_resource type="BoxMesh" id="Mesh_wall_ew"]
 size = Vector3(0.25, 3.2, 10)
 
-[sub_resource type="BoxShape3D" id="Shape_exit"]
-size = Vector3(2.0, 2.3, 1.0)
-
-[sub_resource type="BoxMesh" id="Mesh_exit_door"]
-size = Vector3(2.0, 2.3, 0.18)
-
-[sub_resource type="StandardMaterial3D" id="Mat_exit_door"]
-albedo_color = Color(0.04, 0.04, 0.045, 1)
-roughness = 0.88
-
-[sub_resource type="BoxMesh" id="Mesh_exit_glow"]
-size = Vector3(1.9, 2.15, 0.08)
-
-[sub_resource type="StandardMaterial3D" id="Mat_exit_glow"]
-albedo_color = Color(0.18, 0.12, 0.22, 1)
-emission_enabled = true
-emission = Color(0.82, 0.35, 1, 1)
-emission_energy_multiplier = 1.55
-
 [node name="NextPlace" type="Node3D"]
 script = ExtResource("1_next")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Geometry" type="Node3D" parent="Environment"]
+
+[node name="Lighting" type="Node3D" parent="Environment"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_next")
 
-[node name="EntryLight" type="OmniLight3D" parent="."]
+[node name="EntryLight" type="OmniLight3D" parent="Environment/Lighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 2.8)
 light_color = Color(0.45, 0.72, 1, 1)
 light_energy = 2.2
 omni_range = 6.0
 
-[node name="CenterLamp" type="OmniLight3D" parent="."]
+[node name="CenterLamp" type="OmniLight3D" parent="Environment/Lighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
 light_color = Color(1, 0.84, 0.55, 1)
 light_energy = 1.7
 omni_range = 7.5
 
-[node name="BackLamp" type="OmniLight3D" parent="."]
+[node name="BackLamp" type="OmniLight3D" parent="Environment/Lighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 1.6, -3.7)
 light_color = Color(0.72, 0.92, 1, 1)
 light_energy = 1.05
 omni_range = 4.6
 
-[node name="WarningLamp" type="SpotLight3D" parent="."]
+[node name="WarningLamp" type="SpotLight3D" parent="Environment/Lighting"]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 5.8, 2.6, -3.6)
 light_color = Color(1, 0.28, 0.2, 1)
 light_energy = 1.55
 spot_range = 8.0
 spot_angle = 42.0
 
-[node name="Floor" type="StaticBody3D" parent="."]
+[node name="Floor" type="StaticBody3D" parent="Environment/Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/Floor"]
 shape = SubResource("Shape_floor")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/Floor"]
 mesh = SubResource("Mesh_floor")
 surface_material_override/0 = SubResource("Mat_floor")
 
-[node name="NorthWall" type="StaticBody3D" parent="."]
+[node name="NorthWall" type="StaticBody3D" parent="Environment/Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/NorthWall"]
 shape = SubResource("Shape_wall_ns")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NorthWall"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/NorthWall"]
 mesh = SubResource("Mesh_wall_ns")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="SouthWall" type="StaticBody3D" parent="."]
+[node name="SouthWall" type="StaticBody3D" parent="Environment/Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SouthWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/SouthWall"]
 shape = SubResource("Shape_wall_ns")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SouthWall"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/SouthWall"]
 mesh = SubResource("Mesh_wall_ns")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="WestWall" type="StaticBody3D" parent="."]
+[node name="WestWall" type="StaticBody3D" parent="Environment/Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WestWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/WestWall"]
 shape = SubResource("Shape_wall_ew")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WestWall"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/WestWall"]
 mesh = SubResource("Mesh_wall_ew")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="EastWall" type="StaticBody3D" parent="."]
+[node name="EastWall" type="StaticBody3D" parent="Environment/Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EastWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/EastWall"]
 shape = SubResource("Shape_wall_ew")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EastWall"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/EastWall"]
 mesh = SubResource("Mesh_wall_ew")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="LevelExit" type="Area3D" parent="."]
+[node name="LevelExit" parent="." instance=ExtResource("3_exit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -4.55)
-script = ExtResource("3_exit")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelExit"]
-shape = SubResource("Shape_exit")
-disabled = true
-
-[node name="Door" type="MeshInstance3D" parent="LevelExit"]
-mesh = SubResource("Mesh_exit_door")
-surface_material_override/0 = SubResource("Mat_exit_door")
-
-[node name="Glow" type="MeshInstance3D" parent="LevelExit"]
-mesh = SubResource("Mesh_exit_glow")
-surface_material_override/0 = SubResource("Mat_exit_glow")
-
-[node name="PortalLight" type="OmniLight3D" parent="LevelExit/Glow"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.7)
-light_color = Color(0.82, 0.35, 1, 1)
-light_energy = 1.2
-omni_range = 4.0
 
 [node name="PressurePlate" parent="." instance=ExtResource("4_plate")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -2.55)

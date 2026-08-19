@@ -20,7 +20,14 @@ func _ready() -> void:
 
 
 func _on_connected() -> void:
-	await get_tree().process_frame
+	main._server_authenticate_game_ticket.rpc_id(1, "smoke-session-owner")
+	for _attempt in range(40):
+		if bool(main.game_account_authenticated):
+			break
+		await get_tree().create_timer(0.05).timeout
+	if not bool(main.game_account_authenticated):
+		_fail("Owner game ticket authentication did not complete")
+		return
 	main._server_create_online_session.rpc_id(1)
 	await get_tree().create_timer(0.8).timeout
 	if str(main.active_session_id) == "":

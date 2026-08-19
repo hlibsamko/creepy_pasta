@@ -1,5 +1,8 @@
 # Backrooms Builder
 
+> **Visual-upgrade note:** the builder/gameplay contract is stable. Replace/dress visual kit scenes and visual children rather than rewriting layout semantics or gameplay roots. Preserve authored root offsets, the 4 m grid behavior, spawn/exit/mechanic markers, and generated stable paths. The Unlit (`U`) is now production-capable; the stale experimental-only warning from the older document has been corrected below.
+
+
 The Backrooms builder is an editor-friendly level assembly tool for quickly blocking out yellow-room levels with gameplay markers.
 
 ## Files
@@ -12,7 +15,7 @@ The Backrooms builder is an editor-friendly level assembly tool for quickly bloc
 - Reusable chaser: `res://scenes/common/chaser_monster_basic.tscn`
 - Reusable pressure plate: `res://scenes/common/pressure_plate_basic.tscn`
 - Reusable False Door: `res://scenes/common/mimic_door_basic.tscn`
-- Prototype light-shy monster: `res://scenes/common/light_shy_monster_basic.tscn`
+- Reusable production light-shy monster: `res://scenes/common/light_shy_monster_basic.tscn`
 - Pressure-powered work light: `res://scenes/common/pressure_powered_spotlight_basic.tscn`
 - One-shot breaker trigger: `res://scenes/common/breaker_outage_trigger_basic.tscn`
 - Evidence profile resource: `res://scripts/evidence_profile.gd`
@@ -60,7 +63,7 @@ Generated `N` notes default to the Polarity Switch puzzle. Use `D`, `Q`, `K`, an
 
 Assign `EvidenceProfile` resources to the builder's four puzzle slots when generated records need distinct recovered text or journal facts/rumors. Unassigned slots continue to use `generated_note_text`, so prototype layouts do not require extra resources.
 
-`U` is available for isolated builder experiments with The Unlit. Do not place it in a production layout until its evidence loop and synchronized activation state are complete.
+`U` is production-capable and is already used by The Unlit Maintenance Wing. Its evidence loop, synchronized mechanic/creature state, Restart/late-join behavior, and server-authoritative production integration are complete in that encounter. During visual-upgrade work, preserve the generated `U` gameplay root/path and replace only its visual children/material presentation unless mechanic changes are explicitly requested.
 
 `R` and `T` provide the matching editor-native encounter wiring. Each `R` work light binds to the pressure plate generated in its own cell and aims at the nearest generated `U`. Each `T` binds to the nearest generated work light. The `work_light_range` inspector property controls all generated work lights in that builder. Use spatial separation when a layout contains several independent Unlit encounters so nearest-node wiring stays unambiguous.
 

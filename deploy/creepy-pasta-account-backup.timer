@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily Creepy Pasta account database backup
+
+[Timer]
+OnCalendar=*-*-* 03:25:00 UTC
+RandomizedDelaySec=15m
+Persistent=true
+Unit=creepy-pasta-account-backup.service
+
+[Install]
+WantedBy=timers.target

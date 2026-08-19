@@ -26,6 +26,8 @@ enum PuzzleType {
 }
 
 @onready var menu: Control = $Menu
+@onready var menu_parallax: MenuParallax = $Menu/MenuParallax
+@onready var account_panel: Control = $Menu/AccountPanel
 @onready var status_label: Label = $Menu/Panel/Margin/Box/StatusLabel
 @onready var ip_edit: LineEdit = $Menu/Panel/Margin/Box/IpEdit
 @onready var host_button: Button = $Menu/Panel/Margin/Box/Buttons/HostButton
@@ -137,6 +139,8 @@ func _ready() -> void:
 	session_browser.hide()
 	branch_browser.hide()
 	session_label.hide()
+	hud_label.hide()
+	objective_label.hide()
 	if OS.has_feature("web"):
 		host_button.hide()
 		ip_edit.hide()
@@ -144,6 +148,7 @@ func _ready() -> void:
 		join_button.text = "Play Online"
 		offline_button.text = "Play Offline"
 		status_label.text = "Desktop browser recommended. Start online or play offline."
+	menu.gui_input.connect(_on_menu_gui_input)
 
 
 func set_join_address(address: String) -> void:
@@ -155,11 +160,16 @@ func show_menu() -> void:
 	menu.show()
 	session_label.hide()
 	journal_button.hide()
+	hud_label.hide()
+	objective_label.hide()
+	threat_warning.hide()
 
 
 func hide_menu() -> void:
 	menu.hide()
 	session_label.visible = session_label.text != ""
+	hud_label.visible = hud_label.text != ""
+	objective_label.visible = objective_label.text != ""
 	if journal_available and not journal_panel.visible and not death_panel.visible and not victory_panel.visible:
 		journal_button.show()
 
@@ -182,6 +192,10 @@ func is_victory_visible() -> bool:
 
 func set_status(text: String) -> void:
 	status_label.text = text
+
+
+func set_connection_visual_active(active: bool) -> void:
+	menu_parallax.set_connection_mode(active)
 
 
 func set_session_status(text: String) -> void:
@@ -388,6 +402,7 @@ func update_hud(collected_notes: int, total_notes: int, last_note := "") -> void
 	if last_note != "":
 		text += " | %s" % _get_hud_message(last_note)
 	hud_label.text = text
+	hud_label.visible = not menu.visible
 
 
 func _get_hud_message(message: String) -> String:
@@ -399,7 +414,7 @@ func _get_hud_message(message: String) -> String:
 
 func set_objective(text: String) -> void:
 	objective_label.text = text
-	objective_label.visible = text != ""
+	objective_label.visible = text != "" and not menu.visible
 
 
 func set_extra_hint(text: String) -> void:
@@ -429,7 +444,13 @@ func show_note_puzzle(note_id: String, note_text: String, puzzle_type := PuzzleT
 
 
 func _emit_join_requested() -> void:
+	menu_parallax.arm_audio()
 	join_requested.emit(ip_edit.text)
+
+
+func _on_menu_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton or event is InputEventKey or event is InputEventJoypadButton:
+		menu_parallax.arm_audio()
 
 
 func _emit_reset_session_requested() -> void:
@@ -745,7 +766,7 @@ func show_threat_warning(progress: float, seconds_remaining: float) -> void:
 	var urgency := clampf(progress, 0.0, 1.0)
 	threat_warning.text = "THE WATCHER HAS YOUR GAZE - LOOK AWAY  %.1fs" % maxf(seconds_remaining, 0.0)
 	threat_warning.modulate = Color(1.0, lerpf(0.82, 0.24, urgency), lerpf(0.34, 0.18, urgency), 1.0)
-	threat_warning.show()
+	threat_warning.visible = not menu.visible
 
 
 func hide_threat_warning() -> void:

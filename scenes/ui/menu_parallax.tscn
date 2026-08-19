@@ -1,0 +1,237 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/menu_parallax.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_parallax/room_base_generated.png" id="2_background"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_parallax/rug.png" id="3_rug"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_parallax/side_chair.png" id="4_side_chair"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_parallax/bench.png" id="5_bench"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_parallax/armchair.png" id="6_armchair"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_parallax/fallen_chair.png" id="7_fallen_chair"]
+[ext_resource type="Shader" path="res://shaders/menu_fog.gdshader" id="8_fog"]
+[ext_resource type="Shader" path="res://shaders/menu_finish.gdshader" id="9_finish"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/night_wind_a_cc0.ogg" id="10_wind"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/wolf_howls_public_domain.ogg" id="11_howl"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/tree_creak_cc0.ogg" id="12_creak"]
+
+[sub_resource type="FastNoiseLite" id="FastNoise_fog"]
+noise_type = 1
+frequency = 0.018
+fractal_octaves = 4
+fractal_lacunarity = 2.15
+fractal_gain = 0.48
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture_fog"]
+width = 160
+height = 90
+seamless = true
+seamless_blend_skirt = 1.0
+normalize = false
+noise = SubResource("FastNoise_fog")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fog"]
+shader = ExtResource("8_fog")
+shader_parameter/noise_texture = SubResource("NoiseTexture_fog")
+shader_parameter/smoke_color = Color(0.42, 0.55, 0.72, 0.2)
+shader_parameter/distortion_speed = 0.11
+shader_parameter/density = 0.24
+shader_parameter/vertical_fade = 0.68
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_finish"]
+shader = ExtResource("9_finish")
+shader_parameter/vignette_strength = 0.72
+shader_parameter/grain_strength = 0.024
+shader_parameter/scanline_strength = 0.012
+shader_parameter/tint = Color(0.1, 0.16, 0.24, 0.1)
+
+[node name="MenuParallax" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+clip_contents = true
+script = ExtResource("1_script")
+
+[node name="Fallback" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.006, 0.009, 0.014, 1)
+
+[node name="Art" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Art"]
+layout_mode = 1
+anchors_preset = 15
+anchor_left = -0.018
+anchor_top = -0.025
+anchor_right = 1.018
+anchor_bottom = 1.025
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_background")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Distant" type="Control" parent="Art"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Rug" type="TextureRect" parent="Art/Distant"]
+layout_mode = 1
+anchors_preset = 15
+anchor_left = -0.025
+anchor_top = -0.018
+anchor_right = 1.025
+anchor_bottom = 1.018
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+modulate = Color(0.42, 0.5, 0.64, 0.58)
+texture = ExtResource("3_rug")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Middle" type="Control" parent="Art"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SideChair" type="TextureRect" parent="Art/Middle"]
+layout_mode = 0
+anchor_left = 0.42
+anchor_top = 0.42
+anchor_right = 0.65
+anchor_bottom = 0.91
+mouse_filter = 2
+modulate = Color(0.63, 0.7, 0.84, 0.92)
+texture = ExtResource("4_side_chair")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Bench" type="TextureRect" parent="Art/Middle"]
+layout_mode = 0
+anchor_left = 0.64
+anchor_top = 0.57
+anchor_right = 0.88
+anchor_bottom = 0.9
+mouse_filter = 2
+modulate = Color(0.56, 0.65, 0.8, 0.9)
+texture = ExtResource("5_bench")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Near" type="Control" parent="Art"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Armchair" type="TextureRect" parent="Art/Near"]
+layout_mode = 0
+anchor_left = -0.08
+anchor_top = 0.48
+anchor_right = 0.3
+anchor_bottom = 1.08
+mouse_filter = 2
+modulate = Color(0.48, 0.57, 0.73, 0.96)
+texture = ExtResource("6_armchair")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground" type="Control" parent="Art"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="FallenChair" type="TextureRect" parent="Art/Foreground"]
+layout_mode = 0
+anchor_left = 0.22
+anchor_top = 0.51
+anchor_right = 0.57
+anchor_bottom = 1.09
+mouse_filter = 2
+modulate = Color(0.43, 0.5, 0.65, 0.98)
+texture = ExtResource("7_fallen_chair")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Fog" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_fog")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Finish" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_finish")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="ReadabilityShade" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.005, 0.008, 0.014, 0.16)
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Wind" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("10_wind")
+volume_db = -32.0
+autoplay = false
+
+[node name="Howl" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("11_howl")
+volume_db = -30.0
+
+[node name="Creak" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("12_creak")
+volume_db = -24.0
+
+[node name="EventTimer" type="Timer" parent="Audio"]
+one_shot = true

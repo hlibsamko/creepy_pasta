@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/corridor.tscn" id="1_room"]
+[ext_resource type="Script" path="res://scripts/room_visual_capture.gd" id="2_capture"]
+
+[node name="CorridorVisualCapture" type="Node3D"]
+script = ExtResource("2_capture")
+output_path = "res://build/corridor_visual_capture.png"
+camera_position = Vector3(0, 1.55, -7)
+camera_target = Vector3(0, 1.1, -28)
+minimum_lit_samples = 18
+
+[node name="Corridor" parent="." instance=ExtResource("1_room")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 78.0
+
+[node name="Flashlight" type="SpotLight3D" parent="Camera3D"]
+light_color = Color(1, 0.93, 0.74, 1)
+light_energy = 5.0
+spot_range = 18.0
+spot_angle = 34.0
+spot_angle_attenuation = 1.8

@@ -1,5 +1,8 @@
 # Endless House Builder
 
+> **Visual-upgrade note:** this document's dimensions and root offsets are hard integration contracts. Adapt imported art with wrapper scenes instead of changing the builder/grid/gameplay layout to fit a model. Preserve the existing False Door fairness/readability rules and the continuous `S -> E` route while replacing art.
+
+
 The Endless House kit reuses `BackroomsBuilder` rather than maintaining a second generation system. The builder owns layout parsing and gameplay placement; the scene supplies a different visual kit through exported `PackedScene` slots.
 
 ## Files

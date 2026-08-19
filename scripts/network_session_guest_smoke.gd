@@ -26,7 +26,15 @@ func _on_connected() -> void:
 	if initial_connection_started:
 		return
 	initial_connection_started = true
-	await get_tree().create_timer(0.8).timeout
+	main._server_authenticate_game_ticket.rpc_id(1, "smoke-session-guest")
+	for _attempt in range(40):
+		if bool(main.game_account_authenticated):
+			break
+		await get_tree().create_timer(0.05).timeout
+	if not bool(main.game_account_authenticated):
+		_fail("Guest game ticket authentication did not complete")
+		return
+	await get_tree().create_timer(0.3).timeout
 	if main.ui.session_list.get_child_count() < 1:
 		_fail("Guest lobby did not list the active owner session")
 		return
@@ -109,6 +117,9 @@ func _on_connected() -> void:
 		_fail("Guest session reset did not clear only guest progress")
 		return
 	var reconnect_session_id := str(main.active_session_id)
+	# The account stays signed in but reconnecting requires a new single-use
+	# game ticket, just like release clients receive from AccountService.
+	main.pending_game_ticket = "smoke-session-guest-reconnect"
 	main._reconnect_game()
 	await get_tree().create_timer(1.8).timeout
 	if str(main.active_session_id) != reconnect_session_id:

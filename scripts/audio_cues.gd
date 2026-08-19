@@ -40,6 +40,11 @@ func play_ambience(level_path: String) -> void:
 	ambience_player.play()
 
 
+func stop_ambience() -> void:
+	if ambience_player:
+		ambience_player.stop()
+
+
 func _get_ambience_profile(level_path: String) -> Vector2:
 	if "unlit_evidence_demo" in level_path:
 		return Vector2(50.0, 150.0)

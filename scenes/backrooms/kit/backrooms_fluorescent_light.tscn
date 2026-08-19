@@ -6,10 +6,11 @@
 size = Vector3(2.3, 0.08, 0.34)
 
 [sub_resource type="StandardMaterial3D" id="Mat_panel"]
-albedo_color = Color(0.78, 0.83, 0.72, 1)
+albedo_color = Color(0.72, 0.78, 0.7, 1)
+roughness = 0.82
 emission_enabled = true
-emission = Color(0.82, 0.92, 0.72, 1)
-emission_energy_multiplier = 1.25
+emission = Color(0.68, 0.84, 0.9, 1)
+emission_energy_multiplier = 1.15
 
 [node name="BackroomsFluorescentLight" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.02, 0)
@@ -19,8 +20,8 @@ mesh = SubResource("Mesh_panel")
 surface_material_override/0 = SubResource("Mat_panel")
 
 [node name="Light" type="OmniLight3D" parent="."]
-light_color = Color(0.86, 0.94, 0.74, 1)
-light_energy = 1.35
+light_color = Color(0.68, 0.86, 0.96, 1)
+light_energy = 1.2
 omni_range = 6.0
 script = ExtResource("1_flicker")
 intensity = 0.16

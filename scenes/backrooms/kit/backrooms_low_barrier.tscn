@@ -7,8 +7,8 @@ size = Vector3(2.7, 1.15, 0.55)
 size = Vector3(2.7, 1.15, 0.55)
 
 [sub_resource type="StandardMaterial3D" id="Mat_barrier"]
-albedo_color = Color(0.34, 0.31, 0.22, 1)
-roughness = 0.98
+albedo_color = Color(0.34, 0.35, 0.31, 1)
+roughness = 0.9
 
 [node name="BackroomsLowBarrier" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.575, 0)

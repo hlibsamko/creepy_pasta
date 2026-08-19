@@ -1,5 +1,8 @@
 # The Unlit
 
+> **Visual replacement contract:** The Unlit is already a production/server-authoritative inhabitant. Visual work may replace/wrap `Body/Silhouette` and the warning presentation, but must preserve the gameplay root/path, server-owned position/illumination/contact behavior, light/occlusion rules, and readable cyan-held versus red-moving state. Do not simplify this feature to an experimental local-only creature.
+
+
 `The Unlit` is the fourth production inhabitant. It advances slowly while outside a player's flashlight and stops when an unobstructed spotlight cone reaches it.
 
 ## Files

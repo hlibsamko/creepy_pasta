@@ -7,10 +7,10 @@ size = Vector3(4, 0.2, 4)
 size = Vector3(4, 0.2, 4)
 
 [sub_resource type="StandardMaterial3D" id="Mat_floor"]
-albedo_color = Color(0.155, 0.17, 0.16, 1)
+albedo_color = Color(0.27, 0.29, 0.28, 1)
 roughness = 0.94
 emission_enabled = true
-emission = Color(0.048, 0.055, 0.052, 1)
+emission = Color(0.06, 0.068, 0.064, 1)
 emission_energy_multiplier = 1.0
 
 [node name="HouseFloorTile" type="StaticBody3D"]

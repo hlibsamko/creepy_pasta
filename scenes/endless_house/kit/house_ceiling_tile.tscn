@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [sub_resource type="BoxMesh" id="Mesh_ceiling"]
 size = Vector3(4, 0.14, 4)
@@ -10,7 +10,19 @@ emission_enabled = true
 emission = Color(0.16, 0.17, 0.165, 1)
 emission_energy_multiplier = 1.0
 
+[sub_resource type="BoxMesh" id="Mesh_ceiling_panel"]
+size = Vector3(3.72, 0.035, 3.72)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ceiling_panel"]
+albedo_color = Color(0.28, 0.29, 0.28, 1)
+roughness = 0.96
+
 [node name="HouseCeilingTile" type="MeshInstance3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.12, 0)
 mesh = SubResource("Mesh_ceiling")
 surface_material_override/0 = SubResource("Mat_ceiling")
+
+[node name="InsetPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+mesh = SubResource("Mesh_ceiling_panel")
+surface_material_override/0 = SubResource("Mat_ceiling_panel")

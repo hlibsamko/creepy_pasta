@@ -1,7 +1,8 @@
 param(
     [string]$GodotPath = "D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe",
     [string]$SiteDir = "D:\Codex_projects\creepy-website",
-    [switch]$Exports
+    [switch]$Exports,
+    [switch]$NetworkOnly
 )
 
 $ErrorActionPreference = "Stop"
@@ -49,7 +50,7 @@ function Invoke-NetworkSessionCheck {
     $server = $null
     try {
         Write-Host "== Network note/journal/reset smoke =="
-        $serverArguments = "--headless --path `"$projectRoot`" --server"
+        $serverArguments = "--headless --path `"$projectRoot`" --server --account-auth-test-mode"
         $server = Start-Process -FilePath $GodotPath -ArgumentList $serverArguments -WorkingDirectory $projectRoot -PassThru -WindowStyle Hidden -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
         Start-Sleep -Seconds 2
         if ($server.HasExited) {
@@ -98,7 +99,7 @@ function Invoke-NetworkIsolationCheck {
     $owner = $null
     try {
         Write-Host "== Two-session isolation smoke =="
-        $serverArguments = "--headless --path `"$projectRoot`" --server"
+        $serverArguments = "--headless --path `"$projectRoot`" --server --account-auth-test-mode"
         $server = Start-Process -FilePath $GodotPath -ArgumentList $serverArguments -WorkingDirectory $projectRoot -PassThru -WindowStyle Hidden -RedirectStandardOutput $serverOut -RedirectStandardError $serverErr
         Start-Sleep -Seconds 2
         $ownerArguments = "--headless --path `"$projectRoot`" --quit-after 1800 res://scenes/smoke/network_session_owner_smoke.tscn"
@@ -143,7 +144,10 @@ function Invoke-NetworkIsolationCheck {
     }
 }
 
+if (-not $NetworkOnly) {
 Invoke-GodotCheck -Name "Project parse" -Arguments @("--quit")
+Invoke-GodotCheck -Name "Account client smoke" -Arguments @("res://scenes/smoke/account_client_smoke.tscn")
+Invoke-GodotCheck -Name "Account game bridge queue smoke" -Arguments @("res://scenes/smoke/account_game_bridge_smoke.tscn")
 Invoke-GodotCheck -Name "Physical input bindings smoke" -Arguments @("res://scenes/smoke/input_bindings_smoke.tscn")
 Invoke-GodotCheck -Name "Remote player sync validation smoke" -Arguments @("res://scenes/smoke/player_sync_validation_smoke.tscn")
 Invoke-GodotCheck -Name "Day/night cycle smoke" -Arguments @("res://scenes/smoke/day_night_cycle_smoke.tscn")
@@ -167,7 +171,8 @@ Invoke-GodotCheck -Name "Backrooms builder smoke" -Arguments @("--quit-after", "
 Invoke-GodotCheck -Name "Backrooms builder variants smoke" -Arguments @("res://scenes/smoke/backrooms_builder_variants_smoke.tscn")
 Invoke-GodotCheck -Name "Backrooms builder paired Unlit smoke" -Arguments @("--quit-after", "600", "res://scenes/smoke/backrooms_builder_unlit_pairs_smoke.tscn")
 Invoke-GodotCheck -Name "Backrooms builder Inspector warnings smoke" -Arguments @("res://scenes/smoke/backrooms_builder_warnings_smoke.tscn")
-Invoke-GodotCheck -Name "Dedicated startup smoke" -Arguments @("--server", "--quit-after", "2")
+Invoke-GodotCheck -Name "Dedicated startup smoke" -Arguments @("--server", "--account-auth-test-mode", "--quit-after", "2")
+}
 Invoke-NetworkSessionCheck
 Invoke-NetworkIsolationCheck
 
@@ -186,7 +191,7 @@ foreach ($scriptPath in $scripts) {
     Write-Host "== $scriptPath syntax OK =="
 }
 
-if ($Exports) {
+if ($Exports -and -not $NetworkOnly) {
     Invoke-GodotCheck -Name "Linux dedicated export" -Arguments @("--export-release", "Linux Dedicated Server", "build\server\creepy_pasta_server.x86_64")
     powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $projectRoot "deploy\build_web_site.ps1") -GodotExe $GodotPath -SiteDir $SiteDir
     if ($LASTEXITCODE -ne 0) {

@@ -27,10 +27,12 @@ func _process(_delta: float) -> void:
 		_set_crossing_view()
 	elif frame_index == 14:
 		print("[capture] work light holds The Unlit=%s" % monster.call("is_illuminated"))
+		get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path("res://build/unlit_visual_cyan.png"))
 	elif frame_index == 18:
 		breaker.call("trigger_outage")
 	elif frame_index == 24:
 		print("[capture] outage releases The Unlit=%s" % (not monster.call("is_illuminated")))
+		get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path("res://build/unlit_visual_red.png"))
 	elif frame_index == 27:
 		_set_breaker_view()
 
