@@ -9,7 +9,8 @@ extends Control
 @onready var middle_layer: Control = $Art/Middle
 @onready var near_layer: Control = $Art/Near
 @onready var foreground_layer: Control = $Art/Foreground
-@onready var wind_player: AudioStreamPlayer = $Audio/Wind
+@onready var wind_bed_player: AudioStreamPlayer = $Audio/WindBed
+@onready var ghost_wind_player: AudioStreamPlayer = $Audio/GhostWind
 @onready var howl_player: AudioStreamPlayer = $Audio/Howl
 @onready var creak_player: AudioStreamPlayer = $Audio/Creak
 @onready var event_timer: Timer = $Audio/EventTimer
@@ -18,10 +19,16 @@ var _motion := Vector2.ZERO
 var _active := false
 var _audio_armed := false
 var _rng := RandomNumberGenerator.new()
-var _wind_streams: Array[AudioStream] = [
+var _wind_bed_streams: Array[AudioStream] = [
 	preload("res://assets/audio/menu/night_wind_a_cc0.ogg"),
 	preload("res://assets/audio/menu/night_wind_b_cc0.ogg"),
 	preload("res://assets/audio/menu/night_wind_c_cc0.ogg"),
+]
+var _creak_streams: Array[AudioStream] = [
+	preload("res://assets/audio/menu/floor_creak_01.mp3"),
+	preload("res://assets/audio/menu/floor_creak_02.mp3"),
+	preload("res://assets/audio/menu/floor_creak_03.mp3"),
+	preload("res://assets/audio/menu/floor_creak_04.mp3"),
 ]
 
 
@@ -30,7 +37,8 @@ func _ready() -> void:
 	_rng.randomize()
 	visibility_changed.connect(_sync_active_state)
 	event_timer.timeout.connect(_on_event_timer_timeout)
-	wind_player.finished.connect(_on_wind_finished)
+	wind_bed_player.finished.connect(_on_wind_bed_finished)
+	ghost_wind_player.finished.connect(_on_ghost_wind_finished)
 	_sync_active_state()
 
 
@@ -56,7 +64,7 @@ func arm_audio() -> void:
 	if _audio_armed or not _audio_available():
 		return
 	_audio_armed = true
-	wind_player.stream = _wind_streams[_rng.randi_range(0, _wind_streams.size() - 1)]
+	wind_bed_player.stream = _wind_bed_streams[_rng.randi_range(0, _wind_bed_streams.size() - 1)]
 	if _active:
 		_start_audio()
 
@@ -79,17 +87,20 @@ func _sync_active_state() -> void:
 func _start_audio() -> void:
 	if not _audio_available():
 		return
-	if not wind_player.playing:
-		wind_player.stream = _wind_streams[_rng.randi_range(0, _wind_streams.size() - 1)]
-		wind_player.pitch_scale = _rng.randf_range(0.92, 1.03)
-		wind_player.play()
+	if not wind_bed_player.playing:
+		wind_bed_player.stream = _wind_bed_streams[_rng.randi_range(0, _wind_bed_streams.size() - 1)]
+		wind_bed_player.pitch_scale = _rng.randf_range(0.94, 1.02)
+		wind_bed_player.play()
+	if not ghost_wind_player.playing:
+		ghost_wind_player.pitch_scale = _rng.randf_range(0.96, 1.01)
+		ghost_wind_player.play()
 	if event_timer.is_stopped():
 		_schedule_event(4.0, 9.0)
 
 
 func _stop_audio() -> void:
 	event_timer.stop()
-	for player in [wind_player, howl_player, creak_player]:
+	for player in [wind_bed_player, ghost_wind_player, howl_player, creak_player]:
 		if player:
 			player.stop()
 
@@ -98,8 +109,9 @@ func _on_event_timer_timeout() -> void:
 	if not _active or not _audio_armed:
 		return
 	if _rng.randf() < 0.74:
+		creak_player.stream = _creak_streams[_rng.randi_range(0, _creak_streams.size() - 1)]
 		creak_player.pitch_scale = _rng.randf_range(0.88, 1.08)
-		creak_player.volume_db = _rng.randf_range(-27.0, -21.0)
+		creak_player.volume_db = _rng.randf_range(-25.0, -19.0)
 		creak_player.play()
 		_schedule_event(11.0, 24.0)
 	else:
@@ -113,12 +125,19 @@ func _schedule_event(minimum: float, maximum: float) -> void:
 	event_timer.start(_rng.randf_range(minimum, maximum))
 
 
-func _on_wind_finished() -> void:
+func _on_wind_bed_finished() -> void:
 	if not _active or not _audio_armed:
 		return
-	wind_player.stream = _wind_streams[_rng.randi_range(0, _wind_streams.size() - 1)]
-	wind_player.pitch_scale = _rng.randf_range(0.92, 1.03)
-	wind_player.play()
+	wind_bed_player.stream = _wind_bed_streams[_rng.randi_range(0, _wind_bed_streams.size() - 1)]
+	wind_bed_player.pitch_scale = _rng.randf_range(0.94, 1.02)
+	wind_bed_player.play()
+
+
+func _on_ghost_wind_finished() -> void:
+	if not _active or not _audio_armed:
+		return
+	ghost_wind_player.pitch_scale = _rng.randf_range(0.96, 1.01)
+	ghost_wind_player.play()
 
 
 func _audio_available() -> bool:

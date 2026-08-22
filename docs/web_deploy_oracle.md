@@ -130,6 +130,14 @@ Deploy only the browser site to Oracle:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_web_oracle.ps1
 ```
 
+When Google account login is intentionally not part of the current release,
+publish the static Web client and game WebSocket routes without the account
+service preflight or `/api/*` proxy:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\deploy_web_oracle.ps1 -SkipGoogleAuth
+```
+
 Deploy the account API, Web client, and dedicated server from the same project
 state (with a root-private Google credential file):
 

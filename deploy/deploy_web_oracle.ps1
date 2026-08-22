@@ -4,7 +4,8 @@ param(
     [string]$KeyPath = "D:\Soft\oracle-server\ssh-key-2026-06-07.key",
     [string]$SiteDir = "D:\Codex_projects\creepy-website",
     [string]$Domain = "creepy-pasta.duckdns.org",
-    [string]$RemoteSiteDir = "/var/www/creepy-pasta"
+    [string]$RemoteSiteDir = "/var/www/creepy-pasta",
+    [switch]$SkipGoogleAuth
 )
 
 $ErrorActionPreference = "Stop"
@@ -25,6 +26,35 @@ if ($Domain -notmatch '^[A-Za-z0-9.-]+$') {
 $deployId = [Guid]::NewGuid().ToString("N")
 $archive = Join-Path $env:TEMP "creepy-pasta-site-$deployId.tar.gz"
 $remoteArchive = "/tmp/creepy-pasta-site-$deployId.tar.gz"
+$accountPreflight = if ($SkipGoogleAuth) {
+    "echo 'Publishing without Google account routes.'"
+} else {
+@'
+sudo systemctl is-active --quiet creepy-pasta-account.service
+curl --silent --show-error --fail http://127.0.0.1:8080/healthz >/dev/null
+ready_code="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' http://127.0.0.1:8080/readyz)"
+if [ "$ready_code" != '200' ]; then
+    echo "Account service is not ready (HTTP $ready_code); refusing to publish auth routes." >&2
+    exit 1
+fi
+'@
+}
+$accountRoutes = if ($SkipGoogleAuth) {
+@'
+    # Google account routes are intentionally omitted for this release.
+'@
+} else {
+@'
+    @account_private path /internal/* /healthz /readyz
+    respond @account_private 404
+
+    @account_api path /api/*
+    reverse_proxy @account_api 127.0.0.1:8080
+
+    @account_legal path /privacy /terms
+    reverse_proxy @account_legal 127.0.0.1:8080
+'@
+}
 
 try {
     tar -czf $archive -C $SiteDir .
@@ -98,13 +128,7 @@ handle_web_error() {
 trap cleanup_web EXIT
 trap handle_web_error ERR
 
-sudo systemctl is-active --quiet creepy-pasta-account.service
-curl --silent --show-error --fail http://127.0.0.1:8080/healthz >/dev/null
-ready_code="`$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' http://127.0.0.1:8080/readyz)"
-if [ "`$ready_code" != '200' ]; then
-    echo "Account service is not ready (HTTP `$ready_code); refusing to publish auth routes." >&2
-    exit 1
-fi
+$accountPreflight
 
 if ! command -v caddy >/dev/null 2>&1; then
     sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl gpg
@@ -137,14 +161,7 @@ $Domain {
     @images path /*.png /*.ico
     header @images Cache-Control "public,max-age=3600,must-revalidate"
 
-    @account_private path /internal/* /healthz /readyz
-    respond @account_private 404
-
-    @account_api path /api/*
-    reverse_proxy @account_api 127.0.0.1:8080
-
-    @account_legal path /privacy /terms
-    reverse_proxy @account_legal 127.0.0.1:8080
+$accountRoutes
 
     @websocket {
         header Connection *Upgrade*
@@ -156,7 +173,7 @@ $Domain {
 }
 CADDYFILE
 
-sudo caddy fmt --overwrite "`$candidate_caddy"
+caddy fmt --overwrite "`$candidate_caddy"
 sudo caddy validate --config "`$candidate_caddy"
 if sudo test -e "`$site_dir"; then
     had_site=1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/menu_parallax.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/ui/menu_parallax/room_base_generated.png" id="2_background"]
@@ -10,8 +10,12 @@
 [ext_resource type="Shader" path="res://shaders/menu_fog.gdshader" id="8_fog"]
 [ext_resource type="Shader" path="res://shaders/menu_finish.gdshader" id="9_finish"]
 [ext_resource type="AudioStream" path="res://assets/audio/menu/night_wind_a_cc0.ogg" id="10_wind"]
-[ext_resource type="AudioStream" path="res://assets/audio/menu/wolf_howls_public_domain.ogg" id="11_howl"]
-[ext_resource type="AudioStream" path="res://assets/audio/menu/tree_creak_cc0.ogg" id="12_creak"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/ghost_wind.mp3" id="11_ghost_wind"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/distant_howl.mp3" id="12_howl"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/floor_creak_01.mp3" id="13_creak_1"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/floor_creak_02.mp3" id="14_creak_2"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/floor_creak_03.mp3" id="15_creak_3"]
+[ext_resource type="AudioStream" path="res://assets/audio/menu/floor_creak_04.mp3" id="16_creak_4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoise_fog"]
 noise_type = 1
@@ -220,17 +224,21 @@ color = Color(0.005, 0.008, 0.014, 0.16)
 
 [node name="Audio" type="Node" parent="."]
 
-[node name="Wind" type="AudioStreamPlayer" parent="Audio"]
+[node name="WindBed" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("10_wind")
-volume_db = -32.0
+volume_db = -37.0
 autoplay = false
 
-[node name="Howl" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource("11_howl")
+[node name="GhostWind" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("11_ghost_wind")
 volume_db = -30.0
 
+[node name="Howl" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("12_howl")
+volume_db = -29.0
+
 [node name="Creak" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource("12_creak")
+stream = ExtResource("13_creak_1")
 volume_db = -24.0
 
 [node name="EventTimer" type="Timer" parent="Audio"]
