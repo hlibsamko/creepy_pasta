@@ -2,22 +2,24 @@ class_name MenuParallax
 extends Control
 
 @export_range(0.0, 1.0, 0.01) var pointer_influence := 0.72
-@export_range(0.0, 10.0, 0.1) var follow_speed := 2.8
+@export var camera_travel := Vector2(0.72, 0.18)
+@export_range(0.0, 10.0, 0.1) var idle_delay_seconds := 2.5
+@export_range(0.1, 5.0, 0.05) var idle_fade_seconds := 1.25
+@export_range(0.0, 0.5, 0.01) var idle_strength := 0.16
 
-@onready var background_layer: TextureRect = $Art/Background
-@onready var distant_layer: Control = $Art/Distant
-@onready var middle_layer: Control = $Art/Middle
-@onready var near_layer: Control = $Art/Near
-@onready var foreground_layer: Control = $Art/Foreground
+@onready var scene_camera: Camera3D = $SceneView/Viewport/World/Camera
 @onready var wind_bed_player: AudioStreamPlayer = $Audio/WindBed
 @onready var ghost_wind_player: AudioStreamPlayer = $Audio/GhostWind
 @onready var howl_player: AudioStreamPlayer = $Audio/Howl
 @onready var creak_player: AudioStreamPlayer = $Audio/Creak
 @onready var event_timer: Timer = $Audio/EventTimer
 
-var _motion := Vector2.ZERO
 var _active := false
 var _audio_armed := false
+var _camera_origin := Vector3.ZERO
+var _last_pointer_position := Vector2.ZERO
+var _pointer_idle_seconds := 0.0
+var _idle_blend := 0.0
 var _rng := RandomNumberGenerator.new()
 var _wind_bed_streams: Array[AudioStream] = [
 	preload("res://assets/audio/menu/night_wind_a_cc0.ogg"),
@@ -34,6 +36,8 @@ var _creak_streams: Array[AudioStream] = [
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_camera_origin = scene_camera.position
+	_last_pointer_position = get_viewport().get_mouse_position()
 	_rng.randomize()
 	visibility_changed.connect(_sync_active_state)
 	event_timer.timeout.connect(_on_event_timer_timeout)
@@ -48,16 +52,25 @@ func _process(delta: float) -> void:
 	var viewport_size := get_viewport_rect().size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
 		return
-	var pointer := get_viewport().get_mouse_position() / viewport_size
+	var pointer_position := get_viewport().get_mouse_position()
+	if pointer_position.distance_squared_to(_last_pointer_position) > 0.25:
+		_pointer_idle_seconds = 0.0
+		_idle_blend = 0.0
+	else:
+		_pointer_idle_seconds += delta
+		if _pointer_idle_seconds >= idle_delay_seconds:
+			_idle_blend = move_toward(_idle_blend, 1.0, delta / idle_fade_seconds)
+	_last_pointer_position = pointer_position
+	var pointer := pointer_position / viewport_size
 	var pointer_target := (pointer * 2.0 - Vector2.ONE).clamp(Vector2(-1.0, -1.0), Vector2.ONE)
-	var idle := Vector2(sin(Time.get_ticks_msec() * 0.00013), cos(Time.get_ticks_msec() * 0.00009)) * 0.16
-	var target := pointer_target * pointer_influence + idle
-	_motion = _motion.lerp(target, 1.0 - exp(-follow_speed * maxf(delta, 0.0)))
-	background_layer.position = _motion * Vector2(-4.0, -2.0)
-	distant_layer.position = _motion * Vector2(-7.0, -4.0)
-	middle_layer.position = _motion * Vector2(-13.0, -7.0)
-	near_layer.position = _motion * Vector2(-22.0, -12.0)
-	foreground_layer.position = _motion * Vector2(-34.0, -18.0)
+	var idle := Vector2(sin(Time.get_ticks_msec() * 0.00013), cos(Time.get_ticks_msec() * 0.00009))
+	idle *= idle_strength * _idle_blend
+	var motion := pointer_target * pointer_influence + idle
+	scene_camera.position = _camera_origin + Vector3(
+		motion.x * camera_travel.x,
+		-motion.y * camera_travel.y,
+		0.0
+	)
 
 
 func arm_audio() -> void:
@@ -78,6 +91,10 @@ func set_connection_mode(enabled: bool) -> void:
 func _sync_active_state() -> void:
 	_active = is_visible_in_tree() and not OS.has_feature("dedicated_server") and DisplayServer.get_name() != "headless"
 	set_process(_active)
+	if _active:
+		_last_pointer_position = get_viewport().get_mouse_position()
+		_pointer_idle_seconds = 0.0
+		_idle_blend = 0.0
 	if _active and _audio_armed:
 		_start_audio()
 	else:

@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/menu_fog_volume_bounds.gd" id="1_bounds"]
+[ext_resource type="Shader" path="res://shaders/menu_floor_fog_volume.gdshader" id="2_fog_shader"]
+
+[sub_resource type="StandardMaterial3D" id="Material_bounds"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.2, 0.58, 0.82, 0.075)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bounds"]
+material = SubResource("Material_bounds")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoise_floor_fog"]
+seed = 2750159
+frequency = 0.028
+fractal_octaves = 4
+fractal_lacunarity = 2.08
+fractal_gain = 0.5
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture_floor_fog"]
+width = 192
+height = 192
+noise = SubResource("FastNoise_floor_fog")
+seamless = true
+normalize = true
+
+[sub_resource type="ShaderMaterial" id="Material_fog_low"]
+render_priority = 4
+shader = ExtResource("2_fog_shader")
+shader_parameter/noise_texture = SubResource("NoiseTexture_floor_fog")
+shader_parameter/fog_color = Color(0.3, 0.42, 0.58, 1)
+shader_parameter/opacity = 0.105
+shader_parameter/noise_scale = 0.15
+shader_parameter/contrast = 0.38
+shader_parameter/phase_offset = 0.0
+shader_parameter/cycle_seconds = 30.0
+
+[sub_resource type="ShaderMaterial" id="Material_fog_mid_low"]
+render_priority = 5
+shader = ExtResource("2_fog_shader")
+shader_parameter/noise_texture = SubResource("NoiseTexture_floor_fog")
+shader_parameter/fog_color = Color(0.34, 0.47, 0.64, 1)
+shader_parameter/opacity = 0.082
+shader_parameter/noise_scale = 0.18
+shader_parameter/contrast = 0.43
+shader_parameter/phase_offset = 1.570796
+shader_parameter/cycle_seconds = 30.0
+
+[sub_resource type="ShaderMaterial" id="Material_fog_mid_high"]
+render_priority = 6
+shader = ExtResource("2_fog_shader")
+shader_parameter/noise_texture = SubResource("NoiseTexture_floor_fog")
+shader_parameter/fog_color = Color(0.37, 0.51, 0.69, 1)
+shader_parameter/opacity = 0.062
+shader_parameter/noise_scale = 0.205
+shader_parameter/contrast = 0.47
+shader_parameter/phase_offset = 3.141593
+shader_parameter/cycle_seconds = 30.0
+
+[sub_resource type="ShaderMaterial" id="Material_fog_high"]
+render_priority = 7
+shader = ExtResource("2_fog_shader")
+shader_parameter/noise_texture = SubResource("NoiseTexture_floor_fog")
+shader_parameter/fog_color = Color(0.4, 0.54, 0.72, 1)
+shader_parameter/opacity = 0.043
+shader_parameter/noise_scale = 0.235
+shader_parameter/contrast = 0.52
+shader_parameter/phase_offset = 4.712389
+shader_parameter/cycle_seconds = 30.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fog"]
+size = Vector2(1, 1)
+
+[node name="FloorFogVolume" type="MeshInstance3D"]
+transform = Transform3D(13.8, 0, 0, 0, 0.72, 0, 0, 0, 7.5, 0, -0.88, 4.6)
+mesh = SubResource("BoxMesh_bounds")
+script = ExtResource("1_bounds")
+
+[node name="FogLow" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.42, 0)
+mesh = SubResource("PlaneMesh_fog")
+material_override = SubResource("Material_fog_low")
+
+[node name="FogMidLow" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.14, 0)
+mesh = SubResource("PlaneMesh_fog")
+material_override = SubResource("Material_fog_mid_low")
+
+[node name="FogMidHigh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.14, 0)
+mesh = SubResource("PlaneMesh_fog")
+material_override = SubResource("Material_fog_mid_high")
+
+[node name="FogHigh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.42, 0)
+mesh = SubResource("PlaneMesh_fog")
+material_override = SubResource("Material_fog_high")

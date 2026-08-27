@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://cq6nprymjtglt"]
+
+[ext_resource type="Texture2D" uid="uid://bgt88ovyodj1c" path="res://assets/ui/menu_parallax/room_base_generated.png" id="1_background"]
+[ext_resource type="Texture2D" uid="uid://uw0pf3mpmhhx" path="res://assets/ui/menu_parallax/rug.png" id="2_rug"]
+[ext_resource type="Texture2D" uid="uid://dlvqheb1vjefp" path="res://assets/ui/menu_parallax/side_chair.png" id="3_side_chair"]
+[ext_resource type="Texture2D" uid="uid://cpevfcvroo75p" path="res://assets/ui/menu_parallax/bench.png" id="4_bench"]
+[ext_resource type="Texture2D" uid="uid://csywxudepme6q" path="res://assets/ui/menu_parallax/armchair.png" id="5_armchair"]
+[ext_resource type="Texture2D" uid="uid://b3cqsbljwf33" path="res://assets/ui/menu_parallax/fallen_chair.png" id="6_fallen_chair"]
+[ext_resource type="Shader" uid="uid://d00u5p0fdfckq" path="res://shaders/menu_room_projection.gdshader" id="7_room_projection"]
+[ext_resource type="Shader" uid="uid://b1prnjcufjb6e" path="res://shaders/menu_floor_projection.gdshader" id="8_floor_projection"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menu_floor_fog_volume.tscn" id="9_floor_fog"]
+
+[sub_resource type="Environment" id="Environment_menu_world"]
+background_mode = 1
+background_color = Color(0.006, 0.009, 0.014, 1)
+ambient_light_source = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_room_projection"]
+render_priority = 0
+shader = ExtResource("7_room_projection")
+shader_parameter/room_texture = ExtResource("1_background")
+shader_parameter/reference_camera_z = 10.0899
+shader_parameter/reference_tan_half_fov = 0.46630766
+shader_parameter/reference_aspect = 1.7768332
+shader_parameter/projection_scale = Vector2(0.84, 0.84)
+shader_parameter/projection_offset = Vector2(0.08, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back_wall"]
+material = SubResource("ShaderMaterial_room_projection")
+size = Vector3(16.5, 8, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+material = SubResource("ShaderMaterial_room_projection")
+size = Vector3(16.5, 0.05, 9.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side_wall"]
+material = SubResource("ShaderMaterial_room_projection")
+size = Vector3(0.05, 8, 9.2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_floor_projection"]
+render_priority = 0
+shader = ExtResource("8_floor_projection")
+shader_parameter/overlay_texture = ExtResource("2_rug")
+shader_parameter/source_rect = Vector4(0.214, 0.498, 0.615, 0.542)
+shader_parameter/opacity = 0.58
+shader_parameter/reference_camera_z = 10.0899
+shader_parameter/reference_tan_half_fov = 0.46630766
+shader_parameter/reference_aspect = 1.7768332
+shader_parameter/projection_scale = Vector2(0.84, 0.84)
+shader_parameter/projection_offset = Vector2(0.08, 0.08)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rug_projection"]
+material = SubResource("ShaderMaterial_floor_projection")
+size = Vector2(16.5, 15)
+
+[node name="World" type="Node3D" unique_id=511179943]
+
+[node name="Environment" type="WorldEnvironment" parent="." unique_id=1958442876]
+environment = SubResource("Environment_menu_world")
+
+[node name="Camera" type="Camera3D" parent="." unique_id=511454731]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.0899)
+current = true
+fov = 50.0
+far = 50.0
+
+[node name="Diorama" type="Node3D" parent="." unique_id=1639584716]
+
+[node name="BackWall" type="MeshInstance3D" parent="Diorama" unique_id=1903787045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.75, 0)
+mesh = SubResource("BoxMesh_back_wall")
+
+[node name="Floor" type="MeshInstance3D" parent="Diorama" unique_id=1711995499]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.25, 4.6)
+mesh = SubResource("BoxMesh_floor")
+
+[node name="LeftWall" type="MeshInstance3D" parent="Diorama" unique_id=1285652228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.25, 2.75, 4.6)
+mesh = SubResource("BoxMesh_side_wall")
+
+[node name="RightWall" type="MeshInstance3D" parent="Diorama" unique_id=1715199912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.25, 2.75, 4.6)
+mesh = SubResource("BoxMesh_side_wall")
+
+[node name="RugProjection" type="MeshInstance3D" parent="Diorama" unique_id=1655688254]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.22, 1.7400126)
+mesh = SubResource("PlaneMesh_rug_projection")
+
+[node name="FloorFogVolume" parent="Diorama" instance=ExtResource("9_floor_fog")]
+
+[node name="SideChair" type="Sprite3D" parent="Diorama" unique_id=47264988]
+transform = Transform3D(0.068, 0, 0, 0, 0.091, 0, 0, 0, 1, 0.179, -0.639, 2.644)
+modulate = Color(0.6313726, 0.69803923, 0.8392157, 1)
+texture = ExtResource("3_side_chair")
+
+[node name="Bench" type="Sprite3D" parent="Diorama" unique_id=1167918784]
+transform = Transform3D(0.087, 0, 0, 0, 0.115, 0, 0, 0, 1, 1.222, -0.739, 3.388)
+modulate = Color(0.56, 0.65, 0.8, 0.9)
+texture = ExtResource("4_bench")
+
+[node name="Armchair" type="Sprite3D" parent="Diorama" unique_id=1150323966]
+transform = Transform3D(0.088, 0, 0, 0, 0.103, 0, 0, 0, 1, -1.699, -0.751, 6.119916)
+modulate = Color(0.48, 0.57, 0.73, 0.96)
+texture = ExtResource("5_armchair")
+
+[node name="FallenChair" type="Sprite3D" parent="Diorama" unique_id=1571219602]
+transform = Transform3D(0.066, 0, 0, 0, 0.078, 0, 0, 0, 1, -0.393, -0.883, 7.238)
+modulate = Color(0.43, 0.5, 0.65, 0.98)
+texture = ExtResource("6_fallen_chair")
