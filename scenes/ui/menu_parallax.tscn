@@ -27,13 +27,14 @@ seamless_blend_skirt = 1.0
 shader = ExtResource("8_atmosphere")
 shader_parameter/noise_texture = SubResource("NoiseTexture_fog")
 shader_parameter/cycle_seconds = 30.0
-shader_parameter/smoke_color = Color(0.42, 0.55, 0.72, 0.42)
-shader_parameter/fog_density = 0.55
-shader_parameter/fog_vertical_fade = 0.62
+shader_parameter/smoke_color = Color(0.58, 0.64, 0.68, 0.35)
+shader_parameter/fog_density = 0.64
+shader_parameter/fog_vertical_fade = 0.56
+shader_parameter/global_haze = 0.035
 shader_parameter/vignette_strength = 0.72
 shader_parameter/grain_strength = 0.018
 shader_parameter/scanline_strength = 0.008
-shader_parameter/tint = Color(0.1, 0.16, 0.24, 0.1)
+shader_parameter/tint = Color(0.075, 0.105, 0.135, 0.09)
 shader_parameter/readability_shade = 0.14
 
 [node name="MenuParallax" type="Control" unique_id=1121744764]

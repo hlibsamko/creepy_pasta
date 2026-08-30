@@ -6,6 +6,7 @@ uniform float cycle_seconds : hint_range(1.0, 120.0) = 30.0;
 uniform vec4 smoke_color : source_color = vec4(0.42, 0.55, 0.72, 0.42);
 uniform float fog_density : hint_range(0.0, 1.0) = 0.55;
 uniform float fog_vertical_fade : hint_range(0.0, 1.0) = 0.62;
+uniform float global_haze : hint_range(0.0, 0.12) = 0.035;
 
 uniform float vignette_strength : hint_range(0.0, 1.0) = 0.72;
 uniform float grain_strength : hint_range(0.0, 0.2) = 0.018;
@@ -32,6 +33,8 @@ void fragment() {
 	float left_mask = smoothstep(0.0, 0.14, UV.x);
 	float right_mask = 1.0 - smoothstep(0.86, 1.0, UV.x);
 	float fog_alpha = fog_noise * fog_density * floor_mask * left_mask * right_mask * smoke_color.a;
+	float haze_alpha = global_haze * mix(0.82, 1.0, fog_noise);
+	fog_alpha = 1.0 - (1.0 - fog_alpha) * (1.0 - haze_alpha);
 
 	vec2 centered = UV - vec2(0.5);
 	float distance_from_center = length(centered * vec2(0.88, 1.08));

@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b3cqsbljwf33" path="res://assets/ui/menu_parallax/fallen_chair.png" id="6_fallen_chair"]
 [ext_resource type="Shader" uid="uid://d00u5p0fdfckq" path="res://shaders/menu_room_projection.gdshader" id="7_room_projection"]
 [ext_resource type="Shader" uid="uid://b1prnjcufjb6e" path="res://shaders/menu_floor_projection.gdshader" id="8_floor_projection"]
-[ext_resource type="PackedScene" path="res://scenes/ui/menu_floor_fog_volume.tscn" id="9_floor_fog"]
+[ext_resource type="PackedScene" uid="uid://bkt3pi1y86a48" path="res://scenes/ui/menu_floor_fog_volume.tscn" id="9_floor_fog"]
 
 [sub_resource type="Environment" id="Environment_menu_world"]
 background_mode = 1
@@ -86,24 +86,29 @@ mesh = SubResource("BoxMesh_side_wall")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.22, 1.7400126)
 mesh = SubResource("PlaneMesh_rug_projection")
 
-[node name="FloorFogVolume" parent="Diorama" instance=ExtResource("9_floor_fog")]
+[node name="FloorFogVolume" parent="Diorama" unique_id=1912584813 instance=ExtResource("9_floor_fog")]
+transform = Transform3D(13.8, 0, 0, 0, 0.72, 0, 0, 0, 7.5, 0, -0.88, 5)
 
 [node name="SideChair" type="Sprite3D" parent="Diorama" unique_id=47264988]
 transform = Transform3D(0.068, 0, 0, 0, 0.091, 0, 0, 0, 1, 0.179, -0.639, 2.644)
 modulate = Color(0.6313726, 0.69803923, 0.8392157, 1)
+pixel_size = 0.03
 texture = ExtResource("3_side_chair")
 
 [node name="Bench" type="Sprite3D" parent="Diorama" unique_id=1167918784]
 transform = Transform3D(0.087, 0, 0, 0, 0.115, 0, 0, 0, 1, 1.222, -0.739, 3.388)
 modulate = Color(0.56, 0.65, 0.8, 0.9)
+pixel_size = 0.03
 texture = ExtResource("4_bench")
 
 [node name="Armchair" type="Sprite3D" parent="Diorama" unique_id=1150323966]
 transform = Transform3D(0.088, 0, 0, 0, 0.103, 0, 0, 0, 1, -1.699, -0.751, 6.119916)
 modulate = Color(0.48, 0.57, 0.73, 0.96)
+pixel_size = 0.02
 texture = ExtResource("5_armchair")
 
 [node name="FallenChair" type="Sprite3D" parent="Diorama" unique_id=1571219602]
 transform = Transform3D(0.066, 0, 0, 0, 0.078, 0, 0, 0, 1, -0.393, -0.883, 7.238)
 modulate = Color(0.43, 0.5, 0.65, 0.98)
+pixel_size = 0.02
 texture = ExtResource("6_fallen_chair")

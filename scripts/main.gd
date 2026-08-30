@@ -400,6 +400,12 @@ var account_game_bridge
 var last_death_was_server_authoritative := false
 var last_death_reason := ""
 var last_recovered_record_text := ""
+var qa_invulnerable := true
+var qa_noclip := false
+var qa_speed_multiplier := 1.0
+var qa_monsters_paused := false
+var qa_diagnostics_timer: Timer
+var qa_monster_process_modes := {}
 
 
 #endregion
@@ -419,6 +425,7 @@ func _ready() -> void:
 	_connect_network()
 	_connect_ui()
 	_connect_level_interactables()
+	_setup_qa_mode()
 	ui.set_join_address(network.get_join_hint())
 	ui.set_status("The house remembers every connection. Choose how you enter.")
 	last_join_address = network.get_join_hint()
@@ -456,6 +463,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _handle_qa_menu_input(event):
+		return
 	if _should_capture_game_input(event):
 		_set_player_controls(true)
 		_capture_game_input()
@@ -517,6 +526,17 @@ func _connect_ui() -> void:
 	ui.main_menu_requested.connect(_return_to_menu)
 	ui.note_puzzle_completed.connect(_on_note_puzzle_completed)
 	ui.note_puzzle_cancelled.connect(_on_note_puzzle_cancelled)
+	ui.qa_panel_open_changed.connect(_on_qa_panel_open_changed)
+	ui.qa_level_requested.connect(_qa_load_level)
+	ui.qa_invulnerable_changed.connect(_qa_set_invulnerable)
+	ui.qa_noclip_changed.connect(_qa_set_noclip)
+	ui.qa_speed_changed.connect(_qa_set_speed)
+	ui.qa_monsters_paused_changed.connect(_qa_set_monsters_paused)
+	ui.qa_reload_requested.connect(_qa_reload_level)
+	ui.qa_teleport_spawn_requested.connect(_qa_teleport_to_spawn)
+	ui.qa_teleport_exit_requested.connect(_qa_teleport_to_exit)
+	ui.qa_open_exit_requested.connect(_qa_open_exit)
+	ui.qa_complete_objectives_requested.connect(_qa_complete_objectives)
 
 
 func _connect_level_interactables() -> void:
@@ -857,6 +877,8 @@ func _start_game() -> void:
 	_capture_game_input(not OS.has_feature("web"))
 	_show_level_banner()
 	_update_hud()
+	if ui.is_qa_menu_open():
+		call_deferred("_on_qa_panel_open_changed", true)
 
 
 func _pause_game() -> void:
@@ -2653,6 +2675,10 @@ func _on_player_killed(reason: String, source: Node = null) -> void:
 
 
 func _apply_player_death(reason: String, server_authoritative: bool) -> void:
+	if qa_invulnerable and not multiplayer.has_multiplayer_peer():
+		last_death_reason = reason
+		ui.set_status("QA invulnerability blocked death: %s" % reason)
+		return
 	last_death_was_server_authoritative = server_authoritative
 	last_death_reason = reason
 	started = false
@@ -3208,6 +3234,287 @@ func _adjust_day_night_cycle(multiplier: float) -> void:
 	ui.set_status("Day/night cycle length: %ss" % int(next_length))
 
 
+func _handle_qa_menu_input(event: InputEvent) -> bool:
+	if network.is_dedicated_server():
+		return false
+	if not event is InputEventKey or not event.pressed or event.echo:
+		return false
+	if (event as InputEventKey).physical_keycode != KEY_F1:
+		return false
+	ui.toggle_qa_menu()
+	return true
+
+
+func _setup_qa_mode() -> void:
+	if network.is_dedicated_server():
+		return
+	ui.configure_qa_mode(
+		_get_qa_level_entries(),
+		current_level_scene.resource_path,
+		qa_invulnerable,
+		qa_noclip,
+		qa_speed_multiplier,
+		qa_monsters_paused
+	)
+	players.child_entered_tree.connect(_on_qa_player_added)
+	qa_diagnostics_timer = Timer.new()
+	qa_diagnostics_timer.wait_time = 0.2
+	qa_diagnostics_timer.timeout.connect(_qa_update_diagnostics)
+	add_child(qa_diagnostics_timer)
+	qa_diagnostics_timer.start()
+	_qa_update_diagnostics()
+
+
+func _get_qa_level_entries() -> Array:
+	var entries := [
+		{"title": "01 • Room 1 — The Wrong Copy", "scene_path": LEVEL_SCENE.resource_path},
+		{"title": "02 • Room 2 — The Copied Door", "scene_path": NEXT_PLACE_SCENE.resource_path},
+		{"title": "03 • Backrooms — Yellow Drift", "scene_path": BACKROOMS_SCENE.resource_path},
+		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_BUILDER_DEMO_SCENE.resource_path},
+		{"title": "05 • The Unlit — Maintenance Wing", "scene_path": UNLIT_EVIDENCE_DEMO_SCENE.resource_path},
+		{"title": "06 • Corridor — Do Not Sprint", "scene_path": CORRIDOR_SCENE.resource_path},
+		{"title": "07 • Final Room — Do Not Stare", "scene_path": FOURTH_ROOM_SCENE.resource_path},
+	]
+	for branch in BranchCatalog.ALL:
+		entries.append({
+			"title": "STUDY • %s" % branch.title,
+			"scene_path": branch.scene.resource_path,
+		})
+	return entries
+
+
+func _on_qa_panel_open_changed(is_open: bool) -> void:
+	if not started:
+		return
+	if is_open:
+		_set_player_controls(false)
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		ui.set_qa_notice("QA menu active. Close with F1 to return camera control.")
+		return
+	if not ui.is_blocking_overlay_visible():
+		_set_player_controls(true)
+		_capture_game_input(true)
+
+
+func _on_qa_player_added(_player: Node) -> void:
+	call_deferred("_qa_apply_player_settings")
+
+
+func _qa_require_offline(action_name: String) -> bool:
+	if not multiplayer.has_multiplayer_peer():
+		return true
+	ui.set_qa_notice("%s is blocked during online play." % action_name, true)
+	ui.set_status("QA gameplay commands are offline-only.")
+	return false
+
+
+func _qa_load_level(scene_path: String) -> void:
+	if not _qa_require_offline("Level loading"):
+		return
+	var scene := _get_level_scene_by_path(scene_path)
+	if scene == null:
+		ui.set_qa_notice("Unknown level: %s" % scene_path, true)
+		return
+	ui.hide_death()
+	ui.hide_victory()
+	collected_notes = 0
+	collected_note_ids.clear()
+	if not started:
+		_reset_session()
+		_load_level_scene(scene)
+		_start_game()
+		_spawn_player(1)
+	else:
+		_load_level_scene(scene)
+		_move_current_players_to_spawns()
+	_qa_apply_player_settings()
+	_qa_apply_monster_pause()
+	ui.set_qa_current_scene(scene.resource_path)
+	ui.set_status("QA loaded: %s" % _get_level_title())
+	ui.set_qa_notice("Loaded %s. Close with F1 to play." % _get_level_title())
+	_on_qa_panel_open_changed(ui.is_qa_menu_open())
+	_qa_update_diagnostics()
+
+
+func _qa_reload_level() -> void:
+	if not _qa_require_offline("Reload level"):
+		return
+	_qa_load_level(current_level_scene.resource_path)
+
+
+func _qa_set_invulnerable(enabled: bool) -> void:
+	qa_invulnerable = enabled
+	ui.set_qa_notice("Invulnerability %s." % ("enabled" if enabled else "disabled"))
+	_qa_update_diagnostics()
+
+
+func _qa_set_noclip(enabled: bool) -> void:
+	if enabled and not _qa_require_offline("Fly / No-clip"):
+		qa_noclip = false
+		ui.configure_qa_mode(_get_qa_level_entries(), current_level_scene.resource_path, qa_invulnerable, false, qa_speed_multiplier, qa_monsters_paused)
+		return
+	qa_noclip = enabled
+	_qa_apply_player_settings()
+	ui.set_qa_notice("Fly mode %s. WASD move, Space up, Ctrl down." % ("enabled" if enabled else "disabled"))
+	_qa_update_diagnostics()
+
+
+func _qa_set_speed(multiplier: float) -> void:
+	if not _qa_require_offline("Speed change"):
+		qa_speed_multiplier = 1.0
+		ui.configure_qa_mode(_get_qa_level_entries(), current_level_scene.resource_path, qa_invulnerable, qa_noclip, 1.0, qa_monsters_paused)
+		return
+	qa_speed_multiplier = clampf(multiplier, 0.25, 10.0)
+	_qa_apply_player_settings()
+	ui.set_qa_notice("Player speed set to ×%s." % int(qa_speed_multiplier))
+	_qa_update_diagnostics()
+
+
+func _qa_apply_player_settings() -> void:
+	var allow_offline_tools := not multiplayer.has_multiplayer_peer()
+	for player in players.get_children():
+		if player.has_method("set_qa_noclip"):
+			player.call("set_qa_noclip", qa_noclip and allow_offline_tools)
+		if player.has_method("set_qa_speed_multiplier"):
+			player.call("set_qa_speed_multiplier", qa_speed_multiplier if allow_offline_tools else 1.0)
+
+
+func _qa_set_monsters_paused(paused: bool) -> void:
+	if paused and not _qa_require_offline("Pause monsters"):
+		qa_monsters_paused = false
+		ui.configure_qa_mode(_get_qa_level_entries(), current_level_scene.resource_path, qa_invulnerable, qa_noclip, qa_speed_multiplier, false)
+		return
+	qa_monsters_paused = paused
+	_qa_apply_monster_pause()
+	ui.set_qa_notice("Monster AI %s." % ("paused" if paused else "running"))
+	_qa_update_diagnostics()
+
+
+func _qa_apply_monster_pause() -> void:
+	if not level:
+		return
+	for monster in _get_level_monsters():
+		var instance_id := monster.get_instance_id()
+		if qa_monsters_paused:
+			if not qa_monster_process_modes.has(instance_id):
+				qa_monster_process_modes[instance_id] = monster.process_mode
+			monster.process_mode = Node.PROCESS_MODE_DISABLED
+		elif qa_monster_process_modes.has(instance_id):
+			monster.process_mode = int(qa_monster_process_modes[instance_id])
+			qa_monster_process_modes.erase(instance_id)
+
+
+func _qa_get_controlled_player() -> Node3D:
+	for player in players.get_children():
+		if player is Node3D and player.has_method("has_control") and bool(player.call("has_control")):
+			return player as Node3D
+	return null
+
+
+func _qa_move_player(target_position: Vector3, target_yaw := NAN) -> void:
+	var player := _qa_get_controlled_player()
+	if not player:
+		ui.set_qa_notice("No controlled player is currently spawned.", true)
+		return
+	player.global_position = target_position
+	if is_finite(target_yaw):
+		player.rotation.y = target_yaw
+	if player is CharacterBody3D:
+		player.velocity = Vector3.ZERO
+	if player.has_method("reset_remote_sync_tracking"):
+		player.call("reset_remote_sync_tracking")
+	_qa_update_diagnostics()
+
+
+func _qa_teleport_to_spawn() -> void:
+	if not _qa_require_offline("Teleport"):
+		return
+	var spawn_positions := _get_spawn_positions()
+	if spawn_positions.is_empty():
+		ui.set_qa_notice("This level has no spawn marker.", true)
+		return
+	_qa_move_player(spawn_positions[0], _get_spawn_yaw())
+	ui.set_qa_notice("Teleported to the primary spawn.")
+
+
+func _qa_teleport_to_exit() -> void:
+	if not _qa_require_offline("Teleport"):
+		return
+	if not level_exit:
+		ui.set_qa_notice("This level has no discoverable exit.", true)
+		return
+	var safe_position := level_exit.global_position + level_exit.global_basis.z * 2.5 + Vector3.UP * 0.2
+	_qa_move_player(safe_position)
+	ui.set_qa_notice("Teleported near the exit.")
+
+
+func _qa_open_exit() -> void:
+	if not _qa_require_offline("Open exit"):
+		return
+	if not level_exit:
+		ui.set_qa_notice("This level has no discoverable exit.", true)
+		return
+	_open_level_exit()
+	ui.set_qa_notice("Exit forced open.")
+	_qa_update_diagnostics()
+
+
+func _qa_complete_objectives() -> void:
+	if not _qa_require_offline("Complete objectives"):
+		return
+	var pending_notes := _get_level_notes().duplicate()
+	for note in pending_notes:
+		if not is_instance_valid(note):
+			continue
+		_collect_note(str(note.name), str(note.get("note_text")))
+	for plate in _get_level_pressure_plates():
+		if plate.has_method("set_synced_active"):
+			plate.call("set_synced_active", true)
+	for breaker in level.find_children("GeneratedBreakerTrigger*", "Area3D", true, false):
+		if breaker.has_method("trigger_outage"):
+			breaker.call("trigger_outage")
+	if current_level_scene == FOURTH_ROOM_SCENE:
+		monster_journal.unlock()
+		for entry_id in ["listener", "watcher", "mimic"]:
+			for fact_index in range(1, int(monster_journal.get_fact_total(entry_id)) + 1):
+				monster_journal.discover(entry_id, fact_index)
+		ui.set_journal_available(true)
+	_evaluate_level_exit_unlock()
+	_open_level_exit()
+	_update_objective()
+	_update_hud("QA completed the current objectives.")
+	ui.set_qa_notice("Records, mechanics, journal gates, and exit completed.")
+	_qa_update_diagnostics()
+
+
+func _qa_update_diagnostics() -> void:
+	if network.is_dedicated_server() or not ui or not current_level_scene:
+		return
+	var player := _qa_get_controlled_player()
+	var position_text := "not spawned"
+	if player:
+		position_text = "%.1f, %.1f, %.1f" % [player.global_position.x, player.global_position.y, player.global_position.z]
+	var exit_text := "missing"
+	if level_exit:
+		exit_text = "OPEN" if _is_level_exit_open() else "closed"
+	var network_text := "online (commands locked)" if multiplayer.has_multiplayer_peer() else "offline"
+	ui.set_qa_diagnostics(
+		"Scene: %s\nPath: %s\nPlayer: %s\nRecords: %s/%s • Exit: %s\nMode: %s • God: %s • Fly: %s • Speed: ×%s • AI: %s" % [
+			_get_level_title(),
+			current_level_scene.resource_path,
+			position_text,
+			collected_notes,
+			total_notes,
+			exit_text,
+			network_text,
+			"ON" if qa_invulnerable else "off",
+			"ON" if qa_noclip else "off",
+			int(qa_speed_multiplier),
+			"PAUSED" if qa_monsters_paused else "running",
+		]
+	)
+
+
 #endregion
 
 #region Level loading and local-state synchronization
@@ -3273,6 +3580,7 @@ func _load_level_scene(scene: PackedScene) -> void:
 	if level:
 		remove_child(level)
 		level.queue_free()
+	qa_monster_process_modes.clear()
 
 	level = scene.instantiate()
 	current_level_scene = scene
@@ -3286,6 +3594,9 @@ func _load_level_scene(scene: PackedScene) -> void:
 	notes = level.get_node("Notes")
 	level_exit = level.find_child("LevelExit", true, false) as Area3D
 	_connect_level_interactables()
+	_qa_apply_monster_pause()
+	if not network.is_dedicated_server():
+		ui.set_qa_current_scene(current_level_scene.resource_path)
 	var behavior_shift := _apply_journal_difficulty()
 	_notify_monsters_note_progress()
 	_update_level_hint()

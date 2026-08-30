@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://creepy_game_ui"]
+[gd_scene load_steps=9 format=3 uid="uid://creepy_game_ui"]
 
 [ext_resource type="Script" path="res://scripts/game_ui.gd" id="1_ui"]
 [ext_resource type="Theme" path="res://themes/horror_menu_theme.tres" id="2_menu_theme"]
 [ext_resource type="PackedScene" path="res://scenes/account_panel.tscn" id="3_account_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/menu_parallax.tscn" id="4_menu_parallax"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qa_test_menu.tscn" id="5_qa_test_menu"]
 
 [sub_resource type="StyleBoxFlat" id="Style_journal_panel"]
 bg_color = Color(0.075, 0.068, 0.06, 0.97)
@@ -34,6 +35,8 @@ corner_radius_bottom_left = 3
 
 [node name="GameUi" type="CanvasLayer"]
 script = ExtResource("1_ui")
+
+[node name="QaTestMenu" parent="." instance=ExtResource("5_qa_test_menu")]
 
 [node name="Menu" type="Control" parent="."]
 layout_mode = 3

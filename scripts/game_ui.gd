@@ -17,6 +17,17 @@ signal journal_requested
 signal journal_closed
 signal note_puzzle_completed(note_id: String, note_text: String)
 signal note_puzzle_cancelled(note_id: String)
+signal qa_panel_open_changed(is_open: bool)
+signal qa_level_requested(scene_path: String)
+signal qa_invulnerable_changed(enabled: bool)
+signal qa_noclip_changed(enabled: bool)
+signal qa_speed_changed(multiplier: float)
+signal qa_monsters_paused_changed(paused: bool)
+signal qa_reload_requested
+signal qa_teleport_spawn_requested
+signal qa_teleport_exit_requested
+signal qa_open_exit_requested
+signal qa_complete_objectives_requested
 
 enum PuzzleType {
 	MATCH_DOTS,
@@ -26,6 +37,7 @@ enum PuzzleType {
 }
 
 @onready var menu: Control = $Menu
+@onready var qa_test_menu: QaTestMenu = $QaTestMenu
 @onready var menu_parallax: MenuParallax = $Menu/MenuParallax
 @onready var account_panel: Control = $Menu/AccountPanel
 @onready var status_label: Label = $Menu/Panel/Margin/Box/StatusLabel
@@ -123,6 +135,17 @@ func _ready() -> void:
 	death_menu_button.pressed.connect(main_menu_requested.emit)
 	victory_retry_button.pressed.connect(retry_requested.emit)
 	victory_menu_button.pressed.connect(main_menu_requested.emit)
+	qa_test_menu.panel_open_changed.connect(qa_panel_open_changed.emit)
+	qa_test_menu.level_requested.connect(qa_level_requested.emit)
+	qa_test_menu.invulnerable_changed.connect(qa_invulnerable_changed.emit)
+	qa_test_menu.noclip_changed.connect(qa_noclip_changed.emit)
+	qa_test_menu.speed_changed.connect(qa_speed_changed.emit)
+	qa_test_menu.monsters_paused_changed.connect(qa_monsters_paused_changed.emit)
+	qa_test_menu.reload_requested.connect(qa_reload_requested.emit)
+	qa_test_menu.teleport_spawn_requested.connect(qa_teleport_spawn_requested.emit)
+	qa_test_menu.teleport_exit_requested.connect(qa_teleport_exit_requested.emit)
+	qa_test_menu.open_exit_requested.connect(qa_open_exit_requested.emit)
+	qa_test_menu.complete_objectives_requested.connect(qa_complete_objectives_requested.emit)
 	for dot in left_dots:
 		_connect_puzzle_dot(dot, "left")
 	for dot in right_dots:
@@ -149,6 +172,35 @@ func _ready() -> void:
 		offline_button.text = "Play Offline"
 		status_label.text = "Desktop browser recommended. Start online or play offline."
 	menu.gui_input.connect(_on_menu_gui_input)
+	qa_test_menu.visible = not OS.has_feature("dedicated_server")
+
+
+func configure_qa_mode(entries: Array, current_scene_path: String, invulnerable: bool, noclip: bool, speed: float, monsters_paused: bool) -> void:
+	qa_test_menu.set_levels(entries, current_scene_path)
+	qa_test_menu.set_invulnerable(invulnerable)
+	qa_test_menu.set_noclip(noclip)
+	qa_test_menu.set_speed(speed)
+	qa_test_menu.set_monsters_paused(monsters_paused)
+
+
+func toggle_qa_menu() -> void:
+	qa_test_menu.toggle_panel()
+
+
+func is_qa_menu_open() -> bool:
+	return qa_test_menu.is_panel_open()
+
+
+func set_qa_current_scene(scene_path: String) -> void:
+	qa_test_menu.select_current_scene(scene_path)
+
+
+func set_qa_diagnostics(text: String) -> void:
+	qa_test_menu.set_diagnostics(text)
+
+
+func set_qa_notice(text: String, is_warning := false) -> void:
+	qa_test_menu.set_notice(text, is_warning)
 
 
 func set_join_address(address: String) -> void:

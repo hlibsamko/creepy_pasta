@@ -37,6 +37,8 @@ var remote_sync_position := Vector3.ZERO
 var remote_sync_horizontal_budget := REMOTE_SYNC_HORIZONTAL_BUDGET_INITIAL
 var remote_sync_vertical_budget := REMOTE_SYNC_VERTICAL_BUDGET_INITIAL
 var last_remote_sync_msec := 0
+var qa_noclip_enabled := false
+var qa_speed_multiplier := 1.0
 
 
 func _ready() -> void:
@@ -64,6 +66,9 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		return
+	if qa_noclip_enabled:
+		_qa_fly(delta)
+		return
 
 	if is_on_floor():
 		if Input.is_action_just_pressed("jump"):
@@ -76,7 +81,7 @@ func _physics_process(delta: float) -> void:
 	var input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction := (global_basis * Vector3(input.x, 0.0, input.y)).normalized()
 	is_sprinting = Input.is_action_pressed("sprint") and direction.length() > 0.01
-	var speed := SPRINT_SPEED if is_sprinting else WALK_SPEED
+	var speed := (SPRINT_SPEED if is_sprinting else WALK_SPEED) * qa_speed_multiplier
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	move_and_slide()
@@ -100,6 +105,24 @@ func set_controls_enabled(enabled: bool) -> void:
 		step_timer = 0.0
 
 
+func set_qa_noclip(enabled: bool) -> void:
+	qa_noclip_enabled = enabled
+	velocity = Vector3.ZERO
+	_apply_session_visibility()
+
+
+func set_qa_speed_multiplier(multiplier: float) -> void:
+	qa_speed_multiplier = clampf(multiplier, 0.25, 10.0)
+
+
+func is_qa_noclip_enabled() -> bool:
+	return qa_noclip_enabled
+
+
+func get_qa_speed_multiplier() -> float:
+	return qa_speed_multiplier
+
+
 func set_active_session(session_filter: String) -> void:
 	active_session_filter = session_filter
 	_apply_session_visibility()
@@ -117,7 +140,25 @@ func _apply_session_visibility() -> void:
 		return
 	var belongs_to_active_session := session_id == "" or session_id == active_session_filter
 	visible = belongs_to_active_session
-	collision_shape.disabled = not belongs_to_active_session
+	collision_shape.disabled = qa_noclip_enabled or not belongs_to_active_session
+
+
+func _qa_fly(delta: float) -> void:
+	var input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var direction := global_basis * Vector3(input.x, 0.0, input.y)
+	var vertical := 0.0
+	if Input.is_action_pressed("jump"):
+		vertical += 1.0
+	if Input.is_physical_key_pressed(KEY_CTRL):
+		vertical -= 1.0
+	direction.y = vertical
+	if direction.length_squared() > 1.0:
+		direction = direction.normalized()
+	var speed := SPRINT_SPEED * qa_speed_multiplier
+	velocity = direction * speed
+	global_position += velocity * delta
+	is_sprinting = direction.length_squared() > 0.01
+	step_timer = 0.0
 
 
 func _apply_color() -> void:
