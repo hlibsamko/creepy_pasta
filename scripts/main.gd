@@ -3303,6 +3303,15 @@ func _on_qa_player_added(_player: Node) -> void:
 func _qa_require_offline(action_name: String) -> bool:
 	if not multiplayer.has_multiplayer_peer():
 		return true
+	if not started:
+		_close_network_locally()
+		ui.set_connecting(false)
+		active_session_id = ""
+		loaded_session_id = ""
+		last_online_session_id = ""
+		pending_reconnect_session_id = ""
+		ui.set_status("QA switched to offline test mode.")
+		return true
 	ui.set_qa_notice("%s is blocked during online play." % action_name, true)
 	ui.set_status("QA gameplay commands are offline-only.")
 	return false
