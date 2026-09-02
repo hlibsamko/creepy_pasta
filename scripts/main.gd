@@ -3394,7 +3394,7 @@ func _qa_apply_monster_pause() -> void:
 	if not level:
 		return
 	for monster in _get_level_monsters():
-		var instance_id := monster.get_instance_id()
+		var instance_id: int = int(monster.get_instance_id())
 		if qa_monsters_paused:
 			if not qa_monster_process_modes.has(instance_id):
 				qa_monster_process_modes[instance_id] = monster.process_mode

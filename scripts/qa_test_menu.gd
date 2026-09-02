@@ -13,7 +13,7 @@ signal teleport_exit_requested
 signal open_exit_requested
 signal complete_objectives_requested
 
-var expanded := true
+var expanded := false
 var level_select: OptionButton
 var body: VBoxContainer
 var collapse_button: Button

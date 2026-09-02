@@ -36,8 +36,6 @@ corner_radius_bottom_left = 3
 [node name="GameUi" type="CanvasLayer"]
 script = ExtResource("1_ui")
 
-[node name="QaTestMenu" parent="." instance=ExtResource("5_qa_test_menu")]
-
 [node name="Menu" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -623,3 +621,5 @@ text = "Continue"
 horizontal_alignment = 2
 
 [node name="AccountPanel" parent="Menu" instance=ExtResource("3_account_panel")]
+
+[node name="QaTestMenu" parent="." instance=ExtResource("5_qa_test_menu")]
