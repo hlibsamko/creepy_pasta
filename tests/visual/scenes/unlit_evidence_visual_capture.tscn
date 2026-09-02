@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/endless_house/unlit_evidence_demo.tscn" id="1_demo"]
-[ext_resource type="Script" path="res://scripts/unlit_evidence_visual_capture.gd" id="2_capture"]
+[ext_resource type="Script" path="res://tests/visual/tests/visual/scripts/unlit_evidence_visual_capture.gd" id="2_capture"]
 
 [node name="UnlitEvidenceVisualCapture" type="Node3D"]
 script = ExtResource("2_capture")

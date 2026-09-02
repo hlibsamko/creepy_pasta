@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/branches/empty_mall/empty_mall_concourse.tscn" id="1_branch"]
-[ext_resource type="Script" path="res://scripts/branch_visual_capture.gd" id="2_capture"]
+[ext_resource type="Script" path="res://tests/visual/tests/visual/scripts/branch_visual_capture.gd" id="2_capture"]
 
 [node name="EmptyMallVisualCapture" type="Node3D"]
 script = ExtResource("2_capture")

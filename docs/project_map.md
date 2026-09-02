@@ -55,6 +55,10 @@ LevelName
 6. Normalize authored scenes one level at a time, starting with Office and Poolrooms, without moving network-addressed gameplay nodes casually.
 7. Audit downloaded models by visible production placement, then integrate one high-impact model slot per small batch.
 
+## Migration progress
+
+- Visual capture harnesses now live under `tests/visual/{scenes,scripts}`. Production scenes and scripts no longer share their folders with those capture-only files.
+
 ## Model integration ledger
 
 The detailed ledger lives in `docs/asset_inventory.md`. A model status progresses through `selected -> downloaded -> wrapped -> production`. Only `production` means the request has been fulfilled.

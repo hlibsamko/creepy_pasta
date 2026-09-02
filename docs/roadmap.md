@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: isolate smoke/capture content from production folders and move the QA overlay under `devtools/qa` without changing its gameplay behavior. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: move automated smoke harness scenes and scripts into `tests/smoke`, keeping production files out of that tree. The visual capture harnesses have already moved to `tests/visual`. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 

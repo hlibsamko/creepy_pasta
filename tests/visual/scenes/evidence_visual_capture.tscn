@@ -1,12 +1,12 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/backrooms/backrooms_builder_demo.tscn" id="1_backrooms"]
-[ext_resource type="Script" path="res://scripts/backrooms_visual_capture.gd" id="2_capture"]
+[ext_resource type="PackedScene" path="res://scenes/next_place.tscn" id="1_level"]
+[ext_resource type="Script" path="res://tests/visual/tests/visual/scripts/evidence_visual_capture.gd" id="2_capture"]
 
-[node name="BackroomsVisualCapture" type="Node3D"]
+[node name="EvidenceVisualCapture" type="Node3D"]
 script = ExtResource("2_capture")
 
-[node name="Backrooms" parent="." instance=ExtResource("1_backrooms")]
+[node name="Level" parent="." instance=ExtResource("1_level")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 current = true
