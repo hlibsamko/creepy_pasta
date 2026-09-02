@@ -12,8 +12,8 @@
 - Pressure-powered work light: `res://scenes/common/pressure_powered_spotlight_basic.tscn`
 - One-shot breaker trigger: `res://scenes/common/breaker_outage_trigger_basic.tscn`
 - Evidence chamber: `res://scenes/endless_house/unlit_evidence_demo.tscn`
-- Behavior smoke: `res://scenes/smoke/light_shy_monster_smoke.tscn`
-- Evidence-loop smoke: `res://scenes/smoke/unlit_evidence_demo_smoke.tscn`
+- Behavior smoke: `res://tests/smoke/scenes/light_shy_monster_smoke.tscn`
+- Evidence-loop smoke: `res://tests/smoke/scenes/unlit_evidence_demo_smoke.tscn`
 - Deterministic visual capture: `res://tests/visual/scenes/unlit_evidence_visual_capture.tscn`
 
 The cone test follows Godot's documented `SpotLight3D` contract: light travels along local `-Z`, `spot_angle` is the angular radius, and `spot_range` is the hard distance limit. A physics ray rejects flashlight holds through walls.

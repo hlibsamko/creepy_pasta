@@ -10,7 +10,7 @@ The Endless House kit reuses `BackroomsBuilder` rather than maintaining a second
 - Demo: `res://scenes/endless_house/endless_house_builder_demo.tscn`
 - Shared builder: `res://scripts/backrooms_builder.gd`
 - House kit: `res://scenes/endless_house/kit/`
-- Builder smoke: `res://scenes/smoke/endless_house_builder_smoke.tscn`
+- Builder smoke: `res://tests/smoke/scenes/endless_house_builder_smoke.tscn`
 
 ## Kit Contract
 
@@ -55,5 +55,5 @@ In a local debug run, physical `F9` still loads the level directly and faces the
 ## Local Check
 
 ```powershell
-& (tools/engine/get_godot.ps1) --headless --path . 'res://scenes/smoke/endless_house_builder_smoke.tscn'
+& (tools/engine/get_godot.ps1) --headless --path . 'res://tests/smoke/scenes/endless_house_builder_smoke.tscn'
 ```

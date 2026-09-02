@@ -60,7 +60,7 @@ function Invoke-NetworkSessionCheck {
             throw "Network smoke server exited before the client connected."
         }
         Write-Host "== Network session client =="
-        $clientArguments = "--headless --path `"$projectRoot`" --quit-after 20000 res://scenes/smoke/network_note_smoke.tscn"
+        $clientArguments = "--headless --path `"$projectRoot`" --quit-after 20000 res://tests/smoke/scenes/network_note_smoke.tscn"
         $client = Start-Process -FilePath $GodotPath -ArgumentList $clientArguments -WorkingDirectory $projectRoot -PassThru -Wait -WindowStyle Hidden -RedirectStandardOutput $clientOut -RedirectStandardError $clientErr
         $clientOutput = @()
         $clientOutput += Get-Content -LiteralPath $clientOut -ErrorAction SilentlyContinue
@@ -105,10 +105,10 @@ function Invoke-NetworkIsolationCheck {
         $serverArguments = "--headless --path `"$projectRoot`" --server --account-auth-test-mode"
         $server = Start-Process -FilePath $GodotPath -ArgumentList $serverArguments -WorkingDirectory $projectRoot -PassThru -WindowStyle Hidden -RedirectStandardOutput $serverOut -RedirectStandardError $serverErr
         Start-Sleep -Seconds 2
-        $ownerArguments = "--headless --path `"$projectRoot`" --quit-after 1800 res://scenes/smoke/network_session_owner_smoke.tscn"
+        $ownerArguments = "--headless --path `"$projectRoot`" --quit-after 1800 res://tests/smoke/scenes/network_session_owner_smoke.tscn"
         $owner = Start-Process -FilePath $GodotPath -ArgumentList $ownerArguments -WorkingDirectory $projectRoot -PassThru -WindowStyle Hidden -RedirectStandardOutput $ownerOut -RedirectStandardError $ownerErr
         Start-Sleep -Seconds 3
-        $guestArguments = "--headless --path `"$projectRoot`" --quit-after 1800 res://scenes/smoke/network_session_guest_smoke.tscn"
+        $guestArguments = "--headless --path `"$projectRoot`" --quit-after 1800 res://tests/smoke/scenes/network_session_guest_smoke.tscn"
         $guest = Start-Process -FilePath $GodotPath -ArgumentList $guestArguments -WorkingDirectory $projectRoot -PassThru -Wait -WindowStyle Hidden -RedirectStandardOutput $guestOut -RedirectStandardError $guestErr
         $guestOutput = @()
         $guestOutput += Get-Content -LiteralPath $guestOut -ErrorAction SilentlyContinue
@@ -149,31 +149,31 @@ function Invoke-NetworkIsolationCheck {
 
 if (-not $NetworkOnly) {
 Invoke-GodotCheck -Name "Project parse" -Arguments @("--quit")
-Invoke-GodotCheck -Name "Account client smoke" -Arguments @("res://scenes/smoke/account_client_smoke.tscn")
-Invoke-GodotCheck -Name "Account game bridge queue smoke" -Arguments @("res://scenes/smoke/account_game_bridge_smoke.tscn")
-Invoke-GodotCheck -Name "Physical input bindings smoke" -Arguments @("res://scenes/smoke/input_bindings_smoke.tscn")
-Invoke-GodotCheck -Name "Remote player sync validation smoke" -Arguments @("res://scenes/smoke/player_sync_validation_smoke.tscn")
-Invoke-GodotCheck -Name "Day/night cycle smoke" -Arguments @("res://scenes/smoke/day_night_cycle_smoke.tscn")
-Invoke-GodotCheck -Name "Looping room ambience smoke" -Arguments @("res://scenes/smoke/audio_cues_smoke.tscn")
-Invoke-GodotCheck -Name "Monster journal smoke" -Arguments @("res://scenes/smoke/monster_journal_smoke.tscn")
-Invoke-GodotCheck -Name "Collectible evidence visuals smoke" -Arguments @("res://scenes/smoke/note_visual_smoke.tscn")
-Invoke-GodotCheck -Name "Listener behavior variants smoke" -Arguments @("res://scenes/smoke/corridor_monster_behavior_smoke.tscn")
-Invoke-GodotCheck -Name "Watcher behavior variants smoke" -Arguments @("--quit-after", "600", "res://scenes/smoke/watcher_behavior_smoke.tscn")
-Invoke-GodotCheck -Name "False Door monster smoke" -Arguments @("--quit-after", "600", "res://scenes/smoke/mimic_door_smoke.tscn")
-Invoke-GodotCheck -Name "The Unlit flashlight behavior smoke" -Arguments @("--quit-after", "600", "res://scenes/smoke/light_shy_monster_smoke.tscn")
-Invoke-GodotCheck -Name "The Unlit evidence chamber smoke" -Arguments @("--quit-after", "600", "res://scenes/smoke/unlit_evidence_demo_smoke.tscn")
+Invoke-GodotCheck -Name "Account client smoke" -Arguments @("res://tests/smoke/scenes/account_client_smoke.tscn")
+Invoke-GodotCheck -Name "Account game bridge queue smoke" -Arguments @("res://tests/smoke/scenes/account_game_bridge_smoke.tscn")
+Invoke-GodotCheck -Name "Physical input bindings smoke" -Arguments @("res://tests/smoke/scenes/input_bindings_smoke.tscn")
+Invoke-GodotCheck -Name "Remote player sync validation smoke" -Arguments @("res://tests/smoke/scenes/player_sync_validation_smoke.tscn")
+Invoke-GodotCheck -Name "Day/night cycle smoke" -Arguments @("res://tests/smoke/scenes/day_night_cycle_smoke.tscn")
+Invoke-GodotCheck -Name "Looping room ambience smoke" -Arguments @("res://tests/smoke/scenes/audio_cues_smoke.tscn")
+Invoke-GodotCheck -Name "Monster journal smoke" -Arguments @("res://tests/smoke/scenes/monster_journal_smoke.tscn")
+Invoke-GodotCheck -Name "Collectible evidence visuals smoke" -Arguments @("res://tests/smoke/scenes/note_visual_smoke.tscn")
+Invoke-GodotCheck -Name "Listener behavior variants smoke" -Arguments @("res://tests/smoke/scenes/corridor_monster_behavior_smoke.tscn")
+Invoke-GodotCheck -Name "Watcher behavior variants smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/watcher_behavior_smoke.tscn")
+Invoke-GodotCheck -Name "False Door monster smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/mimic_door_smoke.tscn")
+Invoke-GodotCheck -Name "The Unlit flashlight behavior smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/light_shy_monster_smoke.tscn")
+Invoke-GodotCheck -Name "The Unlit evidence chamber smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/unlit_evidence_demo_smoke.tscn")
 Invoke-GodotCheck -Name "Main scene smoke" -Arguments @("--quit-after", "2", "res://scenes/main.tscn")
 Invoke-GodotCheck -Name "UI scene smoke" -Arguments @("--quit-after", "2", "res://scenes/game_ui.tscn")
-Invoke-GodotCheck -Name "UI control text smoke" -Arguments @("res://scenes/smoke/ui_control_text_smoke.tscn")
-Invoke-GodotCheck -Name "UI end-state smoke" -Arguments @("res://scenes/smoke/ui_end_state_smoke.tscn")
-Invoke-GodotCheck -Name "UI menu smoke" -Arguments @("res://scenes/smoke/ui_menu_smoke.tscn")
-Invoke-GodotCheck -Name "UI puzzle modes smoke" -Arguments @("res://scenes/smoke/ui_puzzle_smoke.tscn")
-Invoke-GodotCheck -Name "Main state discovery smoke" -Arguments @("--quit-after", "600", "res://scenes/smoke/main_state_smoke.tscn")
-Invoke-GodotCheck -Name "Endless House builder smoke" -Arguments @("res://scenes/smoke/endless_house_builder_smoke.tscn")
+Invoke-GodotCheck -Name "UI control text smoke" -Arguments @("res://tests/smoke/scenes/ui_control_text_smoke.tscn")
+Invoke-GodotCheck -Name "UI end-state smoke" -Arguments @("res://tests/smoke/scenes/ui_end_state_smoke.tscn")
+Invoke-GodotCheck -Name "UI menu smoke" -Arguments @("res://tests/smoke/scenes/ui_menu_smoke.tscn")
+Invoke-GodotCheck -Name "UI puzzle modes smoke" -Arguments @("res://tests/smoke/scenes/ui_puzzle_smoke.tscn")
+Invoke-GodotCheck -Name "Main state discovery smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/main_state_smoke.tscn")
+Invoke-GodotCheck -Name "Endless House builder smoke" -Arguments @("res://tests/smoke/scenes/endless_house_builder_smoke.tscn")
 Invoke-GodotCheck -Name "Backrooms builder smoke" -Arguments @("--quit-after", "2", "res://scenes/backrooms/backrooms_builder_demo.tscn")
-Invoke-GodotCheck -Name "Backrooms builder variants smoke" -Arguments @("res://scenes/smoke/backrooms_builder_variants_smoke.tscn")
-Invoke-GodotCheck -Name "Backrooms builder paired Unlit smoke" -Arguments @("--quit-after", "600", "res://scenes/smoke/backrooms_builder_unlit_pairs_smoke.tscn")
-Invoke-GodotCheck -Name "Backrooms builder Inspector warnings smoke" -Arguments @("res://scenes/smoke/backrooms_builder_warnings_smoke.tscn")
+Invoke-GodotCheck -Name "Backrooms builder variants smoke" -Arguments @("res://tests/smoke/scenes/backrooms_builder_variants_smoke.tscn")
+Invoke-GodotCheck -Name "Backrooms builder paired Unlit smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/backrooms_builder_unlit_pairs_smoke.tscn")
+Invoke-GodotCheck -Name "Backrooms builder Inspector warnings smoke" -Arguments @("res://tests/smoke/scenes/backrooms_builder_warnings_smoke.tscn")
 Invoke-GodotCheck -Name "Dedicated startup smoke" -Arguments @("--server", "--account-auth-test-mode", "--quit-after", "2")
 }
 Invoke-NetworkSessionCheck
