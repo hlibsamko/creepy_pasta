@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: move the manual QA overlay into `devtools/qa` and replace its hard production-scene dependency with one optional project-setting-controlled injection point. Automated smoke and visual harnesses have already moved to `tests/`. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: add an explicit private `Web QA` export path that includes `devtools/qa` while normal client/server exports continue to exclude internal tooling. Automated harnesses are under `tests/`, and the QA overlay is now optionally injected from `devtools/qa`. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 

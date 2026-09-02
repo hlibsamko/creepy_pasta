@@ -59,6 +59,7 @@ LevelName
 
 - Visual capture harnesses now live under `tests/visual/{scenes,scripts}`. Production scenes and scripts no longer share their folders with those capture-only files.
 - Automated smoke harnesses now live under `tests/smoke/{scenes,scripts}`. `scenes/smoke` has been retired, and smoke-only scripts no longer sit beside production gameplay scripts.
+- The QA overlay lives under `devtools/qa` and is loaded optionally through `creepy_pasta/qa/enabled` (default `true` while the game is private). `scenes/game_ui.tscn` has no packed-scene dependency on it.
 
 ## Model integration ledger
 

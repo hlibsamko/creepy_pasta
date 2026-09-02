@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 GameVersion="*res://scripts/game_version.gd"
 AccountService="*res://scripts/account_service.gd"
 
+[creepy_pasta]
+
+qa/enabled=true
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
