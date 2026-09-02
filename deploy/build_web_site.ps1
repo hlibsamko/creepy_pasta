@@ -1,5 +1,5 @@
 param(
-    [string]$GodotExe = "D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe",
+    [string]$GodotExe = "",
     [string]$SiteDir = "D:\Codex_projects\creepy-website",
     [string]$Preset = "Web"
 )
@@ -7,6 +7,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+if (-not $GodotExe) {
+    $GodotExe = & (Join-Path $projectRoot "tools\engine\get_godot.ps1")
+}
 $sitePath = [IO.Path]::GetFullPath($SiteDir).TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar)
 $siteRoot = [IO.Path]::GetPathRoot($sitePath).TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar)
 $projectPath = [string]$projectRoot

@@ -1,11 +1,16 @@
 param(
-    [string]$GodotExe = "D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe",
+    [string]$GodotExe = "",
     [string]$PythonExe = "python",
     [string]$SiteDir = "D:\Codex_projects\creepy-website",
     [string]$AccountEnvPath = ""
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $GodotExe) {
+    $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+    $GodotExe = & (Join-Path $projectRoot "tools\engine\get_godot.ps1")
+}
 
 & (Join-Path $PSScriptRoot "local_smoke.ps1") -GodotPath $GodotExe -SiteDir $SiteDir -Exports
 $accountDeployArguments = @{ "PythonExe" = $PythonExe }

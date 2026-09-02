@@ -83,13 +83,13 @@ When changing final-room content, keep the final dialogue hook covered by `Main`
 5. For a faster single parse/startup check:
 
 ```powershell
-& 'D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe' --headless --path . --quit-after 2
+& (tools/engine/get_godot.ps1) --headless --path . --quit-after 2
 ```
 
 6. If the change affects multiplayer or RPC, build the Linux dedicated server:
 
 ```powershell
-& 'D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe' --headless --path . --export-release 'Linux Dedicated Server' 'build\server\creepy_pasta_server.x86_64'
+& (tools/engine/get_godot.ps1) --headless --path . --export-release 'Linux Dedicated Server' 'build\server\creepy_pasta_server.x86_64'
 ```
 
 7. Deploy the matched account/server/Web release to Oracle:

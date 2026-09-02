@@ -36,17 +36,19 @@ When a scripted collision/visual cluster appears more than once, prefer a reusab
 
 ## Imported asset policy
 
-- Store external assets below `assets/third_party/<source_or_pack>/` and record their known provenance in `docs/asset_credits.md`.
-- Prototype suitability is separate from publication clearance. An unresolved or non-distributable temporary model may be used in a smoke build, but it must immediately receive a `CHECK` or `REPLACE` row in `docs/publication_asset_clearance.md`.
+- Store external assets below `assets/third_party/<source_or_pack>/` and record the exact production placement in `docs/asset_inventory.md`.
+- Follow the user's stated sourcing criteria. Do not silently substitute different selection rules or leave a requested model merely downloaded but unused.
 - Wrap imported models in a project-owned `.tscn`. Apply scale/orientation/material overrides in the wrapper instead of editing generated import files.
 - Use a ground pivot, forward `-Z`, practical Web-compatible materials, and a visual child beneath the existing gameplay root.
 - Preserve the existing collision and gameplay silhouette until a dedicated collision review proves a replacement is safe.
 
-## Verification by change type
+## Optional verification by change type
+
+Run these only when the user explicitly requests the relevant validation:
 
 - Visual reparenting: relevant builder smoke, `main_state_smoke`, and player-eye capture.
 - Runtime tree-query changes: `main_state_smoke` plus the relevant builder smoke.
 - RPC paths or session snapshot paths: full `deploy/local_smoke.ps1`, then matched client/server deployment if released.
 - UI hierarchy or styling: UI menu/control/end-state smoke and a rendered UI capture.
 
-Always finish with `git diff --check` and inspect rendered evidence when the change affects what a player sees.
+Do not run them automatically after ordinary edits.

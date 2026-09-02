@@ -55,5 +55,5 @@ In a local debug run, physical `F9` still loads the level directly and faces the
 ## Local Check
 
 ```powershell
-& 'D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe' --headless --path . 'res://scenes/smoke/endless_house_builder_smoke.tscn'
+& (tools/engine/get_godot.ps1) --headless --path . 'res://scenes/smoke/endless_house_builder_smoke.tscn'
 ```

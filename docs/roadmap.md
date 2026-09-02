@@ -12,11 +12,9 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 ## Current Focus — ONE TASK ONLY
 
-**PAUSED — the requested architecture batch is complete; do not start another improvement until the user explicitly resumes it.**
+**ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-The connection/account UI remains owned by another chat and was deliberately excluded from this batch.
-
-Do **not** begin a second target in parallel.
+Current chunk: isolate smoke/capture content from production folders and move the QA overlay under `devtools/qa` without changing its gameplay behavior. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 
@@ -26,14 +24,12 @@ For every meaningful visual batch:
 2. Inspect the real project state/diff and current scene/capture.
 3. Read only the relevant docs from `docs/document_map.md`.
 4. Keep exactly one `Current Focus`.
-5. Research candidates only for that focus.
-6. Record the known source/provenance; license restrictions do not block smoke-build selection.
-7. Download only selected assets.
-8. Import/integrate using wrappers or visual-child replacement; preserve gameplay contracts.
-9. Check scale, pivot, axis, materials, textures, shadows, animation, collision interference, and Web cost as relevant.
-10. Visually inspect from a player-like camera and run the appropriate local checks.
-11. Update `docs/asset_needs.md` and `docs/asset_credits.md`; add any unresolved/non-distributable model to `docs/publication_asset_clearance.md` as `CHECK` or `REPLACE`.
-12. Move the finished batch into `Recently Completed` and set the next single focus.
+5. Research candidates only for that focus, using the user's stated selection criteria.
+6. Download only selected assets.
+7. Import/integrate using wrappers or visual-child replacement; preserve gameplay contracts.
+8. Record the wrapper and exact production placement in `docs/asset_inventory.md`.
+9. When the user explicitly requests validation, check scale, pivot, axis, materials, textures, shadows, animation, collision interference, and Web cost as relevant.
+10. Move the finished batch into `Recently Completed` and set the next single focus.
 
 If context is lost: **do not guess**. Re-read this file, inspect the real project state/diff, then open the relevant feature doc.
 
@@ -41,15 +37,12 @@ If context is lost: **do not guess**. Re-read this file, inspect the real projec
 
 A batch is not complete at `DOWNLOADED` or `IMPORTED`. It is complete only when:
 
-- known provenance is recorded, and any unresolved publication action is in the clearance queue;
 - the chosen asset is imported successfully;
-- scale/orientation/pivot/material/texture/animation checks are complete where relevant;
 - it is placed in the actual production scene/kit or verified reusable scene;
+- its wrapper and production placement are recorded in `docs/asset_inventory.md`;
 - stable gameplay roots, collisions, triggers, signals, RPC paths, generated paths, and server-owned state remain intact;
-- the relevant scene starts without script/load errors;
-- the result is visually inspected from player eye level/capture;
-- obvious Compatibility/Web performance regressions are avoided;
-- roadmap + asset status are updated.
+- roadmap + asset status are updated;
+- requested checks are complete when the user included validation in the task.
 
 ## Visual Priority Order
 
@@ -67,16 +60,15 @@ Use this as tie-break guidance, not permission to work on several items at once:
 
 ## Hard Constraints
 
-- Engine: **Godot 4.6**.
+- Engine: **Godot 4.7.2 stable**, pinned in `tools/engine/godot-version.json` and obtained from the official `godotengine/godot-builds` GitHub releases.
 - Browser target: **Compatibility renderer**.
 - Do not design around volumetric fog or screen-space reflections for the Web target; use supported alternatives from `docs/branch_research.md`.
 - Preserve gameplay roots, scripts, gameplay collision, trigger areas, signals, RPC signatures/paths, stable generated paths, spawn/exit markers, and server authority.
 - Prefer `stable gameplay root -> visual wrapper Node3D -> imported model/mesh/armature`.
 - Preserve the shared builder contracts (including the 4 m grid); adapt art to the contract, not the gameplay contract to the art.
 - Character target after wrapper correction: ground pivot, forward `-Z`.
-- Smoke builds may use any legally obtained local asset that fits the prototype. Unknown, restrictive, paid-seat, branded, or non-distributable publication terms require an immediate `CHECK`/`REPLACE` entry; such files must not enter a public release until cleared or replaced.
 - Prefer practical Web-sized textures and reusable instances; avoid importing huge unused collections into `res://`.
-- Follow `docs/workflow.md` for test/release cadence. Do not deploy/push after every tiny visual edit.
+- Follow `docs/workflow.md` only when the user explicitly requests testing or release work. Do not deploy/push after every tiny visual edit.
 
 ## Recently Completed / Existing Visual State
 
@@ -260,7 +252,7 @@ Keep only the most useful recent visual context here; older history belongs in `
 ## Blockers / Risks — NON-BLOCKING UNLESS STATED
 
 - Final global house art direction (realistic worn residential vs low-poly stylized vs PSX/retro) is not locked. Until the user decides, prefer reversible wrappers/material work and respect each branch's existing identity.
-- Previously listed Sketchfab creature candidates require manual verification of current download availability/license before use.
+- Previously listed model candidates may require manual verification of current download availability before use.
 - Browser/Compatibility limits mean some desktop rendering techniques are unavailable; verify effects against `docs/branch_research.md`.
 
 ## Backlog — DO NOT START DURING CURRENT MISSION

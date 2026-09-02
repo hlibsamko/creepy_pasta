@@ -1,0 +1,5 @@
+[mcp_servers.godot]
+command = "C:\\Users\\Admin\\.codex\\tools\\godot-editor-mcp\\2026.09.02\\.venv\\Scripts\\godot-editor-mcp.exe"
+startup_timeout_sec = 30
+tool_timeout_sec = 120
+env = { GODOT_MCP_GODOT_BIN = "D:\\Soft\\Godot_4.6\\Godot_v4.7.2-stable_win64.exe", GODOT_MCP_PROJECT_DIR = "D:\\Soft\\Godot_4.6\\projects\\creepy_pasta" }

@@ -1,11 +1,14 @@
 param(
-    [string]$GodotExe = "D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe",
+    [string]$GodotExe = "",
     [string]$Preset = "Linux Dedicated Server"
 )
 
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+if (-not $GodotExe) {
+    $GodotExe = & (Join-Path $projectRoot "tools\engine\get_godot.ps1")
+}
 $buildDir = Join-Path $projectRoot "build\server"
 $output = Join-Path $buildDir "creepy_pasta_server.x86_64"
 

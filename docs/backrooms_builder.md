@@ -86,5 +86,5 @@ For old-house rooms using the same generation code, see `docs/endless_house_buil
 ## Local Smoke Check
 
 ```powershell
-& 'D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe' --headless --path . --quit-after 2 'res://scenes/backrooms/backrooms_builder_demo.tscn'
+& (tools/engine/get_godot.ps1) --headless --path . --quit-after 2 'res://scenes/backrooms/backrooms_builder_demo.tscn'
 ```

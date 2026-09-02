@@ -1,5 +1,5 @@
 param(
-    [string]$GodotPath = "D:\Soft\Godot_4.6\Godot_v4.6-stable_win64.exe",
+    [string]$GodotPath = "",
     [string]$SiteDir = "D:\Codex_projects\creepy-website",
     [switch]$Exports,
     [switch]$NetworkOnly
@@ -8,6 +8,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+if (-not $GodotPath) {
+    $GodotPath = & (Join-Path $projectRoot "tools\engine\get_godot.ps1")
+}
 
 function Invoke-GodotCheck {
     param(
