@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3]
 
-[ext_resource type="Script" path="res://tests/visual/tests/visual/scripts/light_shy_visual_capture.gd" id="1_capture"]
+[ext_resource type="Script" path="res://tests/visual/scripts/light_shy_visual_capture.gd" id="1_capture"]
 [ext_resource type="PackedScene" path="res://scenes/common/light_shy_monster_basic.tscn" id="2_monster"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_player"]
 

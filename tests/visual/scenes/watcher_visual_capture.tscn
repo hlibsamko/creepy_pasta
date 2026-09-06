@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/common/watcher_monster_basic.tscn" id="1_watcher"]
-[ext_resource type="Script" path="res://tests/visual/tests/visual/scripts/watcher_visual_capture.gd" id="2_capture"]
+[ext_resource type="Script" path="res://tests/visual/scripts/watcher_visual_capture.gd" id="2_capture"]
 
 [node name="WatcherVisualCapture" type="Node3D"]
 script = ExtResource("2_capture")

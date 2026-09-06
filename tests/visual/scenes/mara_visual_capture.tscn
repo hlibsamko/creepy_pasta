@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/common/survivor_npc_basic.tscn" id="1_mara"]
-[ext_resource type="Script" path="res://tests/visual/tests/visual/scripts/mara_visual_capture.gd" id="2_capture"]
+[ext_resource type="Script" path="res://tests/visual/scripts/mara_visual_capture.gd" id="2_capture"]
 
 [sub_resource type="Environment" id="Environment_capture"]
 background_mode = 1
