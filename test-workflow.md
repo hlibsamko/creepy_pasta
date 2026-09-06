@@ -21,13 +21,13 @@ Dreamcore и остальные studies — короткие отдельные 
 
 `Play Offline` запускает линейный маршрут:
 
-1. `level.tscn` — Room 1: The Wrong Copy
+1. `wrong_copy_room.tscn` — Room 1: The Wrong Copy
 2. `copied_door_room.tscn` — Room 2: The Copied Door
 3. `backrooms.tscn` — Backrooms
 4. `endless_house_builder_demo.tscn` — House Survey
 5. `unlit_evidence_chamber.tscn` — The Unlit
 6. `corridor.tscn` — погоня в коридоре
-7. `final_watcher_room.tscn` — финальная комната
+7. `final_watcher_room.tscn` — Final Room: Do Not Stare
 
 Порядок явно задан в `scripts/main.gd`. Dreamcore, poolrooms, mall и hotel в эту последовательность сейчас не входят.
 
@@ -43,7 +43,11 @@ project.godot
    └─ UI
 
 scenes/
-├─ основные сюжетные сцены
+├─ wrong_copy_room.tscn
+├─ copied_door_room.tscn
+├─ corridor.tscn
+├─ final_watcher_room.tscn
+├─ основные общие сцены игрока, UI и записок
 ├─ branches/             отдельные environment studies
 │  ├─ dreamcore/
 │  ├─ poolrooms/
@@ -52,11 +56,13 @@ scenes/
 ├─ backrooms/kit/        модульные стены, полы, свет
 ├─ endless_house/kit/
 ├─ common/               выходы, монстры, переключатели
-├─ ui/
-└─ smoke/                технические проверки, не уровни
+├─ props/                обёртки импортированных моделей
+└─ ui/
 
 resources/branches/       названия, цели и ссылки на studies
 scripts/                  игровой код и служебные сценарии
+tests/{smoke,visual}/      автоматические фикстуры и снимки, не production
+devtools/qa/              временное ручное QA-меню
 deploy/                   локальные проверки, экспорт и сервер
 backend/                  аккаунты и онлайн-сервисы
 docs/                     архитектура, workflow и roadmap
