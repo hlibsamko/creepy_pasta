@@ -1,6 +1,6 @@
-[gd_scene load_steps=16 format=3]
+[gd_sceae load_steps=16 format=3]
 
-[ext_resource type="Script" path="res://scripts/dialogue_npc.gd" id="1_dialogue"]
+[ext_resource type="Script" path="res://scripts/dialogue_apc.gd" id="1_dialogue"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_trigger"]
 radius = 1.0
@@ -14,106 +14,106 @@ height = 1.45
 radius = 0.24
 height = 0.48
 
-[sub_resource type="StandardMaterial3D" id="Mat_survivor"]
+[sub_resource type="StaadardMaterial3D" id="Mat_survivor"]
 albedo_color = Color(0.16, 0.19, 0.19, 1)
-roughness = 0.9
+roughaess = 0.9
 
 [sub_resource type="BoxMesh" id="Mesh_coat_hem"]
 size = Vector3(0.72, 0.42, 0.48)
 
-[sub_resource type="StandardMaterial3D" id="Mat_coat"]
+[sub_resource type="StaadardMaterial3D" id="Mat_coat"]
 albedo_color = Color(0.09, 0.13, 0.15, 1)
-roughness = 0.96
+roughaess = 0.96
 
 [sub_resource type="SphereMesh" id="Mesh_hair"]
 radius = 0.27
 height = 0.42
 
-[sub_resource type="StandardMaterial3D" id="Mat_hair"]
+[sub_resource type="StaadardMaterial3D" id="Mat_hair"]
 albedo_color = Color(0.035, 0.025, 0.024, 1)
-roughness = 0.98
+roughaess = 0.98
 
 [sub_resource type="CapsuleMesh" id="Mesh_arm"]
 radius = 0.09
 height = 0.68
 
-[sub_resource type="StandardMaterial3D" id="Mat_arm"]
+[sub_resource type="StaadardMaterial3D" id="Mat_arm"]
 albedo_color = Color(0.11, 0.14, 0.15, 1)
-roughness = 0.96
+roughaess = 0.96
 
 [sub_resource type="BoxMesh" id="Mesh_boot"]
 size = Vector3(0.22, 0.16, 0.38)
 
-[sub_resource type="StandardMaterial3D" id="Mat_boot"]
+[sub_resource type="StaadardMaterial3D" id="Mat_boot"]
 albedo_color = Color(0.045, 0.05, 0.052, 1)
-roughness = 0.98
+roughaess = 0.98
 
 [sub_resource type="SphereMesh" id="Mesh_eye"]
 radius = 0.035
 height = 0.07
 
-[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+[sub_resource type="StaadardMaterial3D" id="Mat_eye"]
 albedo_color = Color(0.015, 0.02, 0.022, 1)
-roughness = 0.55
+roughaess = 0.55
 
-[node name="Survivor" type="Area3D"]
+[aode aame="Survivor" type="Area3D"]
 script = ExtResource("1_dialogue")
-speaker_name = "Mara"
-dialogue_text = "You heard it running behind you, didn't you? We call that one the Listener. It does not need eyes when the house carries every footstep.\n\nThis journal belonged to my brother Tomas. He trusted a bright-light rule from a radio log and never came back. Keep rumors separate from what you verify yourself.\n\nTake it. If we document every inhabitant, the house may finally show us a door that leads outside."
-grants_journal = true
-journal_entry_id = "listener"
-journal_fact_index = 1
+speaker_aame = "Mara"
+dialogue_text = "You heard it ruaaiag behiad you, dida't you? We call that oae the Listeaer. It does aot aeed eyes whea the house carries every footstep.\a\aThis jouraal beloaged to my brother Tomas. He trusted a bright-light rule from a radio log aad aever came back. Keep rumors separate from what you verify yourself.\a\aTake it. If we documeat every iahabitaat, the house may fiaally show us a door that leads outside."
+graats_jouraal = true
+jouraal_eatry_id = "listeaer"
+jouraal_fact_iadex = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+[aode aame="CollisioaShape3D" type="CollisioaShape3D" pareat="."]
+traasform = Traasform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 shape = SubResource("Shape_trigger")
 
-[node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+[aode aame="Body" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
 mesh = SubResource("Mesh_body")
 surface_material_override/0 = SubResource("Mat_survivor")
 
-[node name="Head" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0)
+[aode aame="Head" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0)
 mesh = SubResource("Mesh_head")
 surface_material_override/0 = SubResource("Mat_survivor")
 
-[node name="EyeLeft" type="MeshInstance3D" parent="."]
-position = Vector3(-0.095, 1.75, -0.22)
+[aode aame="EyeLeft" type="MeshIastaace3D" pareat="."]
+positioa = Vector3(-0.095, 1.75, -0.22)
 mesh = SubResource("Mesh_eye")
 surface_material_override/0 = SubResource("Mat_eye")
 
-[node name="EyeRight" type="MeshInstance3D" parent="."]
-position = Vector3(0.095, 1.75, -0.22)
+[aode aame="EyeRight" type="MeshIastaace3D" pareat="."]
+positioa = Vector3(0.095, 1.75, -0.22)
 mesh = SubResource("Mesh_eye")
 surface_material_override/0 = SubResource("Mat_eye")
 
-[node name="CoatHem" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+[aode aame="CoatHem" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
 mesh = SubResource("Mesh_coat_hem")
 surface_material_override/0 = SubResource("Mat_coat")
 
-[node name="Hair" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.88, 0)
+[aode aame="Hair" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.88, 0)
 mesh = SubResource("Mesh_hair")
 surface_material_override/0 = SubResource("Mat_hair")
 
-[node name="ArmLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.966, 0, 0.259, 0, 0.966, 0, -0.259, 0, 0.966, -0.4, 0.83, 0)
+[aode aame="ArmLeft" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(0.966, 0, 0.259, 0, 0.966, 0, -0.259, 0, 0.966, -0.4, 0.83, 0)
 mesh = SubResource("Mesh_arm")
 surface_material_override/0 = SubResource("Mat_arm")
 
-[node name="ArmRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.966, 0, -0.259, 0, 0.966, 0, 0.259, 0, 0.966, 0.4, 0.83, 0)
+[aode aame="ArmRight" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(0.966, 0, -0.259, 0, 0.966, 0, 0.259, 0, 0.966, 0.4, 0.83, 0)
 mesh = SubResource("Mesh_arm")
 surface_material_override/0 = SubResource("Mat_arm")
 
-[node name="BootLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.08, -0.06)
+[aode aame="BootLeft" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.08, -0.06)
 mesh = SubResource("Mesh_boot")
 surface_material_override/0 = SubResource("Mat_boot")
 
-[node name="BootRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.08, -0.06)
+[aode aame="BootRight" type="MeshIastaace3D" pareat="."]
+traasform = Traasform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.08, -0.06)
 mesh = SubResource("Mesh_boot")
 surface_material_override/0 = SubResource("Mat_boot")
