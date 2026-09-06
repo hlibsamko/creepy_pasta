@@ -33,7 +33,23 @@ note_text = "Closing log: the same announcement played after every shutter was l
 
 [node name="EmptyMallConcourse" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Architecture" type="Node3D" parent="Environment"]
+
+[node name="Floors" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Walls" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Ceilings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Openings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Props" type="Node3D" parent="Environment"]
+
+[node name="Lighting" type="Node3D" parent="Environment"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_mall")
 
 [node name="MallBuilder" type="Node3D" parent="."]
@@ -52,18 +68,16 @@ generate_chaser_monsters = false
 generate_mimic_doors = false
 generate_light_shy_monsters = false
 
-[node name="Dressing" type="Node3D" parent="."]
-
-[node name="DeadPlantA" parent="Dressing" instance=ExtResource("8_plant")]
+[node name="DeadPlantA" parent="Environment/Props" instance=ExtResource("8_plant")]
 transform = Transform3D(2.1, 0, 0, 0, 2.1, 0, 0, 0, 2.1, 12, 0, 22)
 
-[node name="DeadPlantB" parent="Dressing" instance=ExtResource("8_plant")]
+[node name="DeadPlantB" parent="Environment/Props" instance=ExtResource("8_plant")]
 transform = Transform3D(2.1, 0, 0, 0, 2.1, 0, 0, 0, 2.1, 40, 0, 10)
 
-[node name="WaitingChair" parent="Dressing" instance=ExtResource("9_chair")]
+[node name="WaitingChair" parent="Environment/Props" instance=ExtResource("9_chair")]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 25, 0, 24)
 
-[node name="WarmWayfinding" type="OmniLight3D" parent="."]
+[node name="WarmWayfinding" type="OmniLight3D" parent="Environment/Lighting"]
 position = Vector3(48, 2.8, 4)
 light_color = Color(1, 0.56, 0.26, 1)
 light_energy = 1.8
