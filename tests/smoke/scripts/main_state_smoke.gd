@@ -1,7 +1,7 @@
 extends Node
 
 const MAIN_SCENE := preload("res://scenes/main.tscn")
-const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
+const COPIED_DOOR_ROOM_SCENE := preload("res://scenes/copied_door_room.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
 const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 const FOURTH_ROOM_SCENE := preload("res://scenes/fourth_room.tscn")
@@ -43,10 +43,10 @@ func _run_smoke() -> void:
 	await _assert_debug_unlit_preview()
 	_assert_debug_house_preview()
 
-	main.call("_load_level_scene", NEXT_PLACE_SCENE)
+	main.call("_load_level_scene", COPIED_DOOR_ROOM_SCENE)
 	await get_tree().process_frame
 	_assert_level_state("next place", 2, 0, 1, true)
-	_assert_next_place_structure()
+	_assert_copied_door_room_structure()
 	_assert_active_note_limit("next place")
 	_assert_authoritative_note_copy("next place")
 	_assert_client_discovery_whitelist("next place")
@@ -170,7 +170,7 @@ func _assert_fourth_room_structure() -> void:
 	_assert_exit_box_size(room_exit, Vector3(2.0, 2.3, 1.0), "Fourth room")
 
 
-func _assert_next_place_structure() -> void:
+func _assert_copied_door_room_structure() -> void:
 	var loaded_level := main.get("level") as Node3D
 	if not loaded_level:
 		_fail("Next place did not instantiate as a 3D level")
@@ -285,12 +285,12 @@ func _assert_exit_box_size(room_exit: LevelExit, expected_size: Vector3, label: 
 
 func _assert_level_sequence() -> void:
 	main.set("current_level_scene", main.WRONG_COPY_ROOM_SCENE)
-	if main.call("_get_next_level_scene") != NEXT_PLACE_SCENE:
-		_fail("Level sequence does not route level -> next_place")
+	if main.call("_get_next_level_scene") != COPIED_DOOR_ROOM_SCENE:
+		_fail("Level sequence does not route level -> copied_door_room")
 		return
-	main.set("current_level_scene", NEXT_PLACE_SCENE)
+	main.set("current_level_scene", COPIED_DOOR_ROOM_SCENE)
 	if main.call("_get_next_level_scene") != BACKROOMS_SCENE:
-		_fail("Level sequence does not route next_place -> backrooms")
+		_fail("Level sequence does not route copied_door_room -> backrooms")
 		return
 	main.set("current_level_scene", BACKROOMS_SCENE)
 	if main.call("_get_next_level_scene") != main.HOUSE_BUILDER_DEMO_SCENE:

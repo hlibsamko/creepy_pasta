@@ -6,7 +6,7 @@ const LEVEL_RUNTIME_QUERY := preload("res://scripts/level_runtime_query.gd")
 const ACCOUNT_GAME_BRIDGE := preload("res://scripts/account_game_bridge.gd")
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const WRONG_COPY_ROOM_SCENE := preload("res://scenes/wrong_copy_room.tscn")
-const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
+const COPIED_DOOR_ROOM_SCENE := preload("res://scenes/copied_door_room.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
 const HOUSE_BUILDER_DEMO_SCENE := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
 const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
@@ -34,7 +34,7 @@ const ACCOUNT_AUTH_TIMEOUT_MSEC := 10000
 const ACCOUNT_HEARTBEAT_INTERVAL := 60.0
 const SESSION_LEVEL_PATHS := [
 	"res://scenes/wrong_copy_room.tscn",
-	"res://scenes/next_place.tscn",
+	"res://scenes/copied_door_room.tscn",
 	"res://scenes/backrooms/backrooms.tscn",
 	"res://scenes/endless_house/endless_house_builder_demo.tscn",
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn",
@@ -46,7 +46,7 @@ const SESSION_EXIT_DEFINITIONS := {
 		"position": Vector3(0.0, 1.15, 5.35),
 		"activation_radius": 2.0,
 	},
-	"res://scenes/next_place.tscn": {
+	"res://scenes/copied_door_room.tscn": {
 		"position": Vector3(0.0, 1.15, -4.55),
 		"activation_radius": 2.0,
 	},
@@ -84,7 +84,7 @@ const SESSION_NOTE_DEFINITIONS := {
 			"collection_radius": 1.75,
 		},
 	},
-	"res://scenes/next_place.tscn": {
+	"res://scenes/copied_door_room.tscn": {
 		"Fragment1": {
 			"text": "Survey plate: fixed points show the room copied its own floor plan before the doorway appeared.",
 			"entry_id": "mimic",
@@ -153,14 +153,14 @@ const SESSION_NOTE_DEFINITIONS := {
 	},
 }
 const SESSION_PRESSURE_REQUIREMENTS := {
-	"res://scenes/next_place.tscn": 1,
+	"res://scenes/copied_door_room.tscn": 1,
 	"res://scenes/backrooms/backrooms.tscn": 1,
 }
 const SESSION_BREAKER_REQUIREMENTS := {
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn": 1,
 }
 const SESSION_PRESSURE_PLATE_DEFINITIONS := {
-	"res://scenes/next_place.tscn": {
+	"res://scenes/copied_door_room.tscn": {
 		"PressurePlate": {
 			"position": Vector3(0.0, 0.03, -2.55),
 			"activation_radius": 1.5,
@@ -231,7 +231,7 @@ const SESSION_CLIENT_DISCOVERIES := {
 			"interaction_radius": 2.4,
 		},
 	],
-	"res://scenes/next_place.tscn": [
+	"res://scenes/copied_door_room.tscn": [
 		{
 			"source_id": "DialogueNpcs/Mara",
 			"unlock": true,
@@ -326,7 +326,7 @@ const SESSION_NOTE_GATED_MONSTERS := {
 			"fact_index": 2,
 		},
 	],
-	"res://scenes/next_place.tscn": [],
+	"res://scenes/copied_door_room.tscn": [],
 	"res://scenes/backrooms/backrooms.tscn": [
 		{
 			"source_id": "BackroomsBuilder/GeneratedBackrooms/Monsters/GeneratedChaser1",
@@ -1497,7 +1497,7 @@ func _get_level_title_from_path(level_path: String) -> String:
 	match level_path:
 		"res://scenes/wrong_copy_room.tscn":
 			return "Room 1"
-		"res://scenes/next_place.tscn":
+		"res://scenes/copied_door_room.tscn":
 			return "Room 2"
 		"res://scenes/backrooms/backrooms.tscn":
 			return "Backrooms"
@@ -2614,8 +2614,8 @@ func _record_level_completion_discovery() -> void:
 
 func _get_next_level_scene() -> PackedScene:
 	if current_level_scene == WRONG_COPY_ROOM_SCENE:
-		return NEXT_PLACE_SCENE
-	if current_level_scene == NEXT_PLACE_SCENE:
+		return COPIED_DOOR_ROOM_SCENE
+	if current_level_scene == COPIED_DOOR_ROOM_SCENE:
 		return BACKROOMS_SCENE
 	if current_level_scene == BACKROOMS_SCENE:
 		return HOUSE_BUILDER_DEMO_SCENE
@@ -3268,7 +3268,7 @@ func _setup_qa_mode() -> void:
 func _get_qa_level_entries() -> Array:
 	var entries := [
 		{"title": "01 • Room 1 — The Wrong Copy", "scene_path": WRONG_COPY_ROOM_SCENE.resource_path},
-		{"title": "02 • Room 2 — The Copied Door", "scene_path": NEXT_PLACE_SCENE.resource_path},
+		{"title": "02 • Room 2 — The Copied Door", "scene_path": COPIED_DOOR_ROOM_SCENE.resource_path},
 		{"title": "03 • Backrooms — Yellow Drift", "scene_path": BACKROOMS_SCENE.resource_path},
 		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_BUILDER_DEMO_SCENE.resource_path},
 		{"title": "05 • The Unlit — Maintenance Wing", "scene_path": UNLIT_EVIDENCE_SCENE.resource_path},
@@ -3641,8 +3641,8 @@ func _get_level_scene_by_path(scene_path: String) -> PackedScene:
 	match scene_path:
 		WRONG_COPY_ROOM_SCENE.resource_path:
 			return WRONG_COPY_ROOM_SCENE
-		NEXT_PLACE_SCENE.resource_path:
-			return NEXT_PLACE_SCENE
+		COPIED_DOOR_ROOM_SCENE.resource_path:
+			return COPIED_DOOR_ROOM_SCENE
 		BACKROOMS_SCENE.resource_path:
 			return BACKROOMS_SCENE
 		HOUSE_BUILDER_DEMO_SCENE.resource_path:
@@ -4124,7 +4124,7 @@ func _update_objective() -> void:
 	var objective := ""
 	if current_level_scene == WRONG_COPY_ROOM_SCENE:
 		objective = "The Listener is behind you. Recover two records along the route and cross the narrow doorway."
-	elif current_level_scene == NEXT_PLACE_SCENE:
+	elif current_level_scene == COPIED_DOOR_ROOM_SCENE:
 		if collected_notes >= total_notes and total_notes > 0 and not _are_pressure_plates_satisfied():
 			objective = "Step on the floor switch to stabilize the copied doorway."
 		else:
@@ -4177,7 +4177,7 @@ func _show_level_banner() -> void:
 func _get_level_title() -> String:
 	if current_level_scene == WRONG_COPY_ROOM_SCENE:
 		return "Room 1: The Wrong Copy"
-	if current_level_scene == NEXT_PLACE_SCENE:
+	if current_level_scene == COPIED_DOOR_ROOM_SCENE:
 		return "Room 2: The Copied Door"
 	if current_level_scene == BACKROOMS_SCENE:
 		return "Backrooms: Yellow Drift"

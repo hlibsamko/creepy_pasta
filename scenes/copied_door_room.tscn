@@ -1,6 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://creepy_next_place"]
+[gd_scene load_steps=15 format=3 uid="uid://creepy_copied_door_room"]
 
-[ext_resource type="Script" path="res://scripts/next_place.gd" id="1_next"]
+[ext_resource type="Script" path="res://scripts/copied_door_room.gd" id="1_next"]
 [ext_resource type="PackedScene" path="res://scenes/note.tscn" id="2_note"]
 [ext_resource type="PackedScene" path="res://scenes/common/level_exit_basic.tscn" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/common/pressure_plate_basic.tscn" id="4_plate"]
@@ -39,7 +39,7 @@ size = Vector3(0.25, 3.2, 10)
 [sub_resource type="BoxMesh" id="Mesh_wall_ew"]
 size = Vector3(0.25, 3.2, 10)
 
-[node name="NextPlace" type="Node3D"]
+[node name="CopiedDoorRoom" type="Node3D"]
 script = ExtResource("1_next")
 
 [node name="Environment" type="Node3D" parent="."]

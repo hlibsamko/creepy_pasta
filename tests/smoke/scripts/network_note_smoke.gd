@@ -215,7 +215,7 @@ func _advance_to_backrooms() -> bool:
 	await _move_local_player_to(Vector3(0.0, 0.2, 3.8))
 	main._request_next_level_transition.rpc_id(1)
 	await get_tree().create_timer(0.8).timeout
-	if main.current_level_scene.resource_path != "res://scenes/next_place.tscn":
+	if main.current_level_scene.resource_path != "res://scenes/copied_door_room.tscn":
 		_fail("Session did not transition from Room 1 to Room 2")
 		return false
 	await _move_local_player_to(Vector3(4.5, 0.2, -4.0))

@@ -22,7 +22,7 @@ Dreamcore и остальные studies — короткие отдельные 
 `Play Offline` запускает линейный маршрут:
 
 1. `level.tscn` — Room 1: The Wrong Copy
-2. `next_place.tscn` — Room 2: The Copied Door
+2. `copied_door_room.tscn` — Room 2: The Copied Door
 3. `backrooms.tscn` — Backrooms
 4. `endless_house_builder_demo.tscn` — House Survey
 5. `unlit_evidence_chamber.tscn` — The Unlit
