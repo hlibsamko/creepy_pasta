@@ -30,7 +30,15 @@ script = ExtResource("7_evidence")
 note_text = "Night ledger: room numbers descend by one after every turn. Zero is not the lobby; it is the first copied room."
 
 [node name="EndlessHotelHall" type="Node3D"]
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="Node3D" parent="."]
+[node name="Architecture" type="Node3D" parent="Environment"]
+[node name="Floors" type="Node3D" parent="Environment/Architecture"]
+[node name="Walls" type="Node3D" parent="Environment/Architecture"]
+[node name="Ceilings" type="Node3D" parent="Environment/Architecture"]
+[node name="Openings" type="Node3D" parent="Environment/Architecture"]
+[node name="Props" type="Node3D" parent="Environment"]
+[node name="Lighting" type="Node3D" parent="Environment"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_hotel")
 [node name="HotelBuilder" type="Node3D" parent="."]
 script = ExtResource("1_builder")
@@ -48,13 +56,12 @@ generate_chaser_monsters = false
 generate_mimic_doors = true
 generate_light_shy_monsters = false
 
-[node name="Dressing" type="Node3D" parent="."]
-[node name="Door239" parent="Dressing" instance=ExtResource("8_door")]
+[node name="Door239" parent="Environment/Architecture/Openings" instance=ExtResource("8_door")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 16, 0, 3.2)
-[node name="Door238" parent="Dressing" instance=ExtResource("8_door")]
+[node name="Door238" parent="Environment/Architecture/Openings" instance=ExtResource("8_door")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 28, 0, 3.2)
-[node name="Door237" parent="Dressing" instance=ExtResource("8_door")]
+[node name="Door237" parent="Environment/Architecture/Openings" instance=ExtResource("8_door")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 36, 0, 11.2)
-[node name="NightRadio" parent="Dressing" instance=ExtResource("9_radio")]
+[node name="NightRadio" parent="Environment/Props" instance=ExtResource("9_radio")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 8, 0.2, 25)
 [node name="Notes" type="Node3D" parent="."]

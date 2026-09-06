@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: normalize Empty Mall and Endless Hotel branch studies into the same architecture groups without mixing builder/gameplay roots into visual containers. Dreamcore, Poolrooms, and all core authored rooms now follow the editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: replace direct third-party model instances with project-owned prop wrappers, then continue descriptive route renames. Empty Mall, Endless Hotel, Dreamcore, Poolrooms, and all core authored rooms now expose the editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 
