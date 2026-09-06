@@ -208,10 +208,10 @@ func _assert_corridor_structure() -> void:
 		_fail("Corridor did not instantiate as a 3D level")
 		return
 	for required_path in [
-		"Environment/Geometry/Floor",
-		"Environment/Geometry/LeftWall",
-		"Environment/Geometry/RightWall",
-		"Environment/Geometry/BackWall",
+		"Environment/Architecture/Floors/Floor",
+		"Environment/Architecture/Walls/LeftWall",
+		"Environment/Architecture/Walls/RightWall",
+		"Environment/Architecture/Walls/BackWall",
 		"Environment/Lighting/DimLightA",
 		"Environment/Lighting/DimLightB",
 		"Environment/Lighting/ExitLight",
