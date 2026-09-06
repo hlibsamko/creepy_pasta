@@ -1154,7 +1154,7 @@ func _assert_backrooms_wall_height() -> void:
 	if walls.is_empty():
 		_fail("Backrooms generated no wall blocks")
 		return
-	var wall_mesh := walls[0].get_node_or_null("MeshInstance3D") as MeshInstance3D
+	var wall_mesh := walls[0].get_node_or_null("WallMesh") as MeshInstance3D
 	if not wall_mesh or wall_mesh.mesh.get_aabb().size.y < 4.1:
 		_fail("Backrooms wall blocks are still below the raised 4.2m height")
 
