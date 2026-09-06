@@ -18,7 +18,7 @@ roughness = 0.9
 [node name="PressurePlate" type="Area3D"]
 script = ExtResource("1_plate")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="PlateCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_plate")
 
 [node name="Plate" type="MeshInstance3D" parent="."]

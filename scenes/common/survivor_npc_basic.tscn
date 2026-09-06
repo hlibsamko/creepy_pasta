@@ -64,7 +64,7 @@ grants_journal = true
 journal_entry_id = "listener"
 journal_fact_index = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="BodyCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 shape = SubResource("Shape_trigger")
 

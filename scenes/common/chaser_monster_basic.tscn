@@ -55,12 +55,12 @@ notes_required_to_activate = 1
 patrol_radius = 4.0
 patrol_wait_time = 1.6
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="BodyCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_body")
 
 [node name="KillZone" type="Area3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
+[node name="KillCollision" type="CollisionShape3D" parent="KillZone"]
 shape = SubResource("Shape_kill_zone")
 
 [node name="Body" type="MeshInstance3D" parent="."]

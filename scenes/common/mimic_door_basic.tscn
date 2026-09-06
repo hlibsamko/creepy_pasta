@@ -43,7 +43,7 @@ script = ExtResource("1_mimic")
 collision_layer = 0
 collision_mask = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="DoorCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_trigger")
 
 [node name="Door" type="MeshInstance3D" parent="."]
