@@ -4,7 +4,7 @@ const MAIN_SCENE := preload("res://scenes/main.tscn")
 const COPIED_DOOR_ROOM_SCENE := preload("res://scenes/copied_door_room.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
 const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
-const FOURTH_ROOM_SCENE := preload("res://scenes/fourth_room.tscn")
+const FINAL_WATCHER_ROOM_SCENE := preload("res://scenes/final_watcher_room.tscn")
 const BREAKER_TRIGGER_SCENE := preload("res://scenes/common/breaker_outage_trigger_basic.tscn")
 
 var main: Node
@@ -113,10 +113,10 @@ func _run_smoke() -> void:
 	_assert_note_gated_monster_definitions("corridor")
 	_assert_exit_definition("corridor")
 
-	main.call("_load_level_scene", FOURTH_ROOM_SCENE)
+	main.call("_load_level_scene", FINAL_WATCHER_ROOM_SCENE)
 	await get_tree().process_frame
 	_assert_level_state("fourth room", 2, 2, 0, true)
-	_assert_fourth_room_structure()
+	_assert_final_watcher_room_structure()
 	_assert_active_note_limit("fourth room")
 	_assert_authoritative_note_copy("fourth room")
 	_assert_client_discovery_whitelist("fourth room")
@@ -138,7 +138,7 @@ func _run_smoke() -> void:
 	get_tree().quit()
 
 
-func _assert_fourth_room_structure() -> void:
+func _assert_final_watcher_room_structure() -> void:
 	var loaded_level := main.get("level") as Node3D
 	if not loaded_level:
 		_fail("Fourth room did not instantiate as a 3D level")
@@ -308,8 +308,8 @@ func _assert_level_sequence() -> void:
 		_fail("Level sequence does not route The Unlit -> corridor")
 		return
 	main.set("current_level_scene", main.CORRIDOR_SCENE)
-	if main.call("_get_next_level_scene") != FOURTH_ROOM_SCENE:
-		_fail("Level sequence does not route corridor -> fourth_room")
+	if main.call("_get_next_level_scene") != FINAL_WATCHER_ROOM_SCENE:
+		_fail("Level sequence does not route corridor -> final_watcher_room")
 		return
 	main.set("current_level_scene", main.WRONG_COPY_ROOM_SCENE)
 

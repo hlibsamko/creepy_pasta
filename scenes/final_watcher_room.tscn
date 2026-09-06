@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://creepy_fourth_room"]
+[gd_scene load_steps=21 format=3 uid="uid://creepy_final_watcher_room"]
 
 [ext_resource type="PackedScene" path="res://scenes/common/level_exit_basic.tscn" id="1_exit"]
 [ext_resource type="PackedScene" path="res://scenes/common/watcher_monster_basic.tscn" id="2_watcher"]
@@ -62,7 +62,7 @@ size = Vector3(0.025, 0.72, 0.025)
 albedo_color = Color(0.78, 0.72, 0.58, 1)
 roughness = 0.82
 
-[node name="FourthRoom" type="Node3D"]
+[node name="FinalWatcherRoom" type="Node3D"]
 
 [node name="Environment" type="Node3D" parent="."]
 

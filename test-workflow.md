@@ -27,7 +27,7 @@ Dreamcore и остальные studies — короткие отдельные 
 4. `endless_house_builder_demo.tscn` — House Survey
 5. `unlit_evidence_chamber.tscn` — The Unlit
 6. `corridor.tscn` — погоня в коридоре
-7. `fourth_room.tscn` — финальная комната
+7. `final_watcher_room.tscn` — финальная комната
 
 Порядок явно задан в `scripts/main.gd`. Dreamcore, poolrooms, mall и hotel в эту последовательность сейчас не входят.
 

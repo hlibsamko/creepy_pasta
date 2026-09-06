@@ -27,7 +27,7 @@ When a scripted collision/visual cluster appears more than once, prefer a reusab
 
 - `scenes/main.tscn` is intentionally shallow: services, the active level, runtime players, and UI remain direct children.
 - `scenes/endless_house/kit/house_low_sideboard.tscn` keeps its collision at the gameplay root and groups all dressing under `Visuals`.
-- `scenes/fourth_room.tscn` keeps network-addressed evidence, dialogue, monsters, and `LevelExit` paths stable while grouping its static shell under `Environment/Architecture/{Floors,Walls,Ceilings,Openings}`. Its Watcher and exit remain reusable common-scene instances.
+- `scenes/final_watcher_room.tscn` keeps network-addressed evidence, dialogue, monsters, and `LevelExit` paths stable while grouping its static shell under `Environment/Architecture/{Floors,Walls,Ceilings,Openings}`. Its Watcher and exit remain reusable common-scene instances.
 - `scenes/copied_door_room.tscn` follows the canonical `Environment/Architecture/{Floors,Walls,Ceilings,Openings}` hierarchy while retaining direct `PressurePlate`, `DialogueNpcs`, `Notes`, and `LevelExit` contracts.
 - `scenes/corridor.tscn` keeps its shell under `Environment/Architecture/{Floors,Walls,Ceilings,Openings}` and instances `corridor_photo_chaser_basic.tscn` twice, retaining its two stable monster paths and per-instance pacing/visual overrides.
 - `scenes/level.tscn` groups ordinary shell nodes under `Environment/Architecture/{Floors,Walls,Ceilings,Openings}`, dressing under `Environment/Props`, and lights under `Environment/Lighting`. Threshold walls, threshold/spawn markers, evidence, dialogue, monster, and exit roots remain direct children because runtime/session source IDs treat those paths as contracts.

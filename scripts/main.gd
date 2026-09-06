@@ -11,7 +11,7 @@ const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
 const HOUSE_BUILDER_DEMO_SCENE := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
 const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 const CORRIDOR_SCENE := preload("res://scenes/corridor.tscn")
-const FOURTH_ROOM_SCENE := preload("res://scenes/fourth_room.tscn")
+const FINAL_WATCHER_ROOM_SCENE := preload("res://scenes/final_watcher_room.tscn")
 const SPAWNS := [
 	Vector3(-5.5, 0.2, -4.5),
 	Vector3(5.5, 0.2, -4.5),
@@ -39,7 +39,7 @@ const SESSION_LEVEL_PATHS := [
 	"res://scenes/endless_house/endless_house_builder_demo.tscn",
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn",
 	"res://scenes/corridor.tscn",
-	"res://scenes/fourth_room.tscn",
+	"res://scenes/final_watcher_room.tscn",
 ]
 const SESSION_EXIT_DEFINITIONS := {
 	"res://scenes/wrong_copy_room.tscn": {
@@ -66,7 +66,7 @@ const SESSION_EXIT_DEFINITIONS := {
 		"position": Vector3(0.0, 1.15, 34.5),
 		"activation_radius": 2.0,
 	},
-	"res://scenes/fourth_room.tscn": {
+	"res://scenes/final_watcher_room.tscn": {
 		"position": Vector3(0.0, 1.15, -4.55),
 		"activation_radius": 2.0,
 	},
@@ -135,7 +135,7 @@ const SESSION_NOTE_DEFINITIONS := {
 		},
 	},
 	"res://scenes/corridor.tscn": {},
-	"res://scenes/fourth_room.tscn": {
+	"res://scenes/final_watcher_room.tscn": {
 		"WatcherWarning": {
 			"text": "It only moves inside your attention. Look away before it learns your face.",
 			"entry_id": "watcher",
@@ -286,7 +286,7 @@ const SESSION_CLIENT_DISCOVERIES := {
 		},
 	],
 	"res://scenes/corridor.tscn": [],
-	"res://scenes/fourth_room.tscn": [
+	"res://scenes/final_watcher_room.tscn": [
 		{
 			"source_id": "Monsters/WatcherMonster",
 			"unlock": false,
@@ -344,7 +344,7 @@ const SESSION_NOTE_GATED_MONSTERS := {
 	"res://scenes/endless_house/endless_house_builder_demo.tscn": [],
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn": [],
 	"res://scenes/corridor.tscn": [],
-	"res://scenes/fourth_room.tscn": [],
+	"res://scenes/final_watcher_room.tscn": [],
 }
 
 #endregion
@@ -1507,7 +1507,7 @@ func _get_level_title_from_path(level_path: String) -> String:
 			return "Maintenance Test"
 		"res://scenes/corridor.tscn":
 			return "Corridor"
-		"res://scenes/fourth_room.tscn":
+		"res://scenes/final_watcher_room.tscn":
 			return "Final Room"
 	return "Unknown Room"
 
@@ -1781,7 +1781,7 @@ func _get_session_spawn_positions(level_path: String) -> Array:
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.0, 0.2, 4.8), Vector3(4.0, 0.2, 3.2)]
 		"res://scenes/corridor.tscn":
 			return [Vector3(0.0, 0.2, -26.0), Vector3(-0.8, 0.2, -26.0), Vector3(0.8, 0.2, -26.0)]
-		"res://scenes/fourth_room.tscn":
+		"res://scenes/final_watcher_room.tscn":
 			return [Vector3(0.0, 0.2, 3.2), Vector3(-1.0, 0.2, 3.2), Vector3(1.0, 0.2, 3.2)]
 	return SPAWNS
 
@@ -1804,7 +1804,7 @@ func _get_spawn_positions() -> Array:
 			Vector3(-0.8, 0.2, -26.0),
 			Vector3(0.8, 0.2, -26.0),
 		]
-	if current_level_scene == FOURTH_ROOM_SCENE:
+	if current_level_scene == FINAL_WATCHER_ROOM_SCENE:
 		return [
 			Vector3(0.0, 0.2, 3.2),
 			Vector3(-1.0, 0.2, 3.2),
@@ -2087,7 +2087,7 @@ func _on_level_exit_entered() -> void:
 	if _is_offline_branch_study():
 		_leave_offline_branch_study()
 		return
-	if current_level_scene == FOURTH_ROOM_SCENE:
+	if current_level_scene == FINAL_WATCHER_ROOM_SCENE:
 		if not _is_journal_complete():
 			ui.set_status("The final opening rejects an incomplete field journal.")
 			_update_objective()
@@ -2437,7 +2437,7 @@ func _is_online_peer_facing_position(
 
 
 func _is_session_level_open_by_default(level_path: String) -> bool:
-	return level_path == CORRIDOR_SCENE.resource_path or level_path == FOURTH_ROOM_SCENE.resource_path
+	return level_path == CORRIDOR_SCENE.resource_path or level_path == FINAL_WATCHER_ROOM_SCENE.resource_path
 
 
 #endregion
@@ -2495,7 +2495,7 @@ func _request_complete_game() -> void:
 			})
 			return
 		if (
-			str(online_state["level_path"]) != FOURTH_ROOM_SCENE.resource_path
+			str(online_state["level_path"]) != FINAL_WATCHER_ROOM_SCENE.resource_path
 			or not bool(online_state["exit_open"])
 			or not _is_online_session_journal_complete(online_state)
 			or not _is_online_peer_near_session_exit(requesting_peer_id, online_state)
@@ -2512,7 +2512,7 @@ func _request_complete_game() -> void:
 			_complete_game.rpc_id(int(member_id))
 		_broadcast_online_session_list()
 		return
-	if current_level_scene != FOURTH_ROOM_SCENE or not _is_level_exit_open() or not _is_journal_complete():
+	if current_level_scene != FINAL_WATCHER_ROOM_SCENE or not _is_level_exit_open() or not _is_journal_complete():
 		_log_server_event("victory_ignored", {"sender": multiplayer.get_remote_sender_id()})
 		return
 
@@ -2546,7 +2546,7 @@ func _advance_online_session(state: Dictionary) -> void:
 func _get_next_session_level_path(current_path: String) -> String:
 	var index := SESSION_LEVEL_PATHS.find(current_path)
 	if index < 0 or index >= SESSION_LEVEL_PATHS.size() - 1:
-		return FOURTH_ROOM_SCENE.resource_path
+		return FINAL_WATCHER_ROOM_SCENE.resource_path
 	return str(SESSION_LEVEL_PATHS[index + 1])
 
 
@@ -2624,8 +2624,8 @@ func _get_next_level_scene() -> PackedScene:
 	if current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return CORRIDOR_SCENE
 	if current_level_scene == CORRIDOR_SCENE:
-		return FOURTH_ROOM_SCENE
-	return FOURTH_ROOM_SCENE
+		return FINAL_WATCHER_ROOM_SCENE
+	return FINAL_WATCHER_ROOM_SCENE
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -3273,7 +3273,7 @@ func _get_qa_level_entries() -> Array:
 		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_BUILDER_DEMO_SCENE.resource_path},
 		{"title": "05 • The Unlit — Maintenance Wing", "scene_path": UNLIT_EVIDENCE_SCENE.resource_path},
 		{"title": "06 • Corridor — Do Not Sprint", "scene_path": CORRIDOR_SCENE.resource_path},
-		{"title": "07 • Final Room — Do Not Stare", "scene_path": FOURTH_ROOM_SCENE.resource_path},
+		{"title": "07 • Final Room — Do Not Stare", "scene_path": FINAL_WATCHER_ROOM_SCENE.resource_path},
 	]
 	for branch in BranchCatalog.ALL:
 		entries.append({
@@ -3482,7 +3482,7 @@ func _qa_complete_objectives() -> void:
 	for breaker in level.find_children("GeneratedBreakerTrigger*", "Area3D", true, false):
 		if breaker.has_method("trigger_outage"):
 			breaker.call("trigger_outage")
-	if current_level_scene == FOURTH_ROOM_SCENE:
+	if current_level_scene == FINAL_WATCHER_ROOM_SCENE:
 		monster_journal.unlock()
 		for entry_id in ["listener", "watcher", "mimic"]:
 			for fact_index in range(1, int(monster_journal.get_fact_total(entry_id)) + 1):
@@ -3651,8 +3651,8 @@ func _get_level_scene_by_path(scene_path: String) -> PackedScene:
 			return UNLIT_EVIDENCE_SCENE
 		CORRIDOR_SCENE.resource_path:
 			return CORRIDOR_SCENE
-		FOURTH_ROOM_SCENE.resource_path:
-			return FOURTH_ROOM_SCENE
+		FINAL_WATCHER_ROOM_SCENE.resource_path:
+			return FINAL_WATCHER_ROOM_SCENE
 		_:
 			var branch_scene := BranchCatalog.find_scene_by_path(scene_path)
 			if branch_scene != null:
@@ -4147,14 +4147,14 @@ func _update_objective() -> void:
 		objective = BranchCatalog.find_by_scene(current_level_scene).objective
 	elif current_level_scene == CORRIDOR_SCENE:
 		objective = "Run the corridor. Sprint only when you can afford to be heard."
-	elif current_level_scene == FOURTH_ROOM_SCENE:
+	elif current_level_scene == FINAL_WATCHER_ROOM_SCENE:
 		if _is_journal_complete():
 			objective = "The field journal is complete. Leave through the final opening."
 		else:
 			objective = "Verify the Watcher and the pulsing false doorway before choosing an exit."
 
 	if level_exit and _is_level_exit_open():
-		if current_level_scene == FOURTH_ROOM_SCENE:
+		if current_level_scene == FINAL_WATCHER_ROOM_SCENE:
 			if _is_journal_complete():
 				objective = "The field journal is complete. Leave through the final opening."
 		else:
@@ -4190,7 +4190,7 @@ func _get_level_title() -> String:
 		return branch.title
 	if current_level_scene == CORRIDOR_SCENE:
 		return "Corridor: Do Not Sprint"
-	if current_level_scene == FOURTH_ROOM_SCENE:
+	if current_level_scene == FINAL_WATCHER_ROOM_SCENE:
 		return "Final Room: Do Not Stare"
 	return "Unknown Room"
 

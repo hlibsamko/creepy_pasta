@@ -56,7 +56,7 @@ func _get_ambience_profile(level_path: String) -> Vector2:
 		return Vector2(49.0, 97.0)
 	if "corridor" in level_path:
 		return Vector2(42.0, 75.0)
-	if "fourth_room" in level_path:
+	if "final_watcher_room" in level_path:
 		return Vector2(72.0, 144.0)
 	return Vector2(58.0, 91.0)
 
