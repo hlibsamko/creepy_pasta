@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: replace direct third-party model instances with project-owned prop wrappers, then continue descriptive route renames. Empty Mall, Endless Hotel, Dreamcore, Poolrooms, and all core authored rooms now expose the editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: finish the House Survey production rename without losing the scene currently open in Godot, then continue role-based naming in reusable common scenes. Imported furniture now goes through project-owned wrappers, and the first higher-detail cabinet is integrated into the production House kit. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 

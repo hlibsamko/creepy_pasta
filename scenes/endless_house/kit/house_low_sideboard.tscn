@@ -1,6 +1,6 @@
 [gd_scene load_steps=53 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/props/kenney_desk_visual.tscn" id="1_desk"]
+[ext_resource type="PackedScene" path="res://scenes/props/polyhaven_gothic_cabinet_visual.tscn" id="1_cabinet"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_radio_visual.tscn" id="2_radio"]
 
 [sub_resource type="BoxShape3D" id="Shape_sideboard"]
@@ -360,24 +360,8 @@ shape = SubResource("Shape_sideboard")
 
 [node name="WallDressing" type="Node3D" parent="Visuals"]
 
-[node name="Body" type="MeshInstance3D" parent="Visuals/Furniture"]
-mesh = SubResource("Mesh_body")
-surface_material_override/0 = SubResource("Mat_body")
-
-[node name="Top" type="MeshInstance3D" parent="Visuals/Furniture"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
-mesh = SubResource("Mesh_top")
-surface_material_override/0 = SubResource("Mat_top")
-
-[node name="HandleLeft" type="MeshInstance3D" parent="Visuals/Furniture"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68, 0.18, -0.365)
-mesh = SubResource("Mesh_handle")
-surface_material_override/0 = SubResource("Mat_handle")
-
-[node name="HandleRight" type="MeshInstance3D" parent="Visuals/Furniture"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.68, 0.18, -0.365)
-mesh = SubResource("Mesh_handle")
-surface_material_override/0 = SubResource("Mat_handle")
+[node name="GothicCabinetVisual" parent="Visuals/Furniture" instance=ExtResource("1_cabinet")]
+transform = Transform3D(1.63, 0, 0, 0, 0.47, 0, 0, 0, 0.69, 0, -0.56, 0)
 
 [node name="LampBase" type="MeshInstance3D" parent="Visuals/SurfaceProps"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82, 0.68, -0.14)
@@ -692,6 +676,3 @@ transform = Transform3D(0.96, -0.12, 0, 0.12, 0.96, 0, 0, 0, 1, -1.55, -0.02, 0.
 mesh = SubResource("Mesh_shoe")
 surface_material_override/0 = SubResource("Mat_shoe")
 
-
-[node name="DeskVisual" parent="Visuals/Furniture" instance=ExtResource("1_desk")]
-transform = Transform3D(1.55, 0, 0, 0, 0.98, 0, 0, 0, 0.72, 0, -0.56, 0)

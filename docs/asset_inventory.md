@@ -13,6 +13,7 @@ This ledger answers one practical question: where is each downloaded visual actu
 | Kenney shower | `scenes/props/kenney_shower_visual.tscn` | Poolrooms Gallery: `Environment/Props/Shower` | production | Replace only through this wrapper. |
 | Kenney desk | `scenes/props/kenney_desk_visual.tscn` | Empty Mall kiosk, Dreamcore barrier, Endless House sideboard | production | Shared wrapper; collision remains in each owning kit scene. |
 | Kenney bathtub | `scenes/props/kenney_bathtub_visual.tscn` | Poolrooms low-barrier kit | production | Collision remains in the Poolrooms kit scene. |
+| Poly Haven Gothic Cabinet 01 (1K glTF) | `scenes/props/polyhaven_gothic_cabinet_visual.tscn` | House Survey repeated sideboard: `HouseLowSideboard/Visuals/Furniture/GothicCabinetVisual` | production | The House kit owns the collision and fitted transform; replace only through the wrapper. |
 | Quaternius monster | chaser visual child | Ordinary chaser production route | production-temporary | Replace or improve in a dedicated monster batch. |
 | Poly Haven interior tiles | material imports | Selected interior surfaces | production-partial | Map exact scene/material consumers during level cleanup. |
 
