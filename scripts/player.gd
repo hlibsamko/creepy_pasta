@@ -22,7 +22,7 @@ const REMOTE_SYNC_MAX_ELAPSED := 0.5
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 @onready var body_mesh: MeshInstance3D = $BodyMesh
-@onready var collision_shape: CollisionShape3D = $CollisionShape3D
+@onready var collision_shape: CollisionShape3D = $PlayerCollision
 
 var gravity := ProjectSettings.get_setting("physics/3d/default_gravity") as float
 var controls_enabled := true
