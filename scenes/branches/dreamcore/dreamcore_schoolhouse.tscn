@@ -35,10 +35,26 @@ note_text = "Attendance card: every desk was assigned to the same absent student
 
 [node name="DreamcoreSchoolhouse" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Architecture" type="Node3D" parent="Environment"]
+
+[node name="Floors" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Walls" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Ceilings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Openings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Props" type="Node3D" parent="Environment"]
+
+[node name="Lighting" type="Node3D" parent="Environment"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_dreamcore")
 
-[node name="FalseDaylight" type="DirectionalLight3D" parent="."]
+[node name="FalseDaylight" type="DirectionalLight3D" parent="Environment/Lighting"]
 rotation_degrees = Vector3(-48, -32, 0)
 light_color = Color(0.74, 0.84, 1, 1)
 light_energy = 0.7
@@ -60,21 +76,19 @@ generate_chaser_monsters = false
 generate_mimic_doors = false
 generate_light_shy_monsters = false
 
-[node name="Dressing" type="Node3D" parent="."]
-
-[node name="OversizedBear" parent="Dressing" instance=ExtResource("8_bear")]
+[node name="OversizedBear" parent="Environment/Props" instance=ExtResource("8_bear")]
 transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, 35, 0, 22)
 
-[node name="EmptyChairA" parent="Dressing" instance=ExtResource("9_chair")]
+[node name="EmptyChairA" parent="Environment/Props" instance=ExtResource("9_chair")]
 transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, 17, 0, 17)
 
-[node name="EmptyChairB" parent="Dressing" instance=ExtResource("9_chair")]
+[node name="EmptyChairB" parent="Environment/Props" instance=ExtResource("9_chair")]
 transform = Transform3D(-1.35, 0, 0, 0, 1.35, 0, 0, 0, -1.35, 23, 0, 25)
 
-[node name="SilentRadio" parent="Dressing" instance=ExtResource("10_radio")]
+[node name="SilentRadio" parent="Environment/Props" instance=ExtResource("10_radio")]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 8, 0.2, 21)
 
-[node name="Plant" parent="Dressing" instance=ExtResource("11_plant")]
+[node name="Plant" parent="Environment/Props" instance=ExtResource("11_plant")]
 transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 37, 0, 9)
 
 [node name="Notes" type="Node3D" parent="."]
