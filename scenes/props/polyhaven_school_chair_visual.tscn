@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/polyhaven/school_chair_01/SchoolChair_01_1k.gltf" id="1_model"]
+
+[node name="PolyHavenSchoolChairVisual" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
