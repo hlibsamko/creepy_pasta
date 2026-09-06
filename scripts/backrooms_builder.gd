@@ -117,6 +117,12 @@ const VALID_LAYOUT_SYMBOLS := "#.LSENDQKOndqkoWCAMUBPHGRT"
 
 var generated_root: Node3D
 var generated_geometry_root: Node3D
+var generated_floors_root: Node3D
+var generated_walls_root: Node3D
+var generated_ceilings_root: Node3D
+var generated_openings_root: Node3D
+var generated_props_root: Node3D
+var generated_lighting_root: Node3D
 var generated_markers_root: Node3D
 var generated_mechanics_root: Node3D
 var generated_notes_root: Node3D
@@ -157,6 +163,12 @@ func rebuild() -> void:
 	if Engine.is_editor_hint():
 		generated_root.owner = get_tree().edited_scene_root
 	generated_geometry_root = _add_generated_group("Geometry")
+	generated_floors_root = _add_generated_subgroup(generated_geometry_root, "Floors")
+	generated_walls_root = _add_generated_subgroup(generated_geometry_root, "Walls")
+	generated_ceilings_root = _add_generated_subgroup(generated_geometry_root, "Ceilings")
+	generated_openings_root = _add_generated_subgroup(generated_geometry_root, "Openings")
+	generated_props_root = _add_generated_group("Props")
+	generated_lighting_root = _add_generated_group("Lighting")
 	generated_markers_root = _add_generated_group("Markers")
 	generated_mechanics_root = _add_generated_group("Mechanics")
 	generated_notes_root = _add_generated_group("Notes")
@@ -170,14 +182,14 @@ func rebuild() -> void:
 			var position := Vector3(x * cell_size, 0.0, z * cell_size)
 			match marker:
 				"#":
-					_add_piece(wall_scene, position)
+					_add_piece(wall_scene, position, generated_walls_root, "WallX%02dZ%02d" % [x, z])
 				".", "L", "S", "E", "N", "D", "Q", "K", "O", "n", "d", "q", "k", "o", "W", "C", "A", "M", "U", "B", "P", "H", "G", "R", "T":
-					_add_piece(floor_scene, position)
-					_add_piece(ceiling_scene, position)
+					_add_piece(floor_scene, position, generated_floors_root, "FloorX%02dZ%02d" % [x, z])
+					_add_piece(ceiling_scene, position, generated_ceilings_root, "CeilingX%02dZ%02d" % [x, z])
 					if marker == "L":
-						_add_piece(light_scene, position)
+						_add_piece(light_scene, position, generated_lighting_root, "LightX%02dZ%02d" % [x, z])
 					elif marker == "B":
-						_add_piece(low_barrier_scene, position)
+						_add_piece(low_barrier_scene, position, generated_props_root, "LowBarrierX%02dZ%02d" % [x, z])
 					elif marker == "P":
 						_add_pressure_plate(position + Vector3(0.0, 0.03, 0.0), true, 1)
 					elif marker == "H":
@@ -318,12 +330,13 @@ func _is_layout_walkable(rows: PackedStringArray, x: int, z: int) -> bool:
 	return rows[z].substr(x, 1) != "#"
 
 
-func _add_piece(scene: PackedScene, position: Vector3) -> void:
+func _add_piece(scene: PackedScene, position: Vector3, parent: Node3D, piece_name: String) -> void:
 	if not scene:
 		return
 	var piece := scene.instantiate() as Node3D
+	piece.name = piece_name
 	piece.position += position
-	generated_geometry_root.add_child(piece)
+	parent.add_child(piece)
 	if Engine.is_editor_hint():
 		piece.owner = get_tree().edited_scene_root
 
@@ -332,6 +345,15 @@ func _add_generated_group(group_name: String) -> Node3D:
 	var group := Node3D.new()
 	group.name = group_name
 	generated_root.add_child(group)
+	if Engine.is_editor_hint():
+		group.owner = get_tree().edited_scene_root
+	return group
+
+
+func _add_generated_subgroup(parent: Node3D, group_name: String) -> Node3D:
+	var group := Node3D.new()
+	group.name = group_name
+	parent.add_child(group)
 	if Engine.is_editor_hint():
 		group.owner = get_tree().edited_scene_root
 	return group

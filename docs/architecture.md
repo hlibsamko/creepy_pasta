@@ -31,7 +31,7 @@ When a scripted collision/visual cluster appears more than once, prefer a reusab
 - `scenes/next_place.tscn` follows the same static-shell hierarchy while retaining direct `PressurePlate`, `DialogueNpcs`, `Notes`, and `LevelExit` contracts.
 - `scenes/corridor.tscn` instances `corridor_photo_chaser_basic.tscn` twice, retaining its two stable monster paths and per-instance pacing/visual overrides instead of copying collision and sprite children.
 - `scenes/level.tscn` groups only ordinary shell/lighting/dressing nodes. Threshold walls, threshold/spawn markers, evidence, dialogue, monster, and exit roots remain direct children because tests, startup bindings, and session source IDs treat those paths as contracts.
-- Builder-generated levels use `GeneratedBackrooms/{Geometry,Markers,Mechanics,Notes,Monsters}` as their runtime hierarchy.
+- Builder-generated levels use `GeneratedBackrooms/Geometry/{Floors,Walls,Ceilings,Openings}` for architecture, plus sibling `Props`, `Lighting`, `Markers`, `Mechanics`, `Notes`, and `Monsters` groups. Gameplay-addressed marker/mechanic/monster paths remain stable.
 - `scripts/main.gd` uses foldable responsibility regions; tree-query behavior is centralized in `LevelRuntimeQuery` while RPC methods remain on `Main`.
 
 ## Imported asset policy

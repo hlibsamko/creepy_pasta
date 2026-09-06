@@ -51,7 +51,7 @@ Each kit scene root owns its authored local transform. The builder adds the cell
 | `R` | Floor, ceiling, one-player hold switch, and pressure-powered work light |
 | `T` | Floor, ceiling, and one-shot breaker outage trigger |
 
-Generated content is grouped under `GeneratedBackrooms` as `Geometry`, `Markers`, `Mechanics`, `Notes`, and `Monsters`.
+Generated content is grouped under `GeneratedBackrooms`. Architecture is split into `Geometry/{Floors,Walls,Ceilings,Openings}`; ordinary dressing and fixtures use sibling `Props` and `Lighting` groups; markers, mechanics, notes, and monsters keep their stable groups.
 
 `P` pressure plates are latch-once by default, so they are compatible with solo local testing. Use `H` for a true one-player hold switch and `G` for a two-player hold switch when a co-op gate should stay open only while players stand on it.
 

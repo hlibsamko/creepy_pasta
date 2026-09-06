@@ -5,6 +5,8 @@
 
 The Endless House kit reuses `BackroomsBuilder` rather than maintaining a second generation system. The builder owns layout parsing and gameplay placement; the scene supplies a different visual kit through exported `PackedScene` slots.
 
+Generated architecture is split into `GeneratedBackrooms/Geometry/{Floors,Walls,Ceilings,Openings}`. Props and lighting are sibling groups, so ceilings, fixtures, and dressing can each be hidden or selected at once in the editor without touching gameplay nodes.
+
 ## Files
 
 - Demo: `res://scenes/endless_house/endless_house_builder_demo.tscn`
