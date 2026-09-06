@@ -170,7 +170,7 @@ func _on_connected() -> void:
 	if int(main.collected_notes) != 0:
 		_fail("Online session reset did not clear collected notes")
 		return
-	if main.current_level_scene.resource_path != "res://scenes/level.tscn":
+	if main.current_level_scene.resource_path != "res://scenes/wrong_copy_room.tscn":
 		_fail("Online session reset did not restore Room 1")
 		return
 	if main.monster_journal.unlocked:
@@ -209,7 +209,7 @@ func _advance_to_backrooms() -> bool:
 		return false
 	main._request_next_level_transition.rpc_id(1)
 	await get_tree().create_timer(0.4).timeout
-	if main.current_level_scene.resource_path != "res://scenes/level.tscn":
+	if main.current_level_scene.resource_path != "res://scenes/wrong_copy_room.tscn":
 		_fail("Room 1 accepted a transition request away from its exit")
 		return false
 	await _move_local_player_to(Vector3(0.0, 0.2, 3.8))

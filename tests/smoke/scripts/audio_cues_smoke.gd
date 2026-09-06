@@ -10,7 +10,7 @@ func _ready() -> void:
 		_fail("Maintenance power-change cues are missing")
 		return
 
-	var default_profile: Vector2 = cues.call("_get_ambience_profile", "res://scenes/level.tscn")
+	var default_profile: Vector2 = cues.call("_get_ambience_profile", "res://scenes/wrong_copy_room.tscn")
 	var house_profile: Vector2 = cues.call(
 		"_get_ambience_profile",
 		"res://scenes/endless_house/endless_house_builder_demo.tscn"

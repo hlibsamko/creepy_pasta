@@ -31,13 +31,13 @@ func _run_smoke() -> void:
 	_assert_pressure_plate_definitions("initial level")
 	_assert_exit_definition("initial level")
 	await _assert_note_collection_guards()
-	main.call("_load_level_scene", main.LEVEL_SCENE)
+	main.call("_load_level_scene", main.WRONG_COPY_ROOM_SCENE)
 	await get_tree().process_frame
 	_assert_opening_rumor_source()
 	_assert_opening_chase_layout()
 	_assert_plain_note_collection_preserves_input()
 	_assert_offline_restart_restores_player()
-	main.call("_load_level_scene", main.LEVEL_SCENE)
+	main.call("_load_level_scene", main.WRONG_COPY_ROOM_SCENE)
 	await get_tree().process_frame
 	await _assert_note_interaction_restores_input()
 	await _assert_debug_unlit_preview()
@@ -284,7 +284,7 @@ func _assert_exit_box_size(room_exit: LevelExit, expected_size: Vector3, label: 
 
 
 func _assert_level_sequence() -> void:
-	main.set("current_level_scene", main.LEVEL_SCENE)
+	main.set("current_level_scene", main.WRONG_COPY_ROOM_SCENE)
 	if main.call("_get_next_level_scene") != NEXT_PLACE_SCENE:
 		_fail("Level sequence does not route level -> next_place")
 		return
@@ -311,7 +311,7 @@ func _assert_level_sequence() -> void:
 	if main.call("_get_next_level_scene") != FOURTH_ROOM_SCENE:
 		_fail("Level sequence does not route corridor -> fourth_room")
 		return
-	main.set("current_level_scene", main.LEVEL_SCENE)
+	main.set("current_level_scene", main.WRONG_COPY_ROOM_SCENE)
 
 
 func _assert_session_reassignment_cleanup() -> void:
@@ -445,7 +445,7 @@ func _assert_same_level_session_switch_rebuilds_scene() -> void:
 	main.set("active_session_id", "SMOKE_OLD")
 	main.call(
 		"_sync_session_state",
-		main.LEVEL_SCENE.resource_path,
+		main.WRONG_COPY_ROOM_SCENE.resource_path,
 		first_session_notes,
 		1,
 		false,
@@ -463,7 +463,7 @@ func _assert_same_level_session_switch_rebuilds_scene() -> void:
 
 	main.call(
 		"_sync_session_state",
-		main.LEVEL_SCENE.resource_path,
+		main.WRONG_COPY_ROOM_SCENE.resource_path,
 		clean_session_notes,
 		0,
 		false,
@@ -1578,7 +1578,7 @@ func _assert_debug_unlit_preview() -> void:
 	main.call("_on_level_exit_entered")
 	await get_tree().process_frame
 	if (
-		main.get("current_level_scene") != main.LEVEL_SCENE
+		main.get("current_level_scene") != main.WRONG_COPY_ROOM_SCENE
 		or int(main.get("session_collected_notes")) != session_records_before
 		or not main.get("players").get_node_or_null("1")
 	):

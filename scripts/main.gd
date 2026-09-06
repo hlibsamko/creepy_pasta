@@ -5,7 +5,7 @@ extends Node3D
 const LEVEL_RUNTIME_QUERY := preload("res://scripts/level_runtime_query.gd")
 const ACCOUNT_GAME_BRIDGE := preload("res://scripts/account_game_bridge.gd")
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
-const LEVEL_SCENE := preload("res://scenes/level.tscn")
+const WRONG_COPY_ROOM_SCENE := preload("res://scenes/wrong_copy_room.tscn")
 const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
 const HOUSE_BUILDER_DEMO_SCENE := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
@@ -33,7 +33,7 @@ const SERVER_MONSTER_SYNC_INTERVAL := 0.1
 const ACCOUNT_AUTH_TIMEOUT_MSEC := 10000
 const ACCOUNT_HEARTBEAT_INTERVAL := 60.0
 const SESSION_LEVEL_PATHS := [
-	"res://scenes/level.tscn",
+	"res://scenes/wrong_copy_room.tscn",
 	"res://scenes/next_place.tscn",
 	"res://scenes/backrooms/backrooms.tscn",
 	"res://scenes/endless_house/endless_house_builder_demo.tscn",
@@ -42,7 +42,7 @@ const SESSION_LEVEL_PATHS := [
 	"res://scenes/fourth_room.tscn",
 ]
 const SESSION_EXIT_DEFINITIONS := {
-	"res://scenes/level.tscn": {
+	"res://scenes/wrong_copy_room.tscn": {
 		"position": Vector3(0.0, 1.15, 5.35),
 		"activation_radius": 2.0,
 	},
@@ -72,7 +72,7 @@ const SESSION_EXIT_DEFINITIONS := {
 	},
 }
 const SESSION_NOTE_DEFINITIONS := {
-	"res://scenes/level.tscn": {
+	"res://scenes/wrong_copy_room.tscn": {
 		"Note1": {
 			"text": "Torn maintenance log: fast footsteps wake it; the runner becomes its clearest target.",
 			"position": Vector3(-4.9, 0.55, -1.8),
@@ -220,7 +220,7 @@ const SESSION_MONSTER_DEFINITIONS := {
 	},
 }
 const SESSION_CLIENT_DISCOVERIES := {
-	"res://scenes/level.tscn": [
+	"res://scenes/wrong_copy_room.tscn": [
 		{
 			"source_id": "DialogueNpcs/EntryRadio",
 			"unlock": false,
@@ -318,7 +318,7 @@ const SESSION_CLIENT_DISCOVERIES := {
 	],
 }
 const SESSION_NOTE_GATED_MONSTERS := {
-	"res://scenes/level.tscn": [
+	"res://scenes/wrong_copy_room.tscn": [
 		{
 			"source_id": "Monsters/OpeningListener",
 			"notes_required": 1,
@@ -366,7 +366,7 @@ var total_notes := 0
 var collected_note_ids: Array[String] = []
 var session_collected_notes := 0
 var started := false
-var current_level_scene: PackedScene = LEVEL_SCENE
+var current_level_scene: PackedScene = WRONG_COPY_ROOM_SCENE
 var nearby_dialogue_npc: DialogueNpc
 var active_dialogue_npc: DialogueNpc
 var active_dialogue_pages: Array[String] = []
@@ -906,7 +906,7 @@ func _reset_session() -> void:
 	monster_journal.reset()
 	ui.set_journal_available(false)
 	_clear_players()
-	_load_level_scene(LEVEL_SCENE)
+	_load_level_scene(WRONG_COPY_ROOM_SCENE)
 	_update_hud()
 
 
@@ -1312,7 +1312,7 @@ func _create_online_session_state(session_id: String) -> Dictionary:
 	return {
 		"id": session_id,
 		"name": "Session %s" % session_id.trim_prefix("S"),
-		"level_path": LEVEL_SCENE.resource_path,
+		"level_path": WRONG_COPY_ROOM_SCENE.resource_path,
 		"collected_note_ids": [],
 		"session_collected_notes": 0,
 		"exit_open": false,
@@ -1495,7 +1495,7 @@ func _get_online_session_for_peer(peer_id: int) -> Dictionary:
 
 func _get_level_title_from_path(level_path: String) -> String:
 	match level_path:
-		"res://scenes/level.tscn":
+		"res://scenes/wrong_copy_room.tscn":
 			return "Room 1"
 		"res://scenes/next_place.tscn":
 			return "Room 2"
@@ -1640,7 +1640,7 @@ func _request_session_reset() -> void:
 
 
 func _reset_online_session_state(state: Dictionary) -> void:
-	state["level_path"] = LEVEL_SCENE.resource_path
+	state["level_path"] = WRONG_COPY_ROOM_SCENE.resource_path
 	state["collected_note_ids"] = []
 	state["session_collected_notes"] = 0
 	state["exit_open"] = false
@@ -1686,7 +1686,7 @@ func _apply_session_reset() -> void:
 	active_dialogue_pages.clear()
 	active_dialogue_index = 0
 	_clear_players()
-	_load_level_scene(LEVEL_SCENE)
+	_load_level_scene(WRONG_COPY_ROOM_SCENE)
 	started = true
 	if _is_network_server():
 		_spawn_current_players()
@@ -1771,7 +1771,7 @@ func _move_player_to_online_session_remote(
 
 func _get_session_spawn_positions(level_path: String) -> Array:
 	match level_path:
-		"res://scenes/level.tscn":
+		"res://scenes/wrong_copy_room.tscn":
 			return [Vector3(-0.8, 0.2, -4.15), Vector3(0.8, 0.2, -4.15)]
 		"res://scenes/backrooms/backrooms.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.8, 0.2, 4.0), Vector3(3.2, 0.2, 4.0)]
@@ -1789,7 +1789,7 @@ func _get_session_spawn_positions(level_path: String) -> Array:
 func _get_session_spawn_yaw(level_path: String) -> float:
 	if level_path == HOUSE_BUILDER_DEMO_SCENE.resource_path or level_path == UNLIT_EVIDENCE_SCENE.resource_path:
 		return -PI * 0.5
-	if level_path == LEVEL_SCENE.resource_path or level_path == CORRIDOR_SCENE.resource_path:
+	if level_path == WRONG_COPY_ROOM_SCENE.resource_path or level_path == CORRIDOR_SCENE.resource_path:
 		return PI
 	return 0.0
 
@@ -1814,7 +1814,7 @@ func _get_spawn_positions() -> Array:
 
 
 func _get_spawn_yaw() -> float:
-	if current_level_scene == LEVEL_SCENE or current_level_scene == CORRIDOR_SCENE:
+	if current_level_scene == WRONG_COPY_ROOM_SCENE or current_level_scene == CORRIDOR_SCENE:
 		return PI
 	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE or current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return -PI * 0.5
@@ -2523,7 +2523,7 @@ func _request_complete_game() -> void:
 
 func _advance_online_session(state: Dictionary) -> void:
 	var current_path := str(state["level_path"])
-	if current_path == LEVEL_SCENE.resource_path:
+	if current_path == WRONG_COPY_ROOM_SCENE.resource_path:
 		_apply_discovery_to_online_session(state, false, "listener", 2)
 	elif current_path == CORRIDOR_SCENE.resource_path:
 		_apply_discovery_to_online_session(state, false, "listener", 3)
@@ -2598,7 +2598,7 @@ func _enter_next_level() -> void:
 func _record_level_completion_discovery() -> void:
 	var entry_id := ""
 	var fact_index := 0
-	if current_level_scene == LEVEL_SCENE:
+	if current_level_scene == WRONG_COPY_ROOM_SCENE:
 		entry_id = "listener"
 		fact_index = 2
 	elif current_level_scene == CORRIDOR_SCENE:
@@ -2613,7 +2613,7 @@ func _record_level_completion_discovery() -> void:
 
 
 func _get_next_level_scene() -> PackedScene:
-	if current_level_scene == LEVEL_SCENE:
+	if current_level_scene == WRONG_COPY_ROOM_SCENE:
 		return NEXT_PLACE_SCENE
 	if current_level_scene == NEXT_PLACE_SCENE:
 		return BACKROOMS_SCENE
@@ -3190,7 +3190,7 @@ func _leave_offline_branch_study() -> void:
 	debug_preview_session_collected_notes = 0
 	started = false
 	_clear_players()
-	_load_level_scene(LEVEL_SCENE)
+	_load_level_scene(WRONG_COPY_ROOM_SCENE)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	ui.show_branch_browser(BranchCatalog.ALL)
 	ui.set_status("Choose another environment study or return to the main route.")
@@ -3218,7 +3218,7 @@ func _leave_local_unlit_debug_preview() -> void:
 	collected_note_ids.clear()
 	session_collected_notes = debug_preview_session_collected_notes
 	debug_preview_session_collected_notes = 0
-	_load_level_scene(LEVEL_SCENE)
+	_load_level_scene(WRONG_COPY_ROOM_SCENE)
 	_move_current_players_to_spawns()
 	ui.set_status("The maintenance test folded back into the first room.")
 	_update_hud()
@@ -3267,7 +3267,7 @@ func _setup_qa_mode() -> void:
 
 func _get_qa_level_entries() -> Array:
 	var entries := [
-		{"title": "01 • Room 1 — The Wrong Copy", "scene_path": LEVEL_SCENE.resource_path},
+		{"title": "01 • Room 1 — The Wrong Copy", "scene_path": WRONG_COPY_ROOM_SCENE.resource_path},
 		{"title": "02 • Room 2 — The Copied Door", "scene_path": NEXT_PLACE_SCENE.resource_path},
 		{"title": "03 • Backrooms — Yellow Drift", "scene_path": BACKROOMS_SCENE.resource_path},
 		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_BUILDER_DEMO_SCENE.resource_path},
@@ -3639,8 +3639,8 @@ func _apply_level_exit_state(is_open: bool) -> void:
 
 func _get_level_scene_by_path(scene_path: String) -> PackedScene:
 	match scene_path:
-		LEVEL_SCENE.resource_path:
-			return LEVEL_SCENE
+		WRONG_COPY_ROOM_SCENE.resource_path:
+			return WRONG_COPY_ROOM_SCENE
 		NEXT_PLACE_SCENE.resource_path:
 			return NEXT_PLACE_SCENE
 		BACKROOMS_SCENE.resource_path:
@@ -4122,7 +4122,7 @@ func _update_objective() -> void:
 		return
 
 	var objective := ""
-	if current_level_scene == LEVEL_SCENE:
+	if current_level_scene == WRONG_COPY_ROOM_SCENE:
 		objective = "The Listener is behind you. Recover two records along the route and cross the narrow doorway."
 	elif current_level_scene == NEXT_PLACE_SCENE:
 		if collected_notes >= total_notes and total_notes > 0 and not _are_pressure_plates_satisfied():
@@ -4175,7 +4175,7 @@ func _show_level_banner() -> void:
 
 
 func _get_level_title() -> String:
-	if current_level_scene == LEVEL_SCENE:
+	if current_level_scene == WRONG_COPY_ROOM_SCENE:
 		return "Room 1: The Wrong Copy"
 	if current_level_scene == NEXT_PLACE_SCENE:
 		return "Room 2: The Copied Door"

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/network_manager.gd" id="2_network"]
-[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="3_level"]
+[ext_resource type="PackedScene" path="res://scenes/wrong_copy_room.tscn" id="3_level"]
 [ext_resource type="PackedScene" path="res://scenes/game_ui.tscn" id="4_ui"]
 [ext_resource type="Script" path="res://scripts/day_night_cycle.gd" id="5_day_night"]
 [ext_resource type="Script" path="res://scripts/audio_cues.gd" id="6_audio_cues"]

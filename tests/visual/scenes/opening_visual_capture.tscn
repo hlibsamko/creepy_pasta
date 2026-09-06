@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/wrong_copy_room.tscn" id="1_level"]
 [ext_resource type="Script" path="res://tests/visual/scripts/opening_visual_capture.gd" id="2_capture"]
 
 [node name="OpeningVisualCapture" type="Node3D"]
