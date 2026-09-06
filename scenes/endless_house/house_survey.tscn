@@ -28,7 +28,7 @@ note_text = "Survey record: real openings move floor dust. The copy matches ever
 journal_entry_id = "house"
 journal_fact_index = 3
 
-[node name="EndlessHouseBuilderDemo" type="Node3D"]
+[node name="HouseSurvey" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_house")

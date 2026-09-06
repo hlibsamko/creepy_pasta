@@ -13,7 +13,7 @@ func _ready() -> void:
 	var default_profile: Vector2 = cues.call("_get_ambience_profile", "res://scenes/wrong_copy_room.tscn")
 	var house_profile: Vector2 = cues.call(
 		"_get_ambience_profile",
-		"res://scenes/endless_house/endless_house_builder_demo.tscn"
+		"res://scenes/endless_house/house_survey.tscn"
 	)
 	var unlit_profile: Vector2 = cues.call(
 		"_get_ambience_profile",

@@ -406,7 +406,7 @@ Recent local progress:
 - `BackroomsBuilder` now exposes floor, wall, ceiling, light, and low-barrier scenes as inspector-editable `PackedScene` slots while retaining the Backrooms scenes as defaults.
 - Builder symbol `M` now creates a reusable False Door, and the existing variant smoke protects that generation path alongside chasers, Watchers, notes, and pressure switches.
 - A native Endless House kit now provides 4 m floor/ceiling modules, 3.2 m trimmed walls, a warm flickering ceiling fixture, and low sideboard cover under `scenes/endless_house/kit/`.
-- `endless_house_builder_demo.tscn` assembles a generated residential hall with a spawn, evidence record, cover, two lights, real exit, and False Door using the shared builder.
+- `house_survey.tscn` assembles a generated residential hall with a spawn, evidence record, cover, two lights, real exit, and False Door using the shared builder.
 - The new House builder smoke verifies visual-kit resource overrides, generated geometry, gameplay markers, False Door behavior contract, and rebuild idempotence.
 - Physical local debug `F9` opens the generated House survey without changing the production level sequence; it is disabled for release, dedicated, and multiplayer sessions.
 - Local Web debug screenshots confirmed readable cold wall/floor separation, warm route lighting, a visible distant doorway, coherent HUD, and no game-script console errors. Automated pointer lock remained unavailable inside the test browser only.

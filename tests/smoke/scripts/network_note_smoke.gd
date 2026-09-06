@@ -374,7 +374,7 @@ func _advance_through_house_survey() -> bool:
 	await _move_local_player_to(Vector3(34.45, 0.2, 28.0))
 	main._request_next_level_transition.rpc_id(1)
 	await get_tree().create_timer(0.8).timeout
-	if main.current_level_scene.resource_path != "res://scenes/endless_house/endless_house_builder_demo.tscn":
+	if main.current_level_scene.resource_path != "res://scenes/endless_house/house_survey.tscn":
 		_fail("Session did not transition from Backrooms to the House survey")
 		return false
 	if int(main.total_notes) != 1:

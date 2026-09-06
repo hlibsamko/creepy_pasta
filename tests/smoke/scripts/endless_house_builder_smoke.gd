@@ -1,10 +1,10 @@
 extends Node
 
-const HOUSE_DEMO := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
+const HOUSE_SURVEY := preload("res://scenes/endless_house/house_survey.tscn")
 
 
 func _ready() -> void:
-	var demo := HOUSE_DEMO.instantiate()
+	var demo := HOUSE_SURVEY.instantiate()
 	add_child(demo)
 	await get_tree().process_frame
 

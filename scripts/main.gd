@@ -8,7 +8,7 @@ const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const WRONG_COPY_ROOM_SCENE := preload("res://scenes/wrong_copy_room.tscn")
 const COPIED_DOOR_ROOM_SCENE := preload("res://scenes/copied_door_room.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
-const HOUSE_BUILDER_DEMO_SCENE := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
+const HOUSE_SURVEY_SCENE := preload("res://scenes/endless_house/house_survey.tscn")
 const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 const CORRIDOR_SCENE := preload("res://scenes/corridor.tscn")
 const FINAL_WATCHER_ROOM_SCENE := preload("res://scenes/final_watcher_room.tscn")
@@ -36,7 +36,7 @@ const SESSION_LEVEL_PATHS := [
 	"res://scenes/wrong_copy_room.tscn",
 	"res://scenes/copied_door_room.tscn",
 	"res://scenes/backrooms/backrooms.tscn",
-	"res://scenes/endless_house/endless_house_builder_demo.tscn",
+	"res://scenes/endless_house/house_survey.tscn",
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn",
 	"res://scenes/corridor.tscn",
 	"res://scenes/final_watcher_room.tscn",
@@ -54,7 +54,7 @@ const SESSION_EXIT_DEFINITIONS := {
 		"position": Vector3(36.0, 1.15, 28.0),
 		"activation_radius": 2.0,
 	},
-	"res://scenes/endless_house/endless_house_builder_demo.tscn": {
+	"res://scenes/endless_house/house_survey.tscn": {
 		"position": Vector3(40.0, 1.15, 4.0),
 		"activation_radius": 2.0,
 	},
@@ -116,7 +116,7 @@ const SESSION_NOTE_DEFINITIONS := {
 			"collection_radius": 1.75,
 		},
 	},
-	"res://scenes/endless_house/endless_house_builder_demo.tscn": {
+	"res://scenes/endless_house/house_survey.tscn": {
 		"GeneratedNote1": {
 			"text": "Survey record: real openings move floor dust. The copy matches every measurement, but has no draft or room tone.",
 			"entry_id": "house",
@@ -263,7 +263,7 @@ const SESSION_CLIENT_DISCOVERIES := {
 			"interaction_radius": 2.2,
 		},
 	],
-	"res://scenes/endless_house/endless_house_builder_demo.tscn": [
+	"res://scenes/endless_house/house_survey.tscn": [
 		{
 			"source_id": "EndlessHouseBuilder/GeneratedBackrooms/Monsters/GeneratedMimicDoor1",
 			"unlock": false,
@@ -341,7 +341,7 @@ const SESSION_NOTE_GATED_MONSTERS := {
 			"fact_index": 2,
 		},
 	],
-	"res://scenes/endless_house/endless_house_builder_demo.tscn": [],
+	"res://scenes/endless_house/house_survey.tscn": [],
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn": [],
 	"res://scenes/corridor.tscn": [],
 	"res://scenes/final_watcher_room.tscn": [],
@@ -1501,7 +1501,7 @@ func _get_level_title_from_path(level_path: String) -> String:
 			return "Room 2"
 		"res://scenes/backrooms/backrooms.tscn":
 			return "Backrooms"
-		"res://scenes/endless_house/endless_house_builder_demo.tscn":
+		"res://scenes/endless_house/house_survey.tscn":
 			return "House Survey"
 		"res://scenes/endless_house/unlit_evidence_chamber.tscn":
 			return "Maintenance Test"
@@ -1775,7 +1775,7 @@ func _get_session_spawn_positions(level_path: String) -> Array:
 			return [Vector3(-0.8, 0.2, -4.15), Vector3(0.8, 0.2, -4.15)]
 		"res://scenes/backrooms/backrooms.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.8, 0.2, 4.0), Vector3(3.2, 0.2, 4.0)]
-		"res://scenes/endless_house/endless_house_builder_demo.tscn":
+		"res://scenes/endless_house/house_survey.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.0, 0.2, 4.8), Vector3(4.0, 0.2, 3.2)]
 		"res://scenes/endless_house/unlit_evidence_chamber.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.0, 0.2, 4.8), Vector3(4.0, 0.2, 3.2)]
@@ -1787,7 +1787,7 @@ func _get_session_spawn_positions(level_path: String) -> Array:
 
 
 func _get_session_spawn_yaw(level_path: String) -> float:
-	if level_path == HOUSE_BUILDER_DEMO_SCENE.resource_path or level_path == UNLIT_EVIDENCE_SCENE.resource_path:
+	if level_path == HOUSE_SURVEY_SCENE.resource_path or level_path == UNLIT_EVIDENCE_SCENE.resource_path:
 		return -PI * 0.5
 	if level_path == WRONG_COPY_ROOM_SCENE.resource_path or level_path == CORRIDOR_SCENE.resource_path:
 		return PI
@@ -1816,7 +1816,7 @@ func _get_spawn_positions() -> Array:
 func _get_spawn_yaw() -> float:
 	if current_level_scene == WRONG_COPY_ROOM_SCENE or current_level_scene == CORRIDOR_SCENE:
 		return PI
-	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE or current_level_scene == UNLIT_EVIDENCE_SCENE:
+	if current_level_scene == HOUSE_SURVEY_SCENE or current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return -PI * 0.5
 	return 0.0
 
@@ -2618,8 +2618,8 @@ func _get_next_level_scene() -> PackedScene:
 	if current_level_scene == COPIED_DOOR_ROOM_SCENE:
 		return BACKROOMS_SCENE
 	if current_level_scene == BACKROOMS_SCENE:
-		return HOUSE_BUILDER_DEMO_SCENE
-	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE:
+		return HOUSE_SURVEY_SCENE
+	if current_level_scene == HOUSE_SURVEY_SCENE:
 		return UNLIT_EVIDENCE_SCENE
 	if current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return CORRIDOR_SCENE
@@ -3125,7 +3125,7 @@ func _handle_debug_house_preview_input(event: InputEvent) -> bool:
 
 	collected_notes = 0
 	collected_note_ids.clear()
-	_load_level_scene(HOUSE_BUILDER_DEMO_SCENE)
+	_load_level_scene(HOUSE_SURVEY_SCENE)
 	_move_current_players_to_spawns()
 	ui.set_status("The house assembled another hall.")
 	_update_hud()
@@ -3270,7 +3270,7 @@ func _get_qa_level_entries() -> Array:
 		{"title": "01 • Room 1 — The Wrong Copy", "scene_path": WRONG_COPY_ROOM_SCENE.resource_path},
 		{"title": "02 • Room 2 — The Copied Door", "scene_path": COPIED_DOOR_ROOM_SCENE.resource_path},
 		{"title": "03 • Backrooms — Yellow Drift", "scene_path": BACKROOMS_SCENE.resource_path},
-		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_BUILDER_DEMO_SCENE.resource_path},
+		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_SURVEY_SCENE.resource_path},
 		{"title": "05 • The Unlit — Maintenance Wing", "scene_path": UNLIT_EVIDENCE_SCENE.resource_path},
 		{"title": "06 • Corridor — Do Not Sprint", "scene_path": CORRIDOR_SCENE.resource_path},
 		{"title": "07 • Final Room — Do Not Stare", "scene_path": FINAL_WATCHER_ROOM_SCENE.resource_path},
@@ -3645,8 +3645,8 @@ func _get_level_scene_by_path(scene_path: String) -> PackedScene:
 			return COPIED_DOOR_ROOM_SCENE
 		BACKROOMS_SCENE.resource_path:
 			return BACKROOMS_SCENE
-		HOUSE_BUILDER_DEMO_SCENE.resource_path:
-			return HOUSE_BUILDER_DEMO_SCENE
+		HOUSE_SURVEY_SCENE.resource_path:
+			return HOUSE_SURVEY_SCENE
 		UNLIT_EVIDENCE_SCENE.resource_path:
 			return UNLIT_EVIDENCE_SCENE
 		CORRIDOR_SCENE.resource_path:
@@ -4134,7 +4134,7 @@ func _update_objective() -> void:
 			objective = "The yellow exit needs the floor switch before it will hold."
 		else:
 			objective = "Recover the two yellow-room records. Stay quiet; something wakes as the count rises."
-	elif current_level_scene == HOUSE_BUILDER_DEMO_SCENE:
+	elif current_level_scene == HOUSE_SURVEY_SCENE:
 		objective = "Survey the generated hall, compare its two doorways, and recover the room record."
 	elif current_level_scene == UNLIT_EVIDENCE_SCENE:
 		if collected_notes < total_notes:
@@ -4181,7 +4181,7 @@ func _get_level_title() -> String:
 		return "Room 2: The Copied Door"
 	if current_level_scene == BACKROOMS_SCENE:
 		return "Backrooms: Yellow Drift"
-	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE:
+	if current_level_scene == HOUSE_SURVEY_SCENE:
 		return "House Survey: Repeated Hall"
 	if current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return "The Unlit: Maintenance Wing"

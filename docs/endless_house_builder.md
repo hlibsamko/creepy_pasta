@@ -9,7 +9,7 @@ Generated architecture is split into `GeneratedBackrooms/Geometry/{Floors,Walls,
 
 ## Files
 
-- Demo: `res://scenes/endless_house/endless_house_builder_demo.tscn`
+- Demo: `res://scenes/endless_house/house_survey.tscn`
 - Shared builder: `res://scripts/backrooms_builder.gd`
 - House kit: `res://scenes/endless_house/kit/`
 - Builder smoke: `res://tests/smoke/scenes/endless_house_builder_smoke.tscn`
@@ -40,7 +40,7 @@ The palette is deliberately varied and restrained so future residential assets c
 
 ## Workflow
 
-1. Duplicate `endless_house_builder_demo.tscn`.
+1. Duplicate `house_survey.tscn`.
 2. Edit the builder node's multiline `layout` in the inspector.
 3. Use the same gameplay symbols documented in `docs/backrooms_builder.md`.
 4. Use `M` only where a false exit has a fair record, environmental test, or visible pulse clue.

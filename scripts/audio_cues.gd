@@ -48,7 +48,7 @@ func stop_ambience() -> void:
 func _get_ambience_profile(level_path: String) -> Vector2:
 	if "unlit_evidence_chamber" in level_path:
 		return Vector2(50.0, 150.0)
-	if "endless_house_builder_demo" in level_path:
+	if "house_survey" in level_path:
 		return Vector2(54.0, 83.0)
 	if "copied_door_room" in level_path:
 		return Vector2(66.0, 123.0)

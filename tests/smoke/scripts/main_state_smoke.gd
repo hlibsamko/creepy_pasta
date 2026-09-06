@@ -80,7 +80,7 @@ func _run_smoke() -> void:
 		true,
 		false
 	)
-	main.call("_load_level_scene", main.HOUSE_BUILDER_DEMO_SCENE)
+	main.call("_load_level_scene", main.HOUSE_SURVEY_SCENE)
 	_assert_stale_monster_death_ignored(stale_backrooms_monster)
 	await get_tree().process_frame
 	_assert_level_state("house survey", 1, 1, 0, true)
@@ -293,10 +293,10 @@ func _assert_level_sequence() -> void:
 		_fail("Level sequence does not route copied_door_room -> backrooms")
 		return
 	main.set("current_level_scene", BACKROOMS_SCENE)
-	if main.call("_get_next_level_scene") != main.HOUSE_BUILDER_DEMO_SCENE:
+	if main.call("_get_next_level_scene") != main.HOUSE_SURVEY_SCENE:
 		_fail("Level sequence does not route backrooms -> house survey")
 		return
-	main.set("current_level_scene", main.HOUSE_BUILDER_DEMO_SCENE)
+	main.set("current_level_scene", main.HOUSE_SURVEY_SCENE)
 	if main.call("_get_next_level_scene") != UNLIT_EVIDENCE_SCENE:
 		_fail("Level sequence does not route house survey -> The Unlit")
 		return
@@ -1265,7 +1265,7 @@ func _assert_house_production_evidence() -> void:
 		_fail("House survey False Door does not provide its separate observation fact")
 		return
 	var definitions: Dictionary = main.SESSION_NOTE_DEFINITIONS.get(
-		"res://scenes/endless_house/endless_house_builder_demo.tscn",
+		"res://scenes/endless_house/house_survey.tscn",
 		{}
 	)
 	if (
@@ -1276,8 +1276,8 @@ func _assert_house_production_evidence() -> void:
 		return
 	if main.call(
 		"_get_level_scene_by_path",
-		"res://scenes/endless_house/endless_house_builder_demo.tscn"
-	) != main.HOUSE_BUILDER_DEMO_SCENE:
+		"res://scenes/endless_house/house_survey.tscn"
+	) != main.HOUSE_SURVEY_SCENE:
 		_fail("Online scene lookup cannot load the production House survey")
 
 
@@ -1417,7 +1417,7 @@ func _assert_debug_house_preview() -> void:
 			physical_event.physical_keycode,
 		])
 		return
-	if main.get("current_level_scene") != main.HOUSE_BUILDER_DEMO_SCENE:
+	if main.get("current_level_scene") != main.HOUSE_SURVEY_SCENE:
 		_fail("House preview did not load the generated demo scene")
 		return
 	_assert_level_state("house builder preview", 1, 1, 0, true)
