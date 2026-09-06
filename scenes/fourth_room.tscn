@@ -66,7 +66,17 @@ roughness = 0.82
 
 [node name="Environment" type="Node3D" parent="."]
 
-[node name="Geometry" type="Node3D" parent="Environment"]
+[node name="Architecture" type="Node3D" parent="Environment"]
+
+[node name="Floors" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Walls" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Ceilings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Openings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Props" type="Node3D" parent="Environment"]
 
 [node name="Lighting" type="Node3D" parent="Environment"]
 
@@ -79,53 +89,53 @@ light_color = Color(0.9, 0.72, 1, 1)
 light_energy = 1.25
 omni_range = 6.0
 
-[node name="Floor" type="StaticBody3D" parent="Environment/Geometry"]
+[node name="Floor" type="StaticBody3D" parent="Environment/Architecture/Floors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/Floor"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Floors/Floor"]
 shape = SubResource("Shape_floor")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/Floor"]
+[node name="FloorMesh" type="MeshInstance3D" parent="Environment/Architecture/Floors/Floor"]
 mesh = SubResource("Mesh_floor")
 surface_material_override/0 = SubResource("Mat_floor")
 
-[node name="NorthWall" type="StaticBody3D" parent="Environment/Geometry"]
+[node name="NorthWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/NorthWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/NorthWall"]
 shape = SubResource("Shape_wall_ns")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/NorthWall"]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/NorthWall"]
 mesh = SubResource("Mesh_wall_ns")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="SouthWall" type="StaticBody3D" parent="Environment/Geometry"]
+[node name="SouthWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/SouthWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/SouthWall"]
 shape = SubResource("Shape_wall_ns")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/SouthWall"]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/SouthWall"]
 mesh = SubResource("Mesh_wall_ns")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="WestWall" type="StaticBody3D" parent="Environment/Geometry"]
+[node name="WestWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/WestWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/WestWall"]
 shape = SubResource("Shape_wall_ew")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/WestWall"]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/WestWall"]
 mesh = SubResource("Mesh_wall_ew")
 surface_material_override/0 = SubResource("Mat_wall")
 
-[node name="EastWall" type="StaticBody3D" parent="Environment/Geometry"]
+[node name="EastWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/EastWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/EastWall"]
 shape = SubResource("Shape_wall_ew")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/EastWall"]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/EastWall"]
 mesh = SubResource("Mesh_wall_ew")
 surface_material_override/0 = SubResource("Mat_wall")
 

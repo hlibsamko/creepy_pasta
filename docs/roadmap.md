@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: normalize the final authored room into the same architecture groups while preserving its dialogue, monster, and exit paths. The initial room, Next Place, Corridor, and generated builders now follow the editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: normalize branch-study scenes, starting with Poolrooms, into the same architecture groups without mixing gameplay markers into visual containers. All core authored rooms and generated builders now follow the editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 

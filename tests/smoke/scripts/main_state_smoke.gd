@@ -144,11 +144,11 @@ func _assert_fourth_room_structure() -> void:
 		_fail("Fourth room did not instantiate as a 3D level")
 		return
 	for required_path in [
-		"Environment/Geometry/Floor",
-		"Environment/Geometry/NorthWall",
-		"Environment/Geometry/SouthWall",
-		"Environment/Geometry/WestWall",
-		"Environment/Geometry/EastWall",
+		"Environment/Architecture/Floors/Floor",
+		"Environment/Architecture/Walls/NorthWall",
+		"Environment/Architecture/Walls/SouthWall",
+		"Environment/Architecture/Walls/WestWall",
+		"Environment/Architecture/Walls/EastWall",
 		"Environment/Lighting/RoomLight",
 		"DialogueNpcs/FinalIntercom",
 		"DialogueNpcs/ThresholdTest",
