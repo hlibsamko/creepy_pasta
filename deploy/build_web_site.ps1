@@ -1,7 +1,7 @@
 param(
     [string]$GodotExe = "",
     [string]$SiteDir = "D:\Codex_projects\creepy-website",
-    [string]$Preset = "Web"
+    [string]$Preset = "Web QA"
 )
 
 $ErrorActionPreference = "Stop"

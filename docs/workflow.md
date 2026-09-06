@@ -23,7 +23,8 @@ This file is the source of truth for how we change, test, deploy, and explain th
 - systemd services: `creepy-pasta-server`, `creepy-pasta-account`
 - web service: `caddy`
 - Dedicated server export preset: `Linux Dedicated Server`
-- Web export preset: `Web`
+- Private testing export preset: `Web QA` (default in `deploy/build_web_site.ps1`; includes `devtools/qa`).
+- Clean public export preset: `Web` (excludes all internal tooling).
 
 Players using the Oracle server should open:
 
