@@ -181,7 +181,7 @@ func _on_connected() -> void:
 	main._on_player_killed("Backrooms smoke death")
 	main._retry_after_end()
 	await get_tree().create_timer(0.8).timeout
-	if main.current_level_scene.resource_path != "res://scenes/backrooms/backrooms_builder_demo.tscn":
+	if main.current_level_scene.resource_path != "res://scenes/backrooms/backrooms.tscn":
 		_fail("Backrooms Restart moved the player to a different level")
 		return
 	if main.ui.death_panel.visible or not main.started:
@@ -274,7 +274,7 @@ func _advance_to_backrooms() -> bool:
 	await _move_local_player_to(Vector3(0.0, 0.2, -3.0))
 	main._request_next_level_transition.rpc_id(1)
 	await get_tree().create_timer(0.8).timeout
-	if main.current_level_scene.resource_path != "res://scenes/backrooms/backrooms_builder_demo.tscn":
+	if main.current_level_scene.resource_path != "res://scenes/backrooms/backrooms.tscn":
 		_fail("Session did not transition from Room 2 to Backrooms")
 		return false
 	if int(main.total_notes) != 2:

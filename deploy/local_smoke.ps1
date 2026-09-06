@@ -170,7 +170,7 @@ Invoke-GodotCheck -Name "UI menu smoke" -Arguments @("res://tests/smoke/scenes/u
 Invoke-GodotCheck -Name "UI puzzle modes smoke" -Arguments @("res://tests/smoke/scenes/ui_puzzle_smoke.tscn")
 Invoke-GodotCheck -Name "Main state discovery smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/main_state_smoke.tscn")
 Invoke-GodotCheck -Name "Endless House builder smoke" -Arguments @("res://tests/smoke/scenes/endless_house_builder_smoke.tscn")
-Invoke-GodotCheck -Name "Backrooms builder smoke" -Arguments @("--quit-after", "2", "res://scenes/backrooms/backrooms_builder_demo.tscn")
+Invoke-GodotCheck -Name "Backrooms builder smoke" -Arguments @("--quit-after", "2", "res://scenes/backrooms/backrooms.tscn")
 Invoke-GodotCheck -Name "Backrooms builder variants smoke" -Arguments @("res://tests/smoke/scenes/backrooms_builder_variants_smoke.tscn")
 Invoke-GodotCheck -Name "Backrooms builder paired Unlit smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/backrooms_builder_unlit_pairs_smoke.tscn")
 Invoke-GodotCheck -Name "Backrooms builder Inspector warnings smoke" -Arguments @("res://tests/smoke/scenes/backrooms_builder_warnings_smoke.tscn")

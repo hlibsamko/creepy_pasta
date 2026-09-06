@@ -8,7 +8,7 @@ The Backrooms builder is an editor-friendly level assembly tool for quickly bloc
 ## Files
 
 - Builder script: `res://scripts/backrooms_builder.gd`
-- Demo scene: `res://scenes/backrooms/backrooms_builder_demo.tscn`
+- Production scene: `res://scenes/backrooms/backrooms.tscn`
 - Kit scenes: `res://scenes/backrooms/kit/`
 - Reusable exit: `res://scenes/common/level_exit_basic.tscn`
 - Reusable watcher: `res://scenes/common/watcher_monster_basic.tscn`
@@ -86,5 +86,5 @@ For old-house rooms using the same generation code, see `docs/endless_house_buil
 ## Local Smoke Check
 
 ```powershell
-& (tools/engine/get_godot.ps1) --headless --path . --quit-after 2 'res://scenes/backrooms/backrooms_builder_demo.tscn'
+& (tools/engine/get_godot.ps1) --headless --path . --quit-after 2 'res://scenes/backrooms/backrooms.tscn'
 ```

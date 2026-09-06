@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/backrooms/backrooms_builder_demo.tscn" id="1_backrooms"]
+[ext_resource type="PackedScene" path="res://scenes/backrooms/backrooms.tscn" id="1_backrooms"]
 [ext_resource type="Script" path="res://tests/visual/scripts/backrooms_visual_capture.gd" id="2_capture"]
 
 [node name="BackroomsVisualCapture" type="Node3D"]

@@ -129,7 +129,7 @@ Backrooms builder baseline:
 
 - Builder script: `res://scripts/backrooms_builder.gd`.
 - Builder docs: `docs/backrooms_builder.md`.
-- Demo scene: `res://scenes/backrooms/backrooms_builder_demo.tscn`.
+- Demo scene: `res://scenes/backrooms/backrooms.tscn`.
 - Kit scenes live under `res://scenes/backrooms/kit/`.
 - Layout symbols: `#` wall block, `.` walkable floor/ceiling, `L` floor/ceiling/light, `S` floor plus spawn `Marker3D`, `E` floor plus exit `Marker3D`, `N` generated note, `D` Match Dots note, `Q` Sequence Lock note, `K` Code Lock note, `O` Polarity Switch note, lowercase `n/d/q/k/o` inactive note placeholders, `W` generated watcher monster, `C` generated chaser monster, `A` late ambush chaser, `M` False Door, `U` The Unlit, `B` low barrier/cover, `P` latch-once pressure plate, `H` one-player hold switch, `G` two-player group hold switch, `R` powered work-light hold station, `T` breaker outage trigger.
 - Current builder generates geometry, editor markers, `LevelExit` nodes, generated notes, watcher/chaser/ambush/False Door/Unlit monsters, barriers, pressure-plate variants, work lights, and breaker triggers directly from layout symbols.

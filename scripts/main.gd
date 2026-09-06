@@ -7,7 +7,7 @@ const ACCOUNT_GAME_BRIDGE := preload("res://scripts/account_game_bridge.gd")
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const LEVEL_SCENE := preload("res://scenes/level.tscn")
 const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
-const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms_builder_demo.tscn")
+const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
 const HOUSE_BUILDER_DEMO_SCENE := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
 const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 const CORRIDOR_SCENE := preload("res://scenes/corridor.tscn")
@@ -35,7 +35,7 @@ const ACCOUNT_HEARTBEAT_INTERVAL := 60.0
 const SESSION_LEVEL_PATHS := [
 	"res://scenes/level.tscn",
 	"res://scenes/next_place.tscn",
-	"res://scenes/backrooms/backrooms_builder_demo.tscn",
+	"res://scenes/backrooms/backrooms.tscn",
 	"res://scenes/endless_house/endless_house_builder_demo.tscn",
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn",
 	"res://scenes/corridor.tscn",
@@ -50,7 +50,7 @@ const SESSION_EXIT_DEFINITIONS := {
 		"position": Vector3(0.0, 1.15, -4.55),
 		"activation_radius": 2.0,
 	},
-	"res://scenes/backrooms/backrooms_builder_demo.tscn": {
+	"res://scenes/backrooms/backrooms.tscn": {
 		"position": Vector3(36.0, 1.15, 28.0),
 		"activation_radius": 2.0,
 	},
@@ -100,7 +100,7 @@ const SESSION_NOTE_DEFINITIONS := {
 			"collection_radius": 1.75,
 		},
 	},
-	"res://scenes/backrooms/backrooms_builder_demo.tscn": {
+	"res://scenes/backrooms/backrooms.tscn": {
 		"GeneratedNote1": {
 			"text": "Survey plate: chalk reference points stayed fixed while the corridor around them changed.",
 			"entry_id": "house",
@@ -154,7 +154,7 @@ const SESSION_NOTE_DEFINITIONS := {
 }
 const SESSION_PRESSURE_REQUIREMENTS := {
 	"res://scenes/next_place.tscn": 1,
-	"res://scenes/backrooms/backrooms_builder_demo.tscn": 1,
+	"res://scenes/backrooms/backrooms.tscn": 1,
 }
 const SESSION_BREAKER_REQUIREMENTS := {
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn": 1,
@@ -166,7 +166,7 @@ const SESSION_PRESSURE_PLATE_DEFINITIONS := {
 			"activation_radius": 1.5,
 		},
 	},
-	"res://scenes/backrooms/backrooms_builder_demo.tscn": {
+	"res://scenes/backrooms/backrooms.tscn": {
 		"BackroomsBuilder/GeneratedBackrooms/Mechanics/PressurePlate": {
 			"position": Vector3(32.0, 0.03, 24.0),
 			"activation_radius": 1.5,
@@ -242,7 +242,7 @@ const SESSION_CLIENT_DISCOVERIES := {
 			"interaction_radius": 2.2,
 		},
 	],
-	"res://scenes/backrooms/backrooms_builder_demo.tscn": [
+	"res://scenes/backrooms/backrooms.tscn": [
 		{
 			"source_id": "BackroomsBuilder/GeneratedBackrooms/Monsters/GeneratedWatcher1",
 			"unlock": false,
@@ -327,7 +327,7 @@ const SESSION_NOTE_GATED_MONSTERS := {
 		},
 	],
 	"res://scenes/next_place.tscn": [],
-	"res://scenes/backrooms/backrooms_builder_demo.tscn": [
+	"res://scenes/backrooms/backrooms.tscn": [
 		{
 			"source_id": "BackroomsBuilder/GeneratedBackrooms/Monsters/GeneratedChaser1",
 			"notes_required": 1,
@@ -1499,7 +1499,7 @@ func _get_level_title_from_path(level_path: String) -> String:
 			return "Room 1"
 		"res://scenes/next_place.tscn":
 			return "Room 2"
-		"res://scenes/backrooms/backrooms_builder_demo.tscn":
+		"res://scenes/backrooms/backrooms.tscn":
 			return "Backrooms"
 		"res://scenes/endless_house/endless_house_builder_demo.tscn":
 			return "House Survey"
@@ -1773,7 +1773,7 @@ func _get_session_spawn_positions(level_path: String) -> Array:
 	match level_path:
 		"res://scenes/level.tscn":
 			return [Vector3(-0.8, 0.2, -4.15), Vector3(0.8, 0.2, -4.15)]
-		"res://scenes/backrooms/backrooms_builder_demo.tscn":
+		"res://scenes/backrooms/backrooms.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.8, 0.2, 4.0), Vector3(3.2, 0.2, 4.0)]
 		"res://scenes/endless_house/endless_house_builder_demo.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.0, 0.2, 4.8), Vector3(4.0, 0.2, 3.2)]

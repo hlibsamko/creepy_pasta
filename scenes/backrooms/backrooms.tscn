@@ -23,7 +23,7 @@ note_text = "Maintenance index: room labels count downward and restart at zero, 
 journal_entry_id = "house"
 journal_fact_index = 2
 
-[node name="BackroomsBuilderDemo" type="Node3D"]
+[node name="Backrooms" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_backrooms")

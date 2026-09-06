@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: rename the production House Survey route from its remaining `demo` filename and update all path consumers atomically. The Unlit Evidence Chamber route is now clearly named. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: rename the production House Survey route from its remaining `demo` filename and update all path consumers atomically. Backrooms and the Unlit Evidence Chamber now have production names. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 

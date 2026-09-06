@@ -23,7 +23,7 @@ Dreamcore и остальные studies — короткие отдельные 
 
 1. `level.tscn` — Room 1: The Wrong Copy
 2. `next_place.tscn` — Room 2: The Copied Door
-3. `backrooms_builder_demo.tscn` — Backrooms
+3. `backrooms.tscn` — Backrooms
 4. `endless_house_builder_demo.tscn` — House Survey
 5. `unlit_evidence_chamber.tscn` — The Unlit
 6. `corridor.tscn` — погоня в коридоре

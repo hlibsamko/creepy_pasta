@@ -2,7 +2,7 @@ extends Node
 
 const MAIN_SCENE := preload("res://scenes/main.tscn")
 const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
-const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms_builder_demo.tscn")
+const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
 const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 const FOURTH_ROOM_SCENE := preload("res://scenes/fourth_room.tscn")
 const BREAKER_TRIGGER_SCENE := preload("res://scenes/common/breaker_outage_trigger_basic.tscn")
@@ -1185,7 +1185,7 @@ func _assert_backrooms_evidence_records() -> void:
 		_fail("Backrooms active records still share generic evidence text")
 		return
 	var definitions: Dictionary = main.SESSION_NOTE_DEFINITIONS.get(
-		"res://scenes/backrooms/backrooms_builder_demo.tscn",
+		"res://scenes/backrooms/backrooms.tscn",
 		{}
 	)
 	if (
