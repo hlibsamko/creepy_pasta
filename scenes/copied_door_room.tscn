@@ -89,7 +89,7 @@ spot_angle = 42.0
 [node name="Floor" type="StaticBody3D" parent="Environment/Architecture/Floors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Floors/Floor"]
+[node name="FloorCollision" type="CollisionShape3D" parent="Environment/Architecture/Floors/Floor"]
 shape = SubResource("Shape_floor")
 
 [node name="FloorMesh" type="MeshInstance3D" parent="Environment/Architecture/Floors/Floor"]
@@ -99,7 +99,7 @@ surface_material_override/0 = SubResource("Mat_floor")
 [node name="NorthWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/NorthWall"]
+[node name="WallCollision" type="CollisionShape3D" parent="Environment/Architecture/Walls/NorthWall"]
 shape = SubResource("Shape_wall_ns")
 
 [node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/NorthWall"]
@@ -109,7 +109,7 @@ surface_material_override/0 = SubResource("Mat_wall")
 [node name="SouthWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/SouthWall"]
+[node name="WallCollision" type="CollisionShape3D" parent="Environment/Architecture/Walls/SouthWall"]
 shape = SubResource("Shape_wall_ns")
 
 [node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/SouthWall"]
@@ -119,7 +119,7 @@ surface_material_override/0 = SubResource("Mat_wall")
 [node name="WestWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/WestWall"]
+[node name="WallCollision" type="CollisionShape3D" parent="Environment/Architecture/Walls/WestWall"]
 shape = SubResource("Shape_wall_ew")
 
 [node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/WestWall"]
@@ -129,7 +129,7 @@ surface_material_override/0 = SubResource("Mat_wall")
 [node name="EastWall" type="StaticBody3D" parent="Environment/Architecture/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/EastWall"]
+[node name="WallCollision" type="CollisionShape3D" parent="Environment/Architecture/Walls/EastWall"]
 shape = SubResource("Shape_wall_ew")
 
 [node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/EastWall"]
