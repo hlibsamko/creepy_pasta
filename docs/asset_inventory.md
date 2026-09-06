@@ -14,6 +14,9 @@ This ledger answers one practical question: where is each downloaded visual actu
 | Kenney desk | `scenes/props/kenney_desk_visual.tscn` | Empty Mall kiosk, Dreamcore barrier, Endless House sideboard | production | Shared wrapper; collision remains in each owning kit scene. |
 | Kenney bathtub | `scenes/props/kenney_bathtub_visual.tscn` | Poolrooms low-barrier kit | production | Collision remains in the Poolrooms kit scene. |
 | Poly Haven Gothic Cabinet 01 (1K glTF) | `scenes/props/polyhaven_gothic_cabinet_visual.tscn` | House Survey repeated sideboard: `HouseLowSideboard/Visuals/Furniture/GothicCabinetVisual` | production | The House kit owns the collision and fitted transform; replace only through the wrapper. |
+| Poly Haven School Chair 01 (1K glTF) | `scenes/props/polyhaven_school_chair_visual.tscn` | Dreamcore Schoolhouse: `Environment/Props/EmptyChairA` and `EmptyChairB` | production | Dreamcore owns the deliberately oversized transforms. |
+| Poly Haven Green Chair 01 (1K glTF) | `scenes/props/polyhaven_green_chair_visual.tscn` | Empty Mall: `Environment/Props/WaitingChair` | production | Empty Mall owns the placement transform. |
+| Poly Haven Cassette Player (1K glTF) | `scenes/props/polyhaven_cassette_player_visual.tscn` | Dreamcore `SilentRadio`; Endless Hotel `NightRadio` | production | Shared wrapper keeps imported contents isolated from level scenes. |
 | Quaternius monster | chaser visual child | Ordinary chaser production route | production-temporary | Replace or improve in a dedicated monster batch. |
 | Poly Haven interior tiles | material imports | Selected interior surfaces | production-partial | Map exact scene/material consumers during level cleanup. |
 
