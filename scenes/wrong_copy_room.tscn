@@ -269,7 +269,7 @@ dialogue_text = "If you can hear this, you are inside the wrong copy of the fron
 journal_entry_id = "listener"
 journal_rumor_id = "light_barrier"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueNpcs/EntryRadio"]
+[node name="InteractionCollision" type="CollisionShape3D" parent="DialogueNpcs/EntryRadio"]
 shape = SubResource("Shape_radio_trigger")
 
 [node name="RadioMesh" type="MeshInstance3D" parent="DialogueNpcs/EntryRadio"]

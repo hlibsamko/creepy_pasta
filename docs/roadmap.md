@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: finish the House Survey production rename without losing the scene currently open in Godot, then continue role-based naming in reusable common scenes. Imported furniture now goes through project-owned wrappers, and the first higher-detail cabinet is integrated into the production House kit. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: refresh remaining project documentation and prepare the private QA Web deployment. Production scene filenames and visible node names now use descriptive roles; imported furniture goes through project-owned wrappers, with four higher-detail Poly Haven models visibly integrated. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated migrations in one commit.
 
 ## Working Loop
 
