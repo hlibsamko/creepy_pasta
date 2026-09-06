@@ -29,7 +29,7 @@ roughness = 0.94
 [node name="HouseWallBlock" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="WallCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_wall")
 
 [node name="Wall" type="MeshInstance3D" parent="."]

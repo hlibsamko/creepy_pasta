@@ -13,9 +13,9 @@ roughness = 0.92
 [node name="BackroomsFloorTile" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="FloorCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_floor")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="FloorMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_floor")
 surface_material_override/0 = SubResource("Mat_floor")

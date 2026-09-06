@@ -11,7 +11,7 @@ size = Vector3(2.2, 0.08, 0.9)
 [node name="DreamcoreDeskBarrier" type="StaticBody3D"]
 transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="BarrierCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.740741, 0, 0, 0, 0.740741, 0, 0, 0, 0.740741, 0, 0.55, 0)
 shape = SubResource("Shape_barrier")
 

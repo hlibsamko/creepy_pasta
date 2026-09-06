@@ -13,9 +13,9 @@ roughness = 0.92
 [node name="BackroomsWallBlock" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="WallCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_wall")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="WallMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_wall")
 surface_material_override/0 = SubResource("Mat_wall")

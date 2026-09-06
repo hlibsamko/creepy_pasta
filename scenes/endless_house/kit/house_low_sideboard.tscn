@@ -347,7 +347,7 @@ roughness = 0.98
 [node name="HouseLowSideboard" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="BarrierCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_sideboard")
 
 [node name="Visuals" type="Node3D" parent="."]

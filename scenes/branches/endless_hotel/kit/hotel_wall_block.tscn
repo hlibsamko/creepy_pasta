@@ -10,8 +10,8 @@ roughness = 0.86
 
 [node name="HotelWallBlock" type="StaticBody3D"]
 position = Vector3(0, 2.9, 0)
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="WallCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_wall")
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="WallMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_wall")
 surface_material_override/0 = SubResource("Mat_wall")

@@ -13,9 +13,9 @@ roughness = 0.9
 [node name="BackroomsLowBarrier" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.575, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="BarrierCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_barrier")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="BarrierMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_barrier")
 surface_material_override/0 = SubResource("Mat_barrier")

@@ -7,7 +7,7 @@ size = Vector3(2.4, 0.85, 1.35)
 
 [node name="PoolroomsBathtubBarrier" type="StaticBody3D"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="BarrierCollision" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.425, 0)
 shape = SubResource("Shape_barrier")
 

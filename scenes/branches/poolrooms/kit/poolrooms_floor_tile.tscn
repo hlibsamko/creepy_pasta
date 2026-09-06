@@ -21,7 +21,7 @@ uv1_scale = Vector3(2.1, 2.1, 2.1)
 [node name="PoolroomsFloorTile" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="FloorCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_floor")
 
 [node name="Tile" type="MeshInstance3D" parent="."]
