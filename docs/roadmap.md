@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: rename the production House Survey route from its remaining `demo` filename and update all path consumers atomically. Generated builder architecture is now split into editor-friendly floor, wall, ceiling, and opening groups, with separate props and lighting. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: normalize the next authored production room to `Environment/Architecture/{Floors,Walls,Ceilings,Openings}` plus `Props` and `Lighting`. The initial room and generated builders now follow this editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 

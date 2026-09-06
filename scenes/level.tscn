@@ -106,11 +106,19 @@ size = Vector3(2.2, 2.3, 1)
 
 [node name="Environment" type="Node3D" parent="."]
 
-[node name="Geometry" type="Node3D" parent="Environment"]
+[node name="Architecture" type="Node3D" parent="Environment"]
+
+[node name="Floors" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Walls" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Ceilings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Openings" type="Node3D" parent="Environment/Architecture"]
 
 [node name="Lighting" type="Node3D" parent="Environment"]
 
-[node name="Dressing" type="Node3D" parent="Environment"]
+[node name="Props" type="Node3D" parent="Environment"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=924636357]
 environment = SubResource("Environment_level")
@@ -131,63 +139,63 @@ light_color = Color(0.62, 0.72, 0.9, 1)
 light_energy = 1.05
 omni_range = 4.6
 
-[node name="Floor" type="StaticBody3D" parent="Environment/Geometry" unique_id=1254689471]
+[node name="Floor" type="StaticBody3D" parent="Environment/Architecture/Floors" unique_id=1254689471]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/Floor" unique_id=311580541]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Floors/Floor" unique_id=311580541]
 shape = SubResource("Shape_floor")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/Floor" unique_id=1843917066]
+[node name="FloorMesh" type="MeshInstance3D" parent="Environment/Architecture/Floors/Floor" unique_id=1843917066]
 mesh = SubResource("Mesh_floor")
 surface_material_override/0 = SubResource("Mat_floor")
 
-[node name="Ceiling" type="StaticBody3D" parent="Environment/Geometry" unique_id=272977011]
+[node name="Ceiling" type="StaticBody3D" parent="Environment/Architecture/Ceilings" unique_id=272977011]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/Ceiling" unique_id=1071403169]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Ceilings/Ceiling" unique_id=1071403169]
 shape = SubResource("Shape_ceiling")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/Ceiling" unique_id=1534800549]
+[node name="CeilingMesh" type="MeshInstance3D" parent="Environment/Architecture/Ceilings/Ceiling" unique_id=1534800549]
 mesh = SubResource("Mesh_ceiling")
 surface_material_override/0 = SubResource("Mat_ceiling")
 
-[node name="NorthWall" type="StaticBody3D" parent="Environment/Geometry" unique_id=1151015389]
+[node name="NorthWall" type="StaticBody3D" parent="Environment/Architecture/Walls" unique_id=1151015389]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -6)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/NorthWall" unique_id=396978535]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/NorthWall" unique_id=396978535]
 shape = SubResource("Shape_wall_ns")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/NorthWall" unique_id=1680266908]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/NorthWall" unique_id=1680266908]
 mesh = SubResource("Mesh_wall_ns")
 surface_material_override/0 = SubResource("Mat_wall_a")
 
-[node name="SouthWall" type="StaticBody3D" parent="Environment/Geometry" unique_id=311818153]
+[node name="SouthWall" type="StaticBody3D" parent="Environment/Architecture/Walls" unique_id=311818153]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 6)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/SouthWall" unique_id=1598313358]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/SouthWall" unique_id=1598313358]
 shape = SubResource("Shape_wall_ns")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/SouthWall" unique_id=1811081041]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/SouthWall" unique_id=1811081041]
 mesh = SubResource("Mesh_wall_ns")
 surface_material_override/0 = SubResource("Mat_wall_a")
 
-[node name="WestWall" type="StaticBody3D" parent="Environment/Geometry" unique_id=733702675]
+[node name="WestWall" type="StaticBody3D" parent="Environment/Architecture/Walls" unique_id=733702675]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/WestWall" unique_id=480596387]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/WestWall" unique_id=480596387]
 shape = SubResource("Shape_wall_ew")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/WestWall" unique_id=1809367961]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/WestWall" unique_id=1809367961]
 mesh = SubResource("Mesh_wall_ew")
 surface_material_override/0 = SubResource("Mat_wall_b")
 
-[node name="EastWall" type="StaticBody3D" parent="Environment/Geometry" unique_id=1440017931]
+[node name="EastWall" type="StaticBody3D" parent="Environment/Architecture/Walls" unique_id=1440017931]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.55, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Geometry/EastWall" unique_id=216155138]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Architecture/Walls/EastWall" unique_id=216155138]
 shape = SubResource("Shape_wall_ew")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Geometry/EastWall" unique_id=1084052888]
+[node name="WallMesh" type="MeshInstance3D" parent="Environment/Architecture/Walls/EastWall" unique_id=1084052888]
 mesh = SubResource("Mesh_wall_ew")
 surface_material_override/0 = SubResource("Mat_wall_b")
 
@@ -226,27 +234,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.2, -4.15)
 [node name="SafeThresholdMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 4.7)
 
-[node name="BrokenShelf" type="StaticBody3D" parent="Environment/Dressing" unique_id=156352369]
+[node name="BrokenShelf" type="StaticBody3D" parent="Environment/Props" unique_id=156352369]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.65, -1.2)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Dressing/BrokenShelf" unique_id=1500896891]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Props/BrokenShelf" unique_id=1500896891]
 shape = SubResource("Shape_shelf")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Dressing/BrokenShelf" unique_id=551127041]
+[node name="ShelfMesh" type="MeshInstance3D" parent="Environment/Props/BrokenShelf" unique_id=551127041]
 mesh = SubResource("Mesh_shelf")
 surface_material_override/0 = SubResource("Mat_wood_dark")
 
-[node name="LongTable" type="StaticBody3D" parent="Environment/Dressing" unique_id=1596097047]
+[node name="LongTable" type="StaticBody3D" parent="Environment/Props" unique_id=1596097047]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.45, 1.6)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Dressing/LongTable" unique_id=1874905271]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Props/LongTable" unique_id=1874905271]
 shape = SubResource("Shape_table")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Dressing/LongTable" unique_id=1513730099]
+[node name="TableMesh" type="MeshInstance3D" parent="Environment/Props/LongTable" unique_id=1513730099]
 mesh = SubResource("Mesh_table")
 surface_material_override/0 = SubResource("Mat_wood")
 
-[node name="RitualMark" type="MeshInstance3D" parent="Environment/Dressing" unique_id=2019659073]
+[node name="RitualMark" type="MeshInstance3D" parent="Environment/Props" unique_id=2019659073]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
 mesh = SubResource("Mesh_ritual")
 surface_material_override/0 = SubResource("Mat_ritual")
