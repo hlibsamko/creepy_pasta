@@ -7,10 +7,10 @@
 [ext_resource type="PackedScene" path="res://scenes/branches/dreamcore/kit/dreamcore_light.tscn" id="5_light"]
 [ext_resource type="PackedScene" path="res://scenes/branches/dreamcore/kit/dreamcore_low_barrier.tscn" id="6_barrier"]
 [ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/bear.glb" id="8_bear"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/chairDesk.glb" id="9_chair"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/radio.glb" id="10_radio"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/plantSmall2.glb" id="11_plant"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_bear_visual.tscn" id="8_bear"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_chair_visual.tscn" id="9_chair"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_radio_visual.tscn" id="10_radio"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_plant_visual.tscn" id="11_plant"]
 
 [sub_resource type="Environment" id="Environment_dreamcore"]
 background_mode = 1

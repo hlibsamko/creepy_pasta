@@ -7,8 +7,8 @@
 [ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_light.tscn" id="5_light"]
 [ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_low_barrier.tscn" id="6_barrier"]
 [ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/doorwayOpen.glb" id="8_door"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/radio.glb" id="9_radio"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_doorway_visual.tscn" id="8_door"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_radio_visual.tscn" id="9_radio"]
 
 [sub_resource type="Environment" id="Environment_hotel"]
 background_mode = 1

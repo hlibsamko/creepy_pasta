@@ -1,6 +1,6 @@
 [gd_scene load_steps=53 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/desk.glb" id="1_desk"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_desk_visual.tscn" id="1_desk"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_radio_visual.tscn" id="2_radio"]
 
 [sub_resource type="BoxShape3D" id="Shape_sideboard"]

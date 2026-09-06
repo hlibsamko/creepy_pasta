@@ -7,9 +7,9 @@
 [ext_resource type="PackedScene" path="res://scenes/branches/poolrooms/kit/poolrooms_light.tscn" id="5_light"]
 [ext_resource type="PackedScene" path="res://scenes/branches/poolrooms/kit/poolrooms_low_barrier.tscn" id="6_barrier"]
 [ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/bathroomSinkSquare.glb" id="8_sink"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/showerRound.glb" id="9_shower"]
-[ext_resource type="PackedScene" path="res://assets/third_party/kenney_furniture/doorwayOpen.glb" id="10_doorway"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_bathroom_sink_visual.tscn" id="8_sink"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_shower_visual.tscn" id="9_shower"]
+[ext_resource type="PackedScene" path="res://scenes/props/kenney_doorway_visual.tscn" id="10_doorway"]
 
 [sub_resource type="Environment" id="Environment_poolrooms"]
 background_mode = 1
