@@ -153,7 +153,7 @@ modulate = Color(0.75, 0.88, 1, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 34.5)
 closed = false
 
-[node name="CollisionShape3D" parent="LevelExit" index="0"]
+[node name="ExitCollision" parent="LevelExit" index="0"]
 shape = SubResource("Shape_exit")
 
 [node name="Notes" type="Node3D" parent="." unique_id=753989612]

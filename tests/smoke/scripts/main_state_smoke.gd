@@ -277,7 +277,7 @@ func _assert_initial_level_structure() -> void:
 
 
 func _assert_exit_box_size(room_exit: LevelExit, expected_size: Vector3, label: String) -> void:
-	var collision := room_exit.get_node_or_null("CollisionShape3D") as CollisionShape3D
+	var collision := room_exit.get_node_or_null("ExitCollision") as CollisionShape3D
 	var box_shape := collision.shape as BoxShape3D if collision else null
 	if not box_shape or not box_shape.size.is_equal_approx(expected_size):
 		_fail("%s exit collision footprint changed during prefab extraction" % label)

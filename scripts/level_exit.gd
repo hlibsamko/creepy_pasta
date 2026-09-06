@@ -12,7 +12,7 @@ const ROOM_TONE_DURATION := 8.0
 
 @onready var door: Node3D = $Door
 @onready var glow: Node3D = $Glow
-@onready var collision: CollisionShape3D = $CollisionShape3D
+@onready var collision: CollisionShape3D = $ExitCollision
 @onready var draft_cue: Node3D = get_node_or_null("DraftCue") as Node3D
 
 var room_tone_player: AudioStreamPlayer3D

@@ -33,7 +33,7 @@ roughness = 0.68
 [node name="LevelExit" type="Area3D"]
 script = ExtResource("1_exit")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="ExitCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_exit")
 
 [node name="Door" type="MeshInstance3D" parent="."]

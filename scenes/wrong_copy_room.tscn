@@ -290,7 +290,7 @@ journal_fact_index_on_activation = 2
 [node name="LevelExit" parent="." instance=ExtResource("2_exit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 5.35)
 
-[node name="CollisionShape3D" parent="LevelExit" index="0"]
+[node name="ExitCollision" parent="LevelExit" index="0"]
 shape = SubResource("Shape_exit")
 
 [node name="Notes" type="Node3D" parent="." unique_id=626975839]
