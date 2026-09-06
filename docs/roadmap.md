@@ -14,7 +14,7 @@ During this mission, do **not** redesign gameplay or networking behavior. Struct
 
 **ACTIVE — editor-first project migration, executed in small recoverable chunks.**
 
-Current chunk: normalize the next authored production room to `Environment/Architecture/{Floors,Walls,Ceilings,Openings}` plus `Props` and `Lighting`. The initial room and generated builders now follow this editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
+Current chunk: normalize the corridor authored scene into the same architecture groups while preserving its monster and exit paths. The initial room, Next Place, and generated builders now follow the editor-first hierarchy. The ordered structural queue is in `docs/project_map.md`; do not skip ahead or combine unrelated level migrations in one commit.
 
 ## Working Loop
 
