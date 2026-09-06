@@ -12,12 +12,12 @@ size = Vector3(1.35, 1.7, 3.55)
 [node name="CorridorPhotoChaser" type="CharacterBody3D"]
 script = ExtResource("1_monster")
 
-[node name="BodyCollision" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("Shape_body")
 
 [node name="KillZone" type="Area3D" parent="."]
 
-[node name="KillCollision" type="CollisionShape3D" parent="KillZone"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
 shape = SubResource("Shape_kill_zone")
 
 [node name="PhotoSprite" type="Sprite3D" parent="."]
