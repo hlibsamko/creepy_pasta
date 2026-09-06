@@ -21,7 +21,7 @@ note_text = "Maintenance test: the silhouette stayed inside the same chalk mark 
 journal_entry_id = "unlit"
 journal_fact_index = 1
 
-[node name="UnlitEvidenceDemo" type="Node3D"]
+[node name="UnlitEvidenceChamber" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_unlit")

@@ -1,6 +1,6 @@
 extends Node
 
-const UNLIT_EVIDENCE_DEMO := preload("res://scenes/endless_house/unlit_evidence_demo.tscn")
+const UNLIT_EVIDENCE_CHAMBER := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 
 class ControlledPlayer:
 	extends CharacterBody3D
@@ -15,7 +15,7 @@ var record_puzzle_request_count := 0
 
 
 func _ready() -> void:
-	var demo := UNLIT_EVIDENCE_DEMO.instantiate()
+	var demo := UNLIT_EVIDENCE_CHAMBER.instantiate()
 	add_child(demo)
 	await get_tree().process_frame
 	await get_tree().physics_frame

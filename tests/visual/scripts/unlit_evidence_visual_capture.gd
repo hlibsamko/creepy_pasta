@@ -2,7 +2,7 @@ extends Node3D
 
 @onready var camera: Camera3D = $Camera3D
 @onready var preview_flashlight: SpotLight3D = $Camera3D/PreviewFlashlight
-@onready var demo: Node3D = $UnlitEvidenceDemo
+@onready var demo: Node3D = $UnlitEvidenceChamber
 @onready var plate: Node = demo.get_node(
 	"EndlessHouseBuilder/GeneratedBackrooms/Mechanics/PressurePlate"
 )

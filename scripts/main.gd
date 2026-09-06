@@ -9,7 +9,7 @@ const LEVEL_SCENE := preload("res://scenes/level.tscn")
 const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms_builder_demo.tscn")
 const HOUSE_BUILDER_DEMO_SCENE := preload("res://scenes/endless_house/endless_house_builder_demo.tscn")
-const UNLIT_EVIDENCE_DEMO_SCENE := preload("res://scenes/endless_house/unlit_evidence_demo.tscn")
+const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 const CORRIDOR_SCENE := preload("res://scenes/corridor.tscn")
 const FOURTH_ROOM_SCENE := preload("res://scenes/fourth_room.tscn")
 const SPAWNS := [
@@ -37,7 +37,7 @@ const SESSION_LEVEL_PATHS := [
 	"res://scenes/next_place.tscn",
 	"res://scenes/backrooms/backrooms_builder_demo.tscn",
 	"res://scenes/endless_house/endless_house_builder_demo.tscn",
-	"res://scenes/endless_house/unlit_evidence_demo.tscn",
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn",
 	"res://scenes/corridor.tscn",
 	"res://scenes/fourth_room.tscn",
 ]
@@ -58,7 +58,7 @@ const SESSION_EXIT_DEFINITIONS := {
 		"position": Vector3(40.0, 1.15, 4.0),
 		"activation_radius": 2.0,
 	},
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": {
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
 		"position": Vector3(36.0, 1.15, 4.0),
 		"activation_radius": 2.0,
 	},
@@ -125,7 +125,7 @@ const SESSION_NOTE_DEFINITIONS := {
 			"collection_radius": 1.75,
 		},
 	},
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": {
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
 		"GeneratedNote1": {
 			"text": "Maintenance test: the silhouette stayed inside the same chalk mark only while the work lamp faced it.",
 			"entry_id": "unlit",
@@ -157,7 +157,7 @@ const SESSION_PRESSURE_REQUIREMENTS := {
 	"res://scenes/backrooms/backrooms_builder_demo.tscn": 1,
 }
 const SESSION_BREAKER_REQUIREMENTS := {
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": 1,
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": 1,
 }
 const SESSION_PRESSURE_PLATE_DEFINITIONS := {
 	"res://scenes/next_place.tscn": {
@@ -172,7 +172,7 @@ const SESSION_PRESSURE_PLATE_DEFINITIONS := {
 			"activation_radius": 1.5,
 		},
 	},
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": {
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
 		"EndlessHouseBuilder/GeneratedBackrooms/Mechanics/PressurePlate": {
 			"position": Vector3(4.0, 0.03, 20.0),
 			"activation_radius": 1.5,
@@ -180,7 +180,7 @@ const SESSION_PRESSURE_PLATE_DEFINITIONS := {
 	},
 }
 const SESSION_BREAKER_DEFINITIONS := {
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": {
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
 		"EndlessHouseBuilder/GeneratedBackrooms/Mechanics/GeneratedBreakerTrigger1": {
 			"position": Vector3(36.0, 0.0, 20.0),
 			"activation_radius": 2.0,
@@ -193,7 +193,7 @@ const SESSION_BREAKER_DEFINITIONS := {
 	},
 }
 const SESSION_MONSTER_DEFINITIONS := {
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": {
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
 		"EndlessHouseBuilder/GeneratedBackrooms/Monsters/GeneratedLightShyMonster1": {
 			"spawn_position": Vector3(24.0, 0.0, 20.0),
 			"move_speed": 2.2,
@@ -274,7 +274,7 @@ const SESSION_CLIENT_DISCOVERIES := {
 			"observation_radius": 3.8,
 		},
 	],
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": [
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": [
 		{
 			"source_id": "EndlessHouseBuilder/GeneratedBackrooms/Monsters/GeneratedLightShyMonster1",
 			"unlock": false,
@@ -342,7 +342,7 @@ const SESSION_NOTE_GATED_MONSTERS := {
 		},
 	],
 	"res://scenes/endless_house/endless_house_builder_demo.tscn": [],
-	"res://scenes/endless_house/unlit_evidence_demo.tscn": [],
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": [],
 	"res://scenes/corridor.tscn": [],
 	"res://scenes/fourth_room.tscn": [],
 }
@@ -1503,7 +1503,7 @@ func _get_level_title_from_path(level_path: String) -> String:
 			return "Backrooms"
 		"res://scenes/endless_house/endless_house_builder_demo.tscn":
 			return "House Survey"
-		"res://scenes/endless_house/unlit_evidence_demo.tscn":
+		"res://scenes/endless_house/unlit_evidence_chamber.tscn":
 			return "Maintenance Test"
 		"res://scenes/corridor.tscn":
 			return "Corridor"
@@ -1777,7 +1777,7 @@ func _get_session_spawn_positions(level_path: String) -> Array:
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.8, 0.2, 4.0), Vector3(3.2, 0.2, 4.0)]
 		"res://scenes/endless_house/endless_house_builder_demo.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.0, 0.2, 4.8), Vector3(4.0, 0.2, 3.2)]
-		"res://scenes/endless_house/unlit_evidence_demo.tscn":
+		"res://scenes/endless_house/unlit_evidence_chamber.tscn":
 			return [Vector3(4.0, 0.2, 4.0), Vector3(4.0, 0.2, 4.8), Vector3(4.0, 0.2, 3.2)]
 		"res://scenes/corridor.tscn":
 			return [Vector3(0.0, 0.2, -26.0), Vector3(-0.8, 0.2, -26.0), Vector3(0.8, 0.2, -26.0)]
@@ -1787,7 +1787,7 @@ func _get_session_spawn_positions(level_path: String) -> Array:
 
 
 func _get_session_spawn_yaw(level_path: String) -> float:
-	if level_path == HOUSE_BUILDER_DEMO_SCENE.resource_path or level_path == UNLIT_EVIDENCE_DEMO_SCENE.resource_path:
+	if level_path == HOUSE_BUILDER_DEMO_SCENE.resource_path or level_path == UNLIT_EVIDENCE_SCENE.resource_path:
 		return -PI * 0.5
 	if level_path == LEVEL_SCENE.resource_path or level_path == CORRIDOR_SCENE.resource_path:
 		return PI
@@ -1816,7 +1816,7 @@ func _get_spawn_positions() -> Array:
 func _get_spawn_yaw() -> float:
 	if current_level_scene == LEVEL_SCENE or current_level_scene == CORRIDOR_SCENE:
 		return PI
-	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE or current_level_scene == UNLIT_EVIDENCE_DEMO_SCENE:
+	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE or current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return -PI * 0.5
 	return 0.0
 
@@ -2349,7 +2349,7 @@ func _evaluate_level_exit_unlock() -> void:
 			_update_objective()
 			ui.set_status("The maintenance exit needs the spent breaker.")
 		return
-	if current_level_scene != UNLIT_EVIDENCE_DEMO_SCENE and not _are_pressure_plates_satisfied():
+	if current_level_scene != UNLIT_EVIDENCE_SCENE and not _are_pressure_plates_satisfied():
 		if not multiplayer.has_multiplayer_peer() or multiplayer.is_server():
 			_close_level_exit()
 		_update_objective()
@@ -2620,8 +2620,8 @@ func _get_next_level_scene() -> PackedScene:
 	if current_level_scene == BACKROOMS_SCENE:
 		return HOUSE_BUILDER_DEMO_SCENE
 	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE:
-		return UNLIT_EVIDENCE_DEMO_SCENE
-	if current_level_scene == UNLIT_EVIDENCE_DEMO_SCENE:
+		return UNLIT_EVIDENCE_SCENE
+	if current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return CORRIDOR_SCENE
 	if current_level_scene == CORRIDOR_SCENE:
 		return FOURTH_ROOM_SCENE
@@ -3145,7 +3145,7 @@ func _handle_debug_unlit_preview_input(event: InputEvent) -> bool:
 	debug_preview_session_collected_notes = session_collected_notes
 	collected_notes = 0
 	collected_note_ids.clear()
-	_load_level_scene(UNLIT_EVIDENCE_DEMO_SCENE)
+	_load_level_scene(UNLIT_EVIDENCE_SCENE)
 	_move_current_players_to_spawns()
 	ui.set_status("A maintenance test is still waiting in the dark.")
 	_update_hud()
@@ -3203,7 +3203,7 @@ func _is_local_unlit_debug_preview() -> bool:
 		and not OS.has_feature("web")
 		and not network.is_dedicated_server()
 		and not multiplayer.has_multiplayer_peer()
-		and current_level_scene == UNLIT_EVIDENCE_DEMO_SCENE
+		and current_level_scene == UNLIT_EVIDENCE_SCENE
 	)
 
 
@@ -3271,7 +3271,7 @@ func _get_qa_level_entries() -> Array:
 		{"title": "02 • Room 2 — The Copied Door", "scene_path": NEXT_PLACE_SCENE.resource_path},
 		{"title": "03 • Backrooms — Yellow Drift", "scene_path": BACKROOMS_SCENE.resource_path},
 		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_BUILDER_DEMO_SCENE.resource_path},
-		{"title": "05 • The Unlit — Maintenance Wing", "scene_path": UNLIT_EVIDENCE_DEMO_SCENE.resource_path},
+		{"title": "05 • The Unlit — Maintenance Wing", "scene_path": UNLIT_EVIDENCE_SCENE.resource_path},
 		{"title": "06 • Corridor — Do Not Sprint", "scene_path": CORRIDOR_SCENE.resource_path},
 		{"title": "07 • Final Room — Do Not Stare", "scene_path": FOURTH_ROOM_SCENE.resource_path},
 	]
@@ -3647,8 +3647,8 @@ func _get_level_scene_by_path(scene_path: String) -> PackedScene:
 			return BACKROOMS_SCENE
 		HOUSE_BUILDER_DEMO_SCENE.resource_path:
 			return HOUSE_BUILDER_DEMO_SCENE
-		UNLIT_EVIDENCE_DEMO_SCENE.resource_path:
-			return UNLIT_EVIDENCE_DEMO_SCENE
+		UNLIT_EVIDENCE_SCENE.resource_path:
+			return UNLIT_EVIDENCE_SCENE
 		CORRIDOR_SCENE.resource_path:
 			return CORRIDOR_SCENE
 		FOURTH_ROOM_SCENE.resource_path:
@@ -4095,7 +4095,7 @@ func _are_pressure_plates_satisfied() -> bool:
 
 
 func _are_breaker_requirements_satisfied() -> bool:
-	if current_level_scene != UNLIT_EVIDENCE_DEMO_SCENE:
+	if current_level_scene != UNLIT_EVIDENCE_SCENE:
 		return true
 	var breakers := level.find_children("GeneratedBreakerTrigger*", "Area3D", true, false)
 	if breakers.is_empty():
@@ -4136,7 +4136,7 @@ func _update_objective() -> void:
 			objective = "Recover the two yellow-room records. Stay quiet; something wakes as the count rises."
 	elif current_level_scene == HOUSE_BUILDER_DEMO_SCENE:
 		objective = "Survey the generated hall, compare its two doorways, and recover the room record."
-	elif current_level_scene == UNLIT_EVIDENCE_DEMO_SCENE:
+	elif current_level_scene == UNLIT_EVIDENCE_SCENE:
 		if collected_notes < total_notes:
 			objective = "Read the maintenance test before entering the dark service hall."
 		elif not _are_breaker_requirements_satisfied():
@@ -4183,7 +4183,7 @@ func _get_level_title() -> String:
 		return "Backrooms: Yellow Drift"
 	if current_level_scene == HOUSE_BUILDER_DEMO_SCENE:
 		return "House Survey: Repeated Hall"
-	if current_level_scene == UNLIT_EVIDENCE_DEMO_SCENE:
+	if current_level_scene == UNLIT_EVIDENCE_SCENE:
 		return "The Unlit: Maintenance Wing"
 	var branch := BranchCatalog.find_by_scene(current_level_scene)
 	if branch != null:

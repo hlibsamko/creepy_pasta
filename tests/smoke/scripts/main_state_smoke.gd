@@ -3,7 +3,7 @@ extends Node
 const MAIN_SCENE := preload("res://scenes/main.tscn")
 const NEXT_PLACE_SCENE := preload("res://scenes/next_place.tscn")
 const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms_builder_demo.tscn")
-const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_demo.tscn")
+const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
 const FOURTH_ROOM_SCENE := preload("res://scenes/fourth_room.tscn")
 const BREAKER_TRIGGER_SCENE := preload("res://scenes/common/breaker_outage_trigger_basic.tscn")
 
@@ -1453,7 +1453,7 @@ func _assert_debug_unlit_preview() -> void:
 	if not bool(main.call("_handle_debug_unlit_preview_input", physical_event)):
 		_fail("Physical F8 did not open the local Unlit evidence preview")
 		return
-	if main.get("current_level_scene") != main.UNLIT_EVIDENCE_DEMO_SCENE:
+	if main.get("current_level_scene") != main.UNLIT_EVIDENCE_SCENE:
 		_fail("The Unlit preview did not load its isolated demo scene")
 		return
 	_assert_level_state("Unlit evidence preview", 1, 1, 1, true)
@@ -1536,7 +1536,7 @@ func _assert_debug_unlit_preview() -> void:
 	var exit_was_open := bool(main.call("_is_level_exit_open"))
 	var work_light_instance_id := work_light.get_instance_id()
 	var breaker_instance_id := breaker.get_instance_id()
-	main.call("_load_level_scene", main.UNLIT_EVIDENCE_DEMO_SCENE)
+	main.call("_load_level_scene", main.UNLIT_EVIDENCE_SCENE)
 	main.call("_apply_collected_note_state")
 	main.call("_apply_pressure_plate_states", pressure_states)
 	main.call("_apply_level_mechanic_states", mechanic_states)

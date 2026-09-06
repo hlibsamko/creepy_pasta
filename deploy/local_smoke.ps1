@@ -161,7 +161,7 @@ Invoke-GodotCheck -Name "Listener behavior variants smoke" -Arguments @("res://t
 Invoke-GodotCheck -Name "Watcher behavior variants smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/watcher_behavior_smoke.tscn")
 Invoke-GodotCheck -Name "False Door monster smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/mimic_door_smoke.tscn")
 Invoke-GodotCheck -Name "The Unlit flashlight behavior smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/light_shy_monster_smoke.tscn")
-Invoke-GodotCheck -Name "The Unlit evidence chamber smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/unlit_evidence_demo_smoke.tscn")
+Invoke-GodotCheck -Name "The Unlit evidence chamber smoke" -Arguments @("--quit-after", "600", "res://tests/smoke/scenes/unlit_evidence_chamber_smoke.tscn")
 Invoke-GodotCheck -Name "Main scene smoke" -Arguments @("--quit-after", "2", "res://scenes/main.tscn")
 Invoke-GodotCheck -Name "UI scene smoke" -Arguments @("--quit-after", "2", "res://scenes/game_ui.tscn")
 Invoke-GodotCheck -Name "UI control text smoke" -Arguments @("res://tests/smoke/scenes/ui_control_text_smoke.tscn")

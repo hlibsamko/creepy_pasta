@@ -411,7 +411,7 @@ func _advance_through_house_survey() -> bool:
 	await _move_local_player_to(Vector3(40.0, 0.2, 5.55))
 	main._request_next_level_transition.rpc_id(1)
 	await get_tree().create_timer(0.8).timeout
-	if main.current_level_scene.resource_path != "res://scenes/endless_house/unlit_evidence_demo.tscn":
+	if main.current_level_scene.resource_path != "res://scenes/endless_house/unlit_evidence_chamber.tscn":
 		_fail("Session did not transition from the House survey to The Unlit")
 		return false
 	return await _advance_through_unlit()
@@ -441,7 +441,7 @@ func _advance_through_unlit() -> bool:
 	var local_player := main.players.get_node_or_null(str(multiplayer.get_unique_id())) as Node3D
 	monster = main.level.get_node_or_null(monster_path) as LightShyMonster
 	if (
-		main.current_level_scene.resource_path != "res://scenes/endless_house/unlit_evidence_demo.tscn"
+		main.current_level_scene.resource_path != "res://scenes/endless_house/unlit_evidence_chamber.tscn"
 		or main.ui.death_panel.visible
 		or not main.started
 		or not local_player

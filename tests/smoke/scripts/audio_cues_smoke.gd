@@ -17,7 +17,7 @@ func _ready() -> void:
 	)
 	var unlit_profile: Vector2 = cues.call(
 		"_get_ambience_profile",
-		"res://scenes/endless_house/unlit_evidence_demo.tscn"
+		"res://scenes/endless_house/unlit_evidence_chamber.tscn"
 	)
 	if default_profile == house_profile or house_profile == unlit_profile:
 		_fail("Endless House ambience profiles are no longer distinct")
