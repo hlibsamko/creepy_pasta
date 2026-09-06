@@ -47,7 +47,23 @@ roughness = 0.09
 
 [node name="PoolroomsGallery" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Architecture" type="Node3D" parent="Environment"]
+
+[node name="Floors" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Walls" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Ceilings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Openings" type="Node3D" parent="Environment/Architecture"]
+
+[node name="Props" type="Node3D" parent="Environment"]
+
+[node name="Lighting" type="Node3D" parent="Environment"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_poolrooms")
 
 [node name="PoolroomsBuilder" type="Node3D" parent="."]
@@ -66,32 +82,30 @@ generate_chaser_monsters = false
 generate_mimic_doors = false
 generate_light_shy_monsters = false
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+[node name="WaterReflectionProbe" type="ReflectionProbe" parent="Environment/Lighting"]
 position = Vector3(24, 2, 14)
 size = Vector3(44, 4, 22)
 intensity = 0.58
 interior = true
 
-[node name="SharedShallowWater" type="MeshInstance3D" parent="."]
+[node name="SharedShallowWater" type="MeshInstance3D" parent="Environment/Architecture/Floors"]
 position = Vector3(24, 0.035, 14)
 mesh = SubResource("Mesh_water")
 surface_material_override/0 = SubResource("Mat_water")
 
-[node name="WarmWayfindingLight" type="OmniLight3D" parent="."]
+[node name="WarmWayfindingLight" type="OmniLight3D" parent="Environment/Lighting"]
 position = Vector3(40, 3.5, 24)
 light_color = Color(1, 0.62, 0.29, 1)
 light_energy = 0.9
 omni_range = 7.0
 
-[node name="Dressing" type="Node3D" parent="."]
-
-[node name="Sink" parent="Dressing" instance=ExtResource("8_sink")]
+[node name="Sink" parent="Environment/Props" instance=ExtResource("8_sink")]
 transform = Transform3D(1.45, 0, 0, 0, 1.45, 0, 0, 0, 1.45, 8, 0.12, 20)
 
-[node name="Shower" parent="Dressing" instance=ExtResource("9_shower")]
+[node name="Shower" parent="Environment/Props" instance=ExtResource("9_shower")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 40, 0.12, 20)
 
-[node name="ImpossibleDoorway" parent="Dressing" instance=ExtResource("10_doorway")]
+[node name="ImpossibleDoorway" parent="Environment/Architecture/Openings" instance=ExtResource("10_doorway")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 24, 0.12, 25)
 
 [node name="Notes" type="Node3D" parent="."]

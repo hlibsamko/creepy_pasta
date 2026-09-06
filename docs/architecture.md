@@ -32,6 +32,7 @@ When a scripted collision/visual cluster appears more than once, prefer a reusab
 - `scenes/corridor.tscn` keeps its shell under `Environment/Architecture/{Floors,Walls,Ceilings,Openings}` and instances `corridor_photo_chaser_basic.tscn` twice, retaining its two stable monster paths and per-instance pacing/visual overrides.
 - `scenes/level.tscn` groups ordinary shell nodes under `Environment/Architecture/{Floors,Walls,Ceilings,Openings}`, dressing under `Environment/Props`, and lights under `Environment/Lighting`. Threshold walls, threshold/spawn markers, evidence, dialogue, monster, and exit roots remain direct children because runtime/session source IDs treat those paths as contracts.
 - Builder-generated levels use `GeneratedBackrooms/Geometry/{Floors,Walls,Ceilings,Openings}` for architecture, plus sibling `Props`, `Lighting`, `Markers`, `Mechanics`, `Notes`, and `Monsters` groups. Gameplay-addressed marker/mechanic/monster paths remain stable.
+- Branch studies use the same authored `Environment/Architecture/{Floors,Walls,Ceilings,Openings}`, `Environment/Props`, and `Environment/Lighting` vocabulary around their direct builder/gameplay roots.
 - `scripts/main.gd` uses foldable responsibility regions; tree-query behavior is centralized in `LevelRuntimeQuery` while RPC methods remain on `Main`.
 
 ## Imported asset policy
