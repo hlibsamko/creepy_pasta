@@ -45,15 +45,14 @@ LevelName
 - Scripts: role-oriented `snake_case` (`level_catalog.gd`, not `new_test.gd`).
 - The same semantic terms are used across files, node names, docs, and QA labels: Floor/Floors, Wall/Walls, Ceiling/Ceilings, Opening/Openings, Props, Lighting.
 
-## Current migration queue
+## Current maintenance queue
 
-1. Keep the completed Godot 4.7.2 migration pinned through `tools/engine/`; preserve the migrated 4.6 defaults explicitly in `project.godot`.
-2. Connect the pinned Godot MCP with inspection-only tools enabled by default.
-3. Move smoke/capture content from production folders to `tests/`; move the QA overlay to `devtools/qa/`; exclude both from exports.
-4. Rename production `*_demo.tscn` routes and replace path-keyed menu dictionaries with stable level IDs/catalog entries.
-5. Split builder output into `Floors`, `Walls`, `Ceilings`, and `Openings`, preserving required generated/network paths.
-6. Normalize authored scenes one level at a time, starting with Office and Poolrooms, without moving network-addressed gameplay nodes casually.
-7. Audit downloaded models by visible production placement, then integrate one high-impact model slot per small batch.
+1. Evaluate the fixed-orientation main-menu furniture experiment during ordinary QA play.
+2. Move remaining path-keyed mechanic definitions from `main.gd` into catalog-owned data only in small mechanic-specific changes; keep the current network snapshot compatible.
+3. Use the pinned Godot MCP for inspection when the editor bridge is running; filesystem edits remain the fallback when it is offline.
+4. Split additional dense visual groups only when they still obstruct normal editor work.
+
+Account/Google deployment is deliberately outside this queue until online-friends testing is requested explicitly.
 
 ## Migration progress
 

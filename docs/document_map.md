@@ -25,6 +25,7 @@ Read `docs/workflow.md` when the task reaches testing/release or if a change cou
 - `docs/questions_for_user.md` — non-blocking decisions and machine follow-up.
 - `docs/web_deploy_oracle.md` — infrastructure/setup reference only; normally irrelevant to asset integration.
 - `docs/roadmap_history.md` — archive only; use only when historical reasoning is specifically needed.
+- `docs/roadmap_progress_archive_2026_09.md` — archived 2026 editor/visual migration ledger; never a source of current priority.
 
 ## Conflict Rule
 
