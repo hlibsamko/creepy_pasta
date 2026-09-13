@@ -3,15 +3,16 @@ extends Node3D
 #region Scene resources and authoritative session contracts
 
 const LEVEL_RUNTIME_QUERY := preload("res://scripts/level_runtime_query.gd")
+const LEVEL_CATALOG := preload("res://scripts/level_catalog.gd")
 const ACCOUNT_GAME_BRIDGE := preload("res://scripts/account_game_bridge.gd")
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
-const WRONG_COPY_ROOM_SCENE := preload("res://scenes/wrong_copy_room.tscn")
-const COPIED_DOOR_ROOM_SCENE := preload("res://scenes/copied_door_room.tscn")
-const BACKROOMS_SCENE := preload("res://scenes/backrooms/backrooms.tscn")
-const HOUSE_SURVEY_SCENE := preload("res://scenes/endless_house/house_survey.tscn")
-const UNLIT_EVIDENCE_SCENE := preload("res://scenes/endless_house/unlit_evidence_chamber.tscn")
-const CORRIDOR_SCENE := preload("res://scenes/corridor.tscn")
-const FINAL_WATCHER_ROOM_SCENE := preload("res://scenes/final_watcher_room.tscn")
+const WRONG_COPY_ROOM_SCENE := LEVEL_CATALOG.WRONG_COPY_ROOM_SCENE
+const COPIED_DOOR_ROOM_SCENE := LEVEL_CATALOG.COPIED_DOOR_ROOM_SCENE
+const BACKROOMS_SCENE := LEVEL_CATALOG.BACKROOMS_SCENE
+const HOUSE_SURVEY_SCENE := LEVEL_CATALOG.HOUSE_SURVEY_SCENE
+const UNLIT_EVIDENCE_SCENE := LEVEL_CATALOG.UNLIT_EVIDENCE_SCENE
+const CORRIDOR_SCENE := LEVEL_CATALOG.CORRIDOR_SCENE
+const FINAL_WATCHER_ROOM_SCENE := LEVEL_CATALOG.FINAL_WATCHER_ROOM_SCENE
 const SPAWNS := [
 	Vector3(-5.5, 0.2, -4.5),
 	Vector3(5.5, 0.2, -4.5),
@@ -32,15 +33,6 @@ const SESSION_RECONNECT_GRACE_MSEC := 90000
 const SERVER_MONSTER_SYNC_INTERVAL := 0.1
 const ACCOUNT_AUTH_TIMEOUT_MSEC := 10000
 const ACCOUNT_HEARTBEAT_INTERVAL := 60.0
-const SESSION_LEVEL_PATHS := [
-	"res://scenes/wrong_copy_room.tscn",
-	"res://scenes/copied_door_room.tscn",
-	"res://scenes/backrooms/backrooms.tscn",
-	"res://scenes/endless_house/house_survey.tscn",
-	"res://scenes/endless_house/unlit_evidence_chamber.tscn",
-	"res://scenes/corridor.tscn",
-	"res://scenes/final_watcher_room.tscn",
-]
 const SESSION_EXIT_DEFINITIONS := {
 	"res://scenes/wrong_copy_room.tscn": {
 		"position": Vector3(0.0, 1.15, 5.35),
@@ -1494,22 +1486,7 @@ func _get_online_session_for_peer(peer_id: int) -> Dictionary:
 
 
 func _get_level_title_from_path(level_path: String) -> String:
-	match level_path:
-		"res://scenes/wrong_copy_room.tscn":
-			return "Room 1"
-		"res://scenes/copied_door_room.tscn":
-			return "Room 2"
-		"res://scenes/backrooms/backrooms.tscn":
-			return "Backrooms"
-		"res://scenes/endless_house/house_survey.tscn":
-			return "House Survey"
-		"res://scenes/endless_house/unlit_evidence_chamber.tscn":
-			return "Maintenance Test"
-		"res://scenes/corridor.tscn":
-			return "Corridor"
-		"res://scenes/final_watcher_room.tscn":
-			return "Final Room"
-	return "Unknown Room"
+	return LEVEL_CATALOG.title_from_path(level_path)
 
 
 #endregion
@@ -2544,10 +2521,7 @@ func _advance_online_session(state: Dictionary) -> void:
 
 
 func _get_next_session_level_path(current_path: String) -> String:
-	var index := SESSION_LEVEL_PATHS.find(current_path)
-	if index < 0 or index >= SESSION_LEVEL_PATHS.size() - 1:
-		return FINAL_WATCHER_ROOM_SCENE.resource_path
-	return str(SESSION_LEVEL_PATHS[index + 1])
+	return LEVEL_CATALOG.next_campaign_path(current_path)
 
 
 func _move_online_session_players_to_spawns(state: Dictionary) -> void:
@@ -2613,19 +2587,7 @@ func _record_level_completion_discovery() -> void:
 
 
 func _get_next_level_scene() -> PackedScene:
-	if current_level_scene == WRONG_COPY_ROOM_SCENE:
-		return COPIED_DOOR_ROOM_SCENE
-	if current_level_scene == COPIED_DOOR_ROOM_SCENE:
-		return BACKROOMS_SCENE
-	if current_level_scene == BACKROOMS_SCENE:
-		return HOUSE_SURVEY_SCENE
-	if current_level_scene == HOUSE_SURVEY_SCENE:
-		return UNLIT_EVIDENCE_SCENE
-	if current_level_scene == UNLIT_EVIDENCE_SCENE:
-		return CORRIDOR_SCENE
-	if current_level_scene == CORRIDOR_SCENE:
-		return FINAL_WATCHER_ROOM_SCENE
-	return FINAL_WATCHER_ROOM_SCENE
+	return LEVEL_CATALOG.next_campaign_scene(current_level_scene)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -3266,21 +3228,7 @@ func _setup_qa_mode() -> void:
 
 
 func _get_qa_level_entries() -> Array:
-	var entries := [
-		{"title": "01 • Room 1 — The Wrong Copy", "scene_path": WRONG_COPY_ROOM_SCENE.resource_path},
-		{"title": "02 • Room 2 — The Copied Door", "scene_path": COPIED_DOOR_ROOM_SCENE.resource_path},
-		{"title": "03 • Backrooms — Yellow Drift", "scene_path": BACKROOMS_SCENE.resource_path},
-		{"title": "04 • House Survey — Repeated Hall", "scene_path": HOUSE_SURVEY_SCENE.resource_path},
-		{"title": "05 • The Unlit — Maintenance Wing", "scene_path": UNLIT_EVIDENCE_SCENE.resource_path},
-		{"title": "06 • Corridor — Do Not Sprint", "scene_path": CORRIDOR_SCENE.resource_path},
-		{"title": "07 • Final Room — Do Not Stare", "scene_path": FINAL_WATCHER_ROOM_SCENE.resource_path},
-	]
-	for branch in BranchCatalog.ALL:
-		entries.append({
-			"title": "STUDY • %s" % branch.title,
-			"scene_path": branch.scene.resource_path,
-		})
-	return entries
+	return LEVEL_CATALOG.qa_entries()
 
 
 func _on_qa_panel_open_changed(is_open: bool) -> void:
@@ -3638,27 +3586,10 @@ func _apply_level_exit_state(is_open: bool) -> void:
 
 
 func _get_level_scene_by_path(scene_path: String) -> PackedScene:
-	match scene_path:
-		WRONG_COPY_ROOM_SCENE.resource_path:
-			return WRONG_COPY_ROOM_SCENE
-		COPIED_DOOR_ROOM_SCENE.resource_path:
-			return COPIED_DOOR_ROOM_SCENE
-		BACKROOMS_SCENE.resource_path:
-			return BACKROOMS_SCENE
-		HOUSE_SURVEY_SCENE.resource_path:
-			return HOUSE_SURVEY_SCENE
-		UNLIT_EVIDENCE_SCENE.resource_path:
-			return UNLIT_EVIDENCE_SCENE
-		CORRIDOR_SCENE.resource_path:
-			return CORRIDOR_SCENE
-		FINAL_WATCHER_ROOM_SCENE.resource_path:
-			return FINAL_WATCHER_ROOM_SCENE
-		_:
-			var branch_scene := BranchCatalog.find_scene_by_path(scene_path)
-			if branch_scene != null:
-				return branch_scene
-			push_warning("Unknown level scene path in session sync: %s" % scene_path)
-			return null
+	var scene := LEVEL_CATALOG.scene_by_path(scene_path)
+	if scene == null:
+		push_warning("Unknown level scene path in session sync: %s" % scene_path)
+	return scene
 
 
 func _get_level_marker_positions(prefix: String) -> Array:
