@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3]
+[gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/props/polyhaven_gothic_cabinet_visual.tscn" id="1_cabinet"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_radio_visual.tscn" id="2_radio"]
@@ -6,23 +6,6 @@
 
 [sub_resource type="BoxShape3D" id="Shape_sideboard"]
 size = Vector3(2.8, 1.12, 0.7)
-
-[sub_resource type="BoxMesh" id="Mesh_body"]
-size = Vector3(2.8, 1.05, 0.68)
-
-[sub_resource type="StandardMaterial3D" id="Mat_body"]
-albedo_color = Color(0.27, 0.1, 0.12, 1)
-roughness = 0.86
-
-[sub_resource type="BoxMesh" id="Mesh_top"]
-size = Vector3(2.92, 0.1, 0.78)
-
-[sub_resource type="StandardMaterial3D" id="Mat_top"]
-albedo_color = Color(0.085, 0.095, 0.1, 1)
-roughness = 0.78
-
-[sub_resource type="BoxMesh" id="Mesh_handle"]
-size = Vector3(0.24, 0.045, 0.045)
 
 [sub_resource type="StandardMaterial3D" id="Mat_handle"]
 albedo_color = Color(0.55, 0.34, 0.15, 1)
@@ -61,24 +44,12 @@ size = Vector3(0.3, 0.34, 0.045)
 albedo_color = Color(0.3, 0.18, 0.09, 1)
 roughness = 0.7
 
-[sub_resource type="StandardMaterial3D" id="Mat_survey_map_frame"]
-albedo_color = Color(0.22, 0.12, 0.07, 1)
-roughness = 0.7
-
 [sub_resource type="BoxMesh" id="Mesh_photo"]
 size = Vector3(0.22, 0.23, 0.02)
 
 [sub_resource type="StandardMaterial3D" id="Mat_photo"]
 albedo_color = Color(0.18, 0.32, 0.34, 1)
 roughness = 0.86
-
-[sub_resource type="StandardMaterial3D" id="Mat_wall_portrait"]
-albedo_color = Color(0.12, 0.2, 0.22, 1)
-roughness = 0.92
-
-[sub_resource type="StandardMaterial3D" id="Mat_survey_map"]
-albedo_color = Color(0.36, 0.42, 0.44, 1)
-roughness = 0.94
 
 [sub_resource type="SphereMesh" id="Mesh_key_bowl"]
 radius = 0.12
@@ -92,40 +63,17 @@ roughness = 0.35
 [sub_resource type="BoxMesh" id="Mesh_note"]
 size = Vector3(0.12, 0.09, 0.018)
 
-[sub_resource type="StandardMaterial3D" id="Mat_note_yellow"]
-albedo_color = Color(0.62, 0.47, 0.13, 1)
-
 [sub_resource type="StandardMaterial3D" id="Mat_note_yellow_hero"]
 albedo_color = Color(0.7, 0.52, 0.14, 1)
 roughness = 0.88
-
-[sub_resource type="StandardMaterial3D" id="Mat_room_number"]
-albedo_color = Color(0.58, 0.43, 0.12, 1)
-roughness = 0.92
-
-[sub_resource type="StandardMaterial3D" id="Mat_switch_toggle"]
-albedo_color = Color(0.76, 0.56, 0.16, 1)
-roughness = 0.78
-
-[sub_resource type="StandardMaterial3D" id="Mat_note_cyan"]
-albedo_color = Color(0.12, 0.42, 0.45, 1)
-roughness = 0.9
 
 [sub_resource type="StandardMaterial3D" id="Mat_note_cyan_hero"]
 albedo_color = Color(0.15, 0.5, 0.52, 1)
 roughness = 0.88
 
-[sub_resource type="StandardMaterial3D" id="Mat_note_red"]
-albedo_color = Color(0.48, 0.12, 0.1, 1)
-roughness = 0.9
-
 [sub_resource type="StandardMaterial3D" id="Mat_note_red_hero"]
 albedo_color = Color(0.56, 0.14, 0.11, 1)
 roughness = 0.88
-
-[sub_resource type="StandardMaterial3D" id="Mat_paint_wear"]
-albedo_color = Color(0.32, 0.12, 0.1, 1)
-roughness = 0.94
 
 [sub_resource type="BoxMesh" id="Mesh_stool_seat"]
 size = Vector3(0.58, 0.12, 0.58)
@@ -186,19 +134,6 @@ albedo_color = Color(0.095, 0.105, 0.11, 1)
 metallic = 0.22
 roughness = 0.7
 
-[sub_resource type="StandardMaterial3D" id="Mat_radio_dial"]
-albedo_color = Color(0.32, 0.24, 0.12, 1)
-roughness = 0.72
-
-[sub_resource type="StandardMaterial3D" id="Mat_telephone"]
-albedo_color = Color(0.07, 0.08, 0.09, 1)
-metallic = 0.28
-roughness = 0.78
-
-[sub_resource type="StandardMaterial3D" id="Mat_telephone_dial"]
-albedo_color = Color(0.38, 0.27, 0.12, 1)
-roughness = 0.76
-
 [sub_resource type="TorusMesh" id="Mesh_key_ring"]
 inner_radius = 0.045
 outer_radius = 0.07
@@ -224,92 +159,13 @@ size = Vector3(0.28, 0.38, 0.035)
 [sub_resource type="BoxMesh" id="Mesh_clipboard_paper"]
 size = Vector3(0.22, 0.29, 0.012)
 
-[sub_resource type="StandardMaterial3D" id="Mat_clipboard"]
-albedo_color = Color(0.32, 0.2, 0.1, 1)
-roughness = 0.82
-
-[sub_resource type="StandardMaterial3D" id="Mat_thermometer"]
-albedo_color = Color(0.24, 0.27, 0.25, 1)
-roughness = 0.82
-
-[sub_resource type="StandardMaterial3D" id="Mat_thermometer_mark"]
-albedo_color = Color(0.52, 0.12, 0.08, 1)
-roughness = 0.88
-
 [sub_resource type="StandardMaterial3D" id="Mat_clipboard_hero"]
 albedo_color = Color(0.36, 0.22, 0.11, 1)
 roughness = 0.8
 
-[sub_resource type="StandardMaterial3D" id="Mat_clipboard_paper"]
-albedo_color = Color(0.45, 0.41, 0.32, 1)
-roughness = 0.92
-
 [sub_resource type="StandardMaterial3D" id="Mat_clipboard_paper_hero"]
 albedo_color = Color(0.5, 0.45, 0.34, 1)
 roughness = 0.9
-
-[sub_resource type="StandardMaterial3D" id="Mat_mail_slot"]
-albedo_color = Color(0.12, 0.085, 0.075, 1)
-roughness = 0.88
-
-[sub_resource type="StandardMaterial3D" id="Mat_key_tag"]
-albedo_color = Color(0.76, 0.5, 0.12, 1)
-metallic = 0.35
-roughness = 0.36
-
-[sub_resource type="StandardMaterial3D" id="Mat_coat_hook"]
-albedo_color = Color(0.18, 0.08, 0.07, 1)
-metallic = 0.55
-roughness = 0.38
-
-[sub_resource type="StandardMaterial3D" id="Mat_doorbell"]
-albedo_color = Color(0.42, 0.28, 0.09, 1)
-metallic = 0.6
-roughness = 0.3
-
-[sub_resource type="StandardMaterial3D" id="Mat_room_label"]
-albedo_color = Color(0.56, 0.47, 0.32, 1)
-roughness = 0.9
-
-[sub_resource type="StandardMaterial3D" id="Mat_room_label_mark"]
-albedo_color = Color(0.18, 0.36, 0.4, 1)
-roughness = 0.9
-
-[sub_resource type="StandardMaterial3D" id="Mat_emergency_tag"]
-albedo_color = Color(0.68, 0.12, 0.08, 1)
-roughness = 0.82
-
-[sub_resource type="StandardMaterial3D" id="Mat_maintenance_decal"]
-albedo_color = Color(0.58, 0.4, 0.11, 1)
-roughness = 0.9
-
-[sub_resource type="StandardMaterial3D" id="Mat_maintenance_arrow"]
-albedo_color = Color(0.5, 0.32, 0.08, 1)
-roughness = 0.92
-
-[sub_resource type="CylinderMesh" id="Mesh_clock"]
-top_radius = 0.19
-bottom_radius = 0.19
-height = 0.05
-
-[sub_resource type="BoxMesh" id="Mesh_clock_hand"]
-size = Vector3(0.025, 0.12, 0.018)
-
-[sub_resource type="StandardMaterial3D" id="Mat_clock"]
-albedo_color = Color(0.28, 0.22, 0.14, 1)
-roughness = 0.84
-
-[sub_resource type="StandardMaterial3D" id="Mat_clock_hand"]
-albedo_color = Color(0.62, 0.44, 0.18, 1)
-metallic = 0.2
-roughness = 0.5
-
-[sub_resource type="BoxMesh" id="Mesh_wall_curtain"]
-size = Vector3(0.42, 1.15, 0.045)
-
-[sub_resource type="StandardMaterial3D" id="Mat_wall_curtain"]
-albedo_color = Color(0.09, 0.13, 0.16, 1)
-roughness = 0.92
 
 [sub_resource type="CylinderMesh" id="Mesh_basket"]
 top_radius = 0.24
