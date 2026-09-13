@@ -33,36 +33,6 @@ const SESSION_RECONNECT_GRACE_MSEC := 90000
 const SERVER_MONSTER_SYNC_INTERVAL := 0.1
 const ACCOUNT_AUTH_TIMEOUT_MSEC := 10000
 const ACCOUNT_HEARTBEAT_INTERVAL := 60.0
-const SESSION_EXIT_DEFINITIONS := {
-	"res://scenes/wrong_copy_room.tscn": {
-		"position": Vector3(0.0, 1.15, 5.35),
-		"activation_radius": 2.0,
-	},
-	"res://scenes/copied_door_room.tscn": {
-		"position": Vector3(0.0, 1.15, -4.55),
-		"activation_radius": 2.0,
-	},
-	"res://scenes/backrooms/backrooms.tscn": {
-		"position": Vector3(36.0, 1.15, 28.0),
-		"activation_radius": 2.0,
-	},
-	"res://scenes/endless_house/house_survey.tscn": {
-		"position": Vector3(40.0, 1.15, 4.0),
-		"activation_radius": 2.0,
-	},
-	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
-		"position": Vector3(36.0, 1.15, 4.0),
-		"activation_radius": 2.0,
-	},
-	"res://scenes/corridor.tscn": {
-		"position": Vector3(0.0, 1.15, 34.5),
-		"activation_radius": 2.0,
-	},
-	"res://scenes/final_watcher_room.tscn": {
-		"position": Vector3(0.0, 1.15, -4.55),
-		"activation_radius": 2.0,
-	},
-}
 const SESSION_NOTE_DEFINITIONS := {
 	"res://scenes/wrong_copy_room.tscn": {
 		"Note1": {
@@ -2383,7 +2353,7 @@ func _is_online_peer_near_position(
 
 
 func _is_online_peer_near_session_exit(peer_id: int, state: Dictionary) -> bool:
-	var definition: Dictionary = SESSION_EXIT_DEFINITIONS.get(str(state["level_path"]), {})
+	var definition := LEVEL_CATALOG.exit_definition(str(state["level_path"]))
 	if definition.is_empty():
 		return false
 	return _is_online_peer_near_position(

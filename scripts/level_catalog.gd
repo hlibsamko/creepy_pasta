@@ -17,42 +17,49 @@ const CAMPAIGN := [
 		"title": "Room 1",
 		"qa_title": "01 • Room 1 — The Wrong Copy",
 		"scene": WRONG_COPY_ROOM_SCENE,
+		"exit_position": Vector3(0.0, 1.15, 5.35),
 	},
 	{
 		"id": "copied_door_room",
 		"title": "Room 2",
 		"qa_title": "02 • Room 2 — The Copied Door",
 		"scene": COPIED_DOOR_ROOM_SCENE,
+		"exit_position": Vector3(0.0, 1.15, -4.55),
 	},
 	{
 		"id": "backrooms",
 		"title": "Backrooms",
 		"qa_title": "03 • Backrooms — Yellow Drift",
 		"scene": BACKROOMS_SCENE,
+		"exit_position": Vector3(36.0, 1.15, 28.0),
 	},
 	{
 		"id": "house_survey",
 		"title": "House Survey",
 		"qa_title": "04 • House Survey — Repeated Hall",
 		"scene": HOUSE_SURVEY_SCENE,
+		"exit_position": Vector3(40.0, 1.15, 4.0),
 	},
 	{
 		"id": "unlit_evidence_chamber",
 		"title": "Maintenance Test",
 		"qa_title": "05 • The Unlit — Maintenance Wing",
 		"scene": UNLIT_EVIDENCE_SCENE,
+		"exit_position": Vector3(36.0, 1.15, 4.0),
 	},
 	{
 		"id": "corridor",
 		"title": "Corridor",
 		"qa_title": "06 • Corridor — Do Not Sprint",
 		"scene": CORRIDOR_SCENE,
+		"exit_position": Vector3(0.0, 1.15, 34.5),
 	},
 	{
 		"id": "final_watcher_room",
 		"title": "Final Room",
 		"qa_title": "07 • Final Room — Do Not Stare",
 		"scene": FINAL_WATCHER_ROOM_SCENE,
+		"exit_position": Vector3(0.0, 1.15, -4.55),
 	},
 ]
 
@@ -92,6 +99,16 @@ static func id_from_path(scene_path: String) -> String:
 static func title_from_path(scene_path: String) -> String:
 	var entry := find_by_scene_path(scene_path)
 	return str(entry.get("title", "Unknown Room"))
+
+
+static func exit_definition(scene_path: String) -> Dictionary:
+	var entry := find_by_scene_path(scene_path)
+	if entry.is_empty() or not entry.has("exit_position"):
+		return {}
+	return {
+		"position": entry["exit_position"],
+		"activation_radius": float(entry.get("exit_activation_radius", 2.0)),
+	}
 
 
 static func next_campaign_path(current_path: String) -> String:
