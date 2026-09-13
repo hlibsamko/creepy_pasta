@@ -115,33 +115,6 @@ const SESSION_NOTE_DEFINITIONS := {
 		},
 	},
 }
-const SESSION_MONSTER_DEFINITIONS := {
-	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
-		"EndlessHouseBuilder/GeneratedBackrooms/Monsters/GeneratedLightShyMonster1": {
-			"spawn_position": Vector3(24.0, 0.0, 20.0),
-			"move_speed": 2.2,
-			"kill_radius": 1.0,
-			"death_reason": "Something from the unlit hall reached you",
-			"cell_size": 4.0,
-			"layout": "############\n#S.D.L..#E.#\n#.#.###.#..#\n#.#...#.#..#\n#.###.#.##.#\n#R.L.LU.LT.#\n############",
-			"flashlight_range": 18.0,
-			"flashlight_angle": 34.0,
-			"beam_edge_margin_degrees": 2.0,
-			"journal_entry_id": "unlit",
-			"journal_fact_index_on_observation": 2,
-			"work_lights": [
-				{
-					"source_id": "EndlessHouseBuilder/GeneratedBackrooms/Mechanics/GeneratedWorkLight1",
-					"power_source_id": "EndlessHouseBuilder/GeneratedBackrooms/Mechanics/PressurePlate",
-					"position": Vector3(4.0, 2.65, 20.0),
-					"aim_position": Vector3(24.0, 0.55, 20.0),
-					"range": 24.0,
-					"angle": 32.0,
-				},
-			],
-		},
-	},
-}
 const SESSION_CLIENT_DISCOVERIES := {
 	"res://scenes/wrong_copy_room.tscn": [
 		{
@@ -3575,7 +3548,7 @@ func _apply_online_monster_states(states: Dictionary) -> void:
 
 func _get_online_monster_snapshot(state: Dictionary) -> Dictionary:
 	var level_path := str(state.get("level_path", ""))
-	var definitions: Dictionary = SESSION_MONSTER_DEFINITIONS.get(level_path, {})
+	var definitions := LEVEL_MECHANICS_CATALOG.monsters(level_path)
 	if definitions.is_empty():
 		state["monster_states"] = {}
 		return {}
@@ -3602,7 +3575,7 @@ func _server_step_online_monsters(
 	now_msec := -1
 ) -> bool:
 	var level_path := str(state.get("level_path", ""))
-	var definitions: Dictionary = SESSION_MONSTER_DEFINITIONS.get(level_path, {})
+	var definitions := LEVEL_MECHANICS_CATALOG.monsters(level_path)
 	if definitions.is_empty():
 		return false
 	var timestamp := int(Time.get_ticks_msec()) if now_msec < 0 else int(now_msec)

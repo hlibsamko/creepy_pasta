@@ -45,6 +45,34 @@ const BREAKERS := {
 	},
 }
 
+const MONSTERS := {
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
+		"EndlessHouseBuilder/GeneratedBackrooms/Monsters/GeneratedLightShyMonster1": {
+			"spawn_position": Vector3(24.0, 0.0, 20.0),
+			"move_speed": 2.2,
+			"kill_radius": 1.0,
+			"death_reason": "Something from the unlit hall reached you",
+			"cell_size": 4.0,
+			"layout": "############\n#S.D.L..#E.#\n#.#.###.#..#\n#.#...#.#..#\n#.###.#.##.#\n#R.L.LU.LT.#\n############",
+			"flashlight_range": 18.0,
+			"flashlight_angle": 34.0,
+			"beam_edge_margin_degrees": 2.0,
+			"journal_entry_id": "unlit",
+			"journal_fact_index_on_observation": 2,
+			"work_lights": [
+				{
+					"source_id": "EndlessHouseBuilder/GeneratedBackrooms/Mechanics/GeneratedWorkLight1",
+					"power_source_id": "EndlessHouseBuilder/GeneratedBackrooms/Mechanics/PressurePlate",
+					"position": Vector3(4.0, 2.65, 20.0),
+					"aim_position": Vector3(24.0, 0.55, 20.0),
+					"range": 24.0,
+					"angle": 32.0,
+				},
+			],
+		},
+	},
+}
+
 
 static func pressure_requirement(scene_path: String) -> int:
 	return int(PRESSURE_REQUIREMENTS.get(scene_path, 0))
@@ -60,3 +88,7 @@ static func breaker_requirement(scene_path: String) -> int:
 
 static func breakers(scene_path: String) -> Dictionary:
 	return BREAKERS.get(scene_path, {})
+
+
+static func monsters(scene_path: String) -> Dictionary:
+	return MONSTERS.get(scene_path, {})
