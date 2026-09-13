@@ -4,6 +4,7 @@ extends Node3D
 
 const LEVEL_RUNTIME_QUERY := preload("res://scripts/level_runtime_query.gd")
 const LEVEL_CATALOG := preload("res://scripts/level_catalog.gd")
+const LEVEL_MECHANICS_CATALOG := preload("res://scripts/level_mechanics_catalog.gd")
 const ACCOUNT_GAME_BRIDGE := preload("res://scripts/account_game_bridge.gd")
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const WRONG_COPY_ROOM_SCENE := LEVEL_CATALOG.WRONG_COPY_ROOM_SCENE
@@ -114,32 +115,8 @@ const SESSION_NOTE_DEFINITIONS := {
 		},
 	},
 }
-const SESSION_PRESSURE_REQUIREMENTS := {
-	"res://scenes/copied_door_room.tscn": 1,
-	"res://scenes/backrooms/backrooms.tscn": 1,
-}
 const SESSION_BREAKER_REQUIREMENTS := {
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn": 1,
-}
-const SESSION_PRESSURE_PLATE_DEFINITIONS := {
-	"res://scenes/copied_door_room.tscn": {
-		"PressurePlate": {
-			"position": Vector3(0.0, 0.03, -2.55),
-			"activation_radius": 1.5,
-		},
-	},
-	"res://scenes/backrooms/backrooms.tscn": {
-		"BackroomsBuilder/GeneratedBackrooms/Mechanics/PressurePlate": {
-			"position": Vector3(32.0, 0.03, 24.0),
-			"activation_radius": 1.5,
-		},
-	},
-	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
-		"EndlessHouseBuilder/GeneratedBackrooms/Mechanics/PressurePlate": {
-			"position": Vector3(4.0, 0.03, 20.0),
-			"activation_radius": 1.5,
-		},
-	},
 }
 const SESSION_BREAKER_DEFINITIONS := {
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
@@ -2080,7 +2057,7 @@ func _request_online_pressure_state(plate_id: String, is_active: bool) -> void:
 	if state.is_empty():
 		return
 	var level_path := str(state["level_path"])
-	var plate_definitions: Dictionary = SESSION_PRESSURE_PLATE_DEFINITIONS.get(level_path, {})
+	var plate_definitions := LEVEL_MECHANICS_CATALOG.pressure_plates(level_path)
 	if not plate_definitions.has(plate_id):
 		_log_server_event(
 			"session_pressure_state_ignored",
@@ -2311,13 +2288,13 @@ func _evaluate_online_session_exit(state: Dictionary) -> void:
 	var level_path := str(state["level_path"])
 	var definitions: Dictionary = SESSION_NOTE_DEFINITIONS.get(level_path, {})
 	var collected: Array = state["collected_note_ids"]
-	var required_plate_count := int(SESSION_PRESSURE_REQUIREMENTS.get(level_path, 0))
+	var required_plate_count := LEVEL_MECHANICS_CATALOG.pressure_requirement(level_path)
 	var required_breaker_count := int(SESSION_BREAKER_REQUIREMENTS.get(level_path, 0))
 	var active_plate_count := 0
 	var triggered_breaker_count := 0
 	var pressure_states: Dictionary = state["pressure_plate_states"]
 	var mechanic_states: Dictionary = state["level_mechanic_states"]
-	var plate_definitions: Dictionary = SESSION_PRESSURE_PLATE_DEFINITIONS.get(level_path, {})
+	var plate_definitions := LEVEL_MECHANICS_CATALOG.pressure_plates(level_path)
 	var breaker_definitions: Dictionary = SESSION_BREAKER_DEFINITIONS.get(level_path, {})
 	for plate_id in plate_definitions:
 		if bool(pressure_states.get(str(plate_id), false)):
