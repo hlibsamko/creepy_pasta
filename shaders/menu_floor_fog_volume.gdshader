@@ -3,6 +3,7 @@ shader_type spatial;
 render_mode unshaded, cull_front, depth_draw_never, depth_test_disabled, blend_mix;
 
 uniform sampler3D volume_noise : repeat_enable, filter_linear;
+uniform sampler2D scene_depth : hint_depth_texture, repeat_disable, filter_nearest;
 uniform vec4 fog_color : source_color = vec4(0.46, 0.51, 0.55, 1.0);
 uniform float density : hint_range(0.0, 4.0) = 0.82;
 uniform float base_density : hint_range(0.0, 0.5) = 0.012;
@@ -43,12 +44,35 @@ void fragment() {
 	float entry_distance = max(max(entry_axis.x, entry_axis.y), entry_axis.z);
 	float exit_distance = min(min(exit_axis.x, exit_axis.y), exit_axis.z);
 	entry_distance = max(entry_distance, 0.0);
+
+	// Stop the volume ray at the first opaque surface in the diorama. The box
+	// still renders as one transparent mesh, but it now occupies the room
+	// instead of behaving like a camera-attached overlay.
+	float raw_depth = textureLod(scene_depth, SCREEN_UV, 0.0).r;
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+	vec3 scene_ndc = vec3(SCREEN_UV * 2.0 - 1.0, raw_depth * 2.0 - 1.0);
+#else
+	vec3 scene_ndc = vec3(SCREEN_UV * 2.0 - 1.0, raw_depth);
+#endif
+	vec4 scene_view = INV_PROJECTION_MATRIX * vec4(scene_ndc, 1.0);
+	scene_view.xyz /= max(abs(scene_view.w), 0.00001);
+	vec3 scene_world = (INV_VIEW_MATRIX * vec4(scene_view.xyz, 1.0)).xyz;
+	vec3 scene_local = (inverse_model * vec4(scene_world, 1.0)).xyz;
+	float surface_distance = dot(scene_local - camera_local, ray_direction);
+	if (surface_distance > 0.0) {
+		exit_distance = min(exit_distance, surface_distance);
+	}
 	if (exit_distance <= entry_distance) {
 		discard;
 	}
 
 	float step_length = (exit_distance - entry_distance) / float(MARCH_STEPS);
-	float stable_jitter = texture(volume_noise, vec3(SCREEN_UV * vec2(2.0, 1.125), 0.371)).r;
+	vec3 entry_local = camera_local + ray_direction * entry_distance;
+	vec3 entry_world = (MODEL_MATRIX * vec4(entry_local, 1.0)).xyz;
+	float stable_jitter = texture(
+		volume_noise,
+		entry_world * (noise_scale * 1.73) + vec3(0.173, 0.619, 0.347)
+	).r;
 	float sample_distance = entry_distance + step_length * stable_jitter;
 	float accumulated_alpha = 0.0;
 	vec3 accumulated_color = vec3(0.0);
