@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ciiwjb8p52mhi"
-path.s3tc="res://.godot/imported/interior_tiles_nor_gl_1k.jpg-45d2339c948f52832a20c359892ea06b.s3tc.ctex"
+uid="uid://y42vlc2k8xqc"
+path.s3tc="res://.godot/imported/GothicCabinet_01_nor_gl_1k.jpg-fce05c3e7f166ec4eeca6edd114de9ef.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/third_party/polyhaven/interior_tiles/interior_tiles_nor_gl_1k.jpg"
-dest_files=["res://.godot/imported/interior_tiles_nor_gl_1k.jpg-45d2339c948f52832a20c359892ea06b.s3tc.ctex"]
+source_file="res://assets/third_party/polyhaven/gothic_cabinet_01/textures/GothicCabinet_01_nor_gl_1k.jpg"
+dest_files=["res://.godot/imported/GothicCabinet_01_nor_gl_1k.jpg-fce05c3e7f166ec4eeca6edd114de9ef.s3tc.ctex"]
 
 [params]
 
@@ -27,7 +27,7 @@ compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=1
-roughness/src_normal="res://assets/third_party/polyhaven/interior_tiles/interior_tiles_nor_gl_1k.jpg"
+roughness/src_normal="res://assets/third_party/polyhaven/gothic_cabinet_01/textures/GothicCabinet_01_nor_gl_1k.jpg"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

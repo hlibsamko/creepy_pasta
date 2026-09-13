@@ -47,7 +47,7 @@ LevelName
 
 ## Current migration queue
 
-1. Pin the editor to Godot 4.7.2 stable and resolve it through `tools/engine/`.
+1. Keep the completed Godot 4.7.2 migration pinned through `tools/engine/`; preserve the migrated 4.6 defaults explicitly in `project.godot`.
 2. Connect the pinned Godot MCP with inspection-only tools enabled by default.
 3. Move smoke/capture content from production folders to `tests/`; move the QA overlay to `devtools/qa/`; exclude both from exports.
 4. Rename production `*_demo.tscn` routes and replace path-keyed menu dictionaries with stable level IDs/catalog entries.
