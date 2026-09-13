@@ -1,0 +1,311 @@
+[gd_scene format=3]
+
+[sub_resource type="BoxMesh" id="Mesh_photo_frame"]
+size = Vector3(0.3, 0.34, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="Mat_photo_frame"]
+albedo_color = Color(0.3, 0.18, 0.09, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_survey_map_frame"]
+albedo_color = Color(0.22, 0.12, 0.07, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="Mesh_photo"]
+size = Vector3(0.22, 0.23, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall_portrait"]
+albedo_color = Color(0.12, 0.2, 0.22, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Mat_survey_map"]
+albedo_color = Color(0.36, 0.42, 0.44, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="Mesh_note"]
+size = Vector3(0.12, 0.09, 0.018)
+
+[sub_resource type="StandardMaterial3D" id="Mat_room_number"]
+albedo_color = Color(0.58, 0.43, 0.12, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Mat_switch_toggle"]
+albedo_color = Color(0.76, 0.56, 0.16, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_paint_wear"]
+albedo_color = Color(0.32, 0.12, 0.1, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="Mesh_radio"]
+size = Vector3(0.34, 0.2, 0.2)
+
+[sub_resource type="CylinderMesh" id="Mesh_radio_dial"]
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.025
+
+[sub_resource type="StandardMaterial3D" id="Mat_radio"]
+albedo_color = Color(0.095, 0.105, 0.11, 1)
+metallic = 0.22
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_handle"]
+albedo_color = Color(0.55, 0.34, 0.15, 1)
+metallic = 0.55
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Mat_telephone"]
+albedo_color = Color(0.07, 0.08, 0.09, 1)
+metallic = 0.28
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="Mat_telephone_dial"]
+albedo_color = Color(0.38, 0.27, 0.12, 1)
+roughness = 0.76
+
+[sub_resource type="TorusMesh" id="Mesh_key_ring"]
+inner_radius = 0.045
+outer_radius = 0.07
+rings = 8
+ring_segments = 12
+
+[sub_resource type="BoxMesh" id="Mesh_key"]
+size = Vector3(0.16, 0.025, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="Mat_key"]
+albedo_color = Color(0.55, 0.36, 0.12, 1)
+metallic = 0.75
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="Mesh_clipboard"]
+size = Vector3(0.28, 0.38, 0.035)
+
+[sub_resource type="BoxMesh" id="Mesh_clipboard_paper"]
+size = Vector3(0.22, 0.29, 0.012)
+
+[sub_resource type="StandardMaterial3D" id="Mat_clipboard"]
+albedo_color = Color(0.32, 0.2, 0.1, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Mat_thermometer"]
+albedo_color = Color(0.24, 0.27, 0.25, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Mat_thermometer_mark"]
+albedo_color = Color(0.52, 0.12, 0.08, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_clipboard_paper"]
+albedo_color = Color(0.45, 0.41, 0.32, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Mat_mail_slot"]
+albedo_color = Color(0.12, 0.085, 0.075, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Mat_key_tag"]
+albedo_color = Color(0.76, 0.5, 0.12, 1)
+metallic = 0.35
+roughness = 0.36
+
+[sub_resource type="StandardMaterial3D" id="Mat_coat_hook"]
+albedo_color = Color(0.18, 0.08, 0.07, 1)
+metallic = 0.55
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Mat_doorbell"]
+albedo_color = Color(0.42, 0.28, 0.09, 1)
+metallic = 0.6
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_room_label"]
+albedo_color = Color(0.56, 0.47, 0.32, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_room_label_mark"]
+albedo_color = Color(0.18, 0.36, 0.4, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_emergency_tag"]
+albedo_color = Color(0.68, 0.12, 0.08, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="Mat_maintenance_decal"]
+albedo_color = Color(0.58, 0.4, 0.11, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_maintenance_arrow"]
+albedo_color = Color(0.5, 0.32, 0.08, 1)
+roughness = 0.92
+
+[sub_resource type="CylinderMesh" id="Mesh_clock"]
+top_radius = 0.19
+bottom_radius = 0.19
+height = 0.05
+
+[sub_resource type="BoxMesh" id="Mesh_clock_hand"]
+size = Vector3(0.025, 0.12, 0.018)
+
+[sub_resource type="StandardMaterial3D" id="Mat_clock"]
+albedo_color = Color(0.28, 0.22, 0.14, 1)
+roughness = 0.84
+
+[sub_resource type="StandardMaterial3D" id="Mat_clock_hand"]
+albedo_color = Color(0.62, 0.44, 0.18, 1)
+metallic = 0.2
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_wall_curtain"]
+size = Vector3(0.42, 1.15, 0.045)
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall_curtain"]
+albedo_color = Color(0.09, 0.13, 0.16, 1)
+roughness = 0.92
+
+[node name="HouseSideboardWallDressing" type="Node3D"]
+
+[node name="WallClock" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.25, 1.36, 0.24)
+mesh = SubResource("Mesh_clock")
+surface_material_override/0 = SubResource("Mat_clock")
+
+[node name="ClockHandMinute" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.25, 1.46, 0.2)
+mesh = SubResource("Mesh_clock_hand")
+surface_material_override/0 = SubResource("Mat_clock_hand")
+
+[node name="ClockHandHour" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.25, 1.34, 0.2)
+mesh = SubResource("Mesh_clock_hand")
+surface_material_override/0 = SubResource("Mat_clock_hand")
+
+[node name="WallPortraitFrame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1, -0.72, 1.48, 0.24)
+mesh = SubResource("Mesh_photo_frame")
+surface_material_override/0 = SubResource("Mat_photo_frame")
+
+[node name="WallPortrait" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1, -0.72, 1.48, 0.205)
+mesh = SubResource("Mesh_photo")
+surface_material_override/0 = SubResource("Mat_wall_portrait")
+
+[node name="WallIntercom" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.78, 0, 0, 0, 1.15, 0, 0, 0, 0.72, 1.18, 1.3, 0.23)
+mesh = SubResource("Mesh_radio")
+surface_material_override/0 = SubResource("Mat_radio")
+
+[node name="WallIntercomDial" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 1.18, 1.3, 0.08)
+mesh = SubResource("Mesh_radio_dial")
+surface_material_override/0 = SubResource("Mat_handle")
+
+[node name="WallSwitchPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.82, 0, 0, 0, 0.5, 0.72, 1.24, 0.23)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_clipboard")
+
+[node name="WallSwitchToggle" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.6, 0.72, 1.24, 0.08)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_switch_toggle")
+
+[node name="WallMailSlot" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.72, 0, 0, 0, 0.42, 0, 0, 0, 0.55, 0.36, 1.18, 0.23)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_mail_slot")
+
+[node name="WallMailPaper" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.62, 0, 0, 0, 0.58, 0, 0, 0, 0.5, 0.36, 1.22, 0.08)
+mesh = SubResource("Mesh_clipboard_paper")
+surface_material_override/0 = SubResource("Mat_clipboard_paper")
+
+[node name="WallKeyHook" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, -0.1, 1.18, 0.22)
+mesh = SubResource("Mesh_key_ring")
+surface_material_override/0 = SubResource("Mat_key")
+
+[node name="WallKeyTag" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.7, 0.14, 0, -0.14, 0.7, 0, 0, 0, 0.7, -0.1, 1.1, 0.08)
+mesh = SubResource("Mesh_key")
+surface_material_override/0 = SubResource("Mat_key_tag")
+
+[node name="WallThermometer" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.34, 0, 0, 0, 0.8, 0, 0, 0, 0.42, -0.42, 1.26, 0.22)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_thermometer")
+
+[node name="WallThermometerMark" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.62, 0, 0, 0, 0.62, 0, 0, 0, 0.52, -0.42, 1.28, 0.08)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_thermometer_mark")
+
+[node name="WallRoomLabel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9, 0, 0, 0, 0.34, 0, 0, 0, 0.5, 0.7, 1.68, 0.22)
+mesh = SubResource("Mesh_clipboard")
+surface_material_override/0 = SubResource("Mat_room_label")
+
+[node name="WallRoomLabelMark" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.65, 0, 0, 0, 0.5, 0, 0, 0, 0.52, 0.7, 1.68, 0.08)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_room_label_mark")
+
+[node name="WallPaintWear" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.8, 0.12, 0, -0.12, 0.46, 0, 0, 0, 0.4, 1.05, 0.36, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_paint_wear")
+
+[node name="MaintenanceDecal" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.78, 0.06, 0, -0.06, 0.5, 0, 0, 0, 0.42, -1.02, 1.24, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_maintenance_decal")
+
+[node name="MaintenanceArrow" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.15, 0.08, 0, -0.08, 0.3, 0, 0, 0, 0.4, -1.0, 1.02, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_maintenance_arrow")
+
+[node name="WallRoomNumber" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.42, 0, 0, 0, 0.4, 0.08, 1.58, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_room_number")
+
+[node name="WallCoatHook" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.42, 1.36, 0.22)
+mesh = SubResource("Mesh_key_ring")
+surface_material_override/0 = SubResource("Mat_coat_hook")
+
+[node name="WallDoorbell" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.58, 0, 0, 0, 0.58, 0, 0, 0, 0.58, 0.58, 1.2, 0.22)
+mesh = SubResource("Mesh_radio_dial")
+surface_material_override/0 = SubResource("Mat_doorbell")
+
+[node name="WallEmergencyTag" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.72, 0.04, 0, -0.04, 0.44, 0, 0, 0, 0.4, 0.86, 1.2, 0.22)
+mesh = SubResource("Mesh_note")
+surface_material_override/0 = SubResource("Mat_emergency_tag")
+
+[node name="WallSurveyMapFrame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.45, 0, 0, 0, 1.45, 0, 0, 0, 1, -0.2, 1.72, 0.22)
+mesh = SubResource("Mesh_photo_frame")
+surface_material_override/0 = SubResource("Mat_survey_map_frame")
+
+[node name="WallSurveyMap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.45, 0, 0, 0, 1.45, 0, 0, 0, 1, -0.2, 1.72, 0.18)
+mesh = SubResource("Mesh_photo")
+surface_material_override/0 = SubResource("Mat_survey_map")
+
+[node name="WallCurtain" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.06, 0, -0.06, 1.0, 0, 0, 0, 1, 1.35, 1.45, 0.22)
+mesh = SubResource("Mesh_wall_curtain")
+surface_material_override/0 = SubResource("Mat_wall_curtain")
+
+[node name="WallTelephone" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.72, 0, 0, 0, 0.92, 0, 0, 0, 0.68, -1.12, 1.38, 0.22)
+mesh = SubResource("Mesh_radio")
+surface_material_override/0 = SubResource("Mat_telephone")
+
+[node name="WallTelephoneDial" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.62, 0, 0, 0, 0.62, 0, 0, 0, 0.62, -1.12, 1.38, 0.08)
+mesh = SubResource("Mesh_radio_dial")
+surface_material_override/0 = SubResource("Mat_telephone_dial")

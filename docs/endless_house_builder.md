@@ -34,7 +34,8 @@ The kit scene root is also the authoritative local offset for the asset. `Backro
 - `house_wall_block.tscn`: cool faded wall with contrasting base trim.
 - `house_ceiling_tile.tscn`: low-contrast plaster ceiling.
 - `house_ceiling_lamp.tscn`: warm fixture using the shared flicker component.
-- `house_low_sideboard.tscn`: low cover and pursuit-breaking furniture placeholder.
+- `house_low_sideboard.tscn`: low cover, collision, furniture, and surface/floor dressing.
+- `house_sideboard_wall_dressing.tscn`: visual-only wall props instanced as the sideboard's `Visuals/WallDressing` group.
 
 The palette is deliberately varied and restrained so future residential assets can replace placeholders without forcing a full lighting rewrite.
 
