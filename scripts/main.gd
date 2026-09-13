@@ -115,22 +115,6 @@ const SESSION_NOTE_DEFINITIONS := {
 		},
 	},
 }
-const SESSION_BREAKER_REQUIREMENTS := {
-	"res://scenes/endless_house/unlit_evidence_chamber.tscn": 1,
-}
-const SESSION_BREAKER_DEFINITIONS := {
-	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
-		"EndlessHouseBuilder/GeneratedBackrooms/Mechanics/GeneratedBreakerTrigger1": {
-			"position": Vector3(36.0, 0.0, 20.0),
-			"activation_radius": 2.0,
-			"work_light_id": "EndlessHouseBuilder/GeneratedBackrooms/Mechanics/GeneratedWorkLight1",
-			"outage_duration": 3.2,
-			"entry_id": "unlit",
-			"fact_index": 3,
-			"message": "The work light died. Keep your own beam on the silhouette.",
-		},
-	},
-}
 const SESSION_MONSTER_DEFINITIONS := {
 	"res://scenes/endless_house/unlit_evidence_chamber.tscn": {
 		"EndlessHouseBuilder/GeneratedBackrooms/Monsters/GeneratedLightShyMonster1": {
@@ -2175,7 +2159,7 @@ func _server_apply_online_breaker_outage(
 	now_msec := -1
 ) -> bool:
 	var level_path := str(state.get("level_path", ""))
-	var definitions: Dictionary = SESSION_BREAKER_DEFINITIONS.get(level_path, {})
+	var definitions := LEVEL_MECHANICS_CATALOG.breakers(level_path)
 	if not definitions.has(source_id):
 		_log_server_event("session_breaker_ignored", {
 			"session_id": state.get("id", ""),
@@ -2289,13 +2273,13 @@ func _evaluate_online_session_exit(state: Dictionary) -> void:
 	var definitions: Dictionary = SESSION_NOTE_DEFINITIONS.get(level_path, {})
 	var collected: Array = state["collected_note_ids"]
 	var required_plate_count := LEVEL_MECHANICS_CATALOG.pressure_requirement(level_path)
-	var required_breaker_count := int(SESSION_BREAKER_REQUIREMENTS.get(level_path, 0))
+	var required_breaker_count := LEVEL_MECHANICS_CATALOG.breaker_requirement(level_path)
 	var active_plate_count := 0
 	var triggered_breaker_count := 0
 	var pressure_states: Dictionary = state["pressure_plate_states"]
 	var mechanic_states: Dictionary = state["level_mechanic_states"]
 	var plate_definitions := LEVEL_MECHANICS_CATALOG.pressure_plates(level_path)
-	var breaker_definitions: Dictionary = SESSION_BREAKER_DEFINITIONS.get(level_path, {})
+	var breaker_definitions := LEVEL_MECHANICS_CATALOG.breakers(level_path)
 	for plate_id in plate_definitions:
 		if bool(pressure_states.get(str(plate_id), false)):
 			active_plate_count += 1
@@ -3919,7 +3903,7 @@ func _get_level_mechanic_states() -> Dictionary:
 func _get_online_mechanic_snapshot(state: Dictionary, now_msec := -1) -> Dictionary:
 	var snapshot: Dictionary = (state.get("level_mechanic_states", {}) as Dictionary).duplicate(true)
 	var level_path := str(state.get("level_path", ""))
-	var definitions: Dictionary = SESSION_BREAKER_DEFINITIONS.get(level_path, {})
+	var definitions := LEVEL_MECHANICS_CATALOG.breakers(level_path)
 	var timestamp := int(Time.get_ticks_msec()) if now_msec < 0 else int(now_msec)
 	for breaker_id in definitions:
 		var definition: Dictionary = definitions[breaker_id]
