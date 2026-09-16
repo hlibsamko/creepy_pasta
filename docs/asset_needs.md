@@ -14,6 +14,8 @@ The Dreamcore projector is now prepared and authored above the empty-chair compo
 
 Status values: `NEEDED`, `RESEARCHING`, `SELECTED`, `DOWNLOADED`, `IMPORTED`, `PLACED`, `VERIFIED`, `TEMPORARY`, `DEFERRED`, `REJECTED`.
 
+The active Empty Mall vending-machine card records Valentin Laffitte's red retro cabinet, downloaded into `.asset_work/mall_vending_machine/`. Only the GLB was extracted from the author's archive. The planned production placement is `(28, 0, 24)` beside WaitingChair; preparation and placement remain next. The package still counts three authored models, not four.
+
 ## Current Priority and Status
 
 | Priority | Role | Status | Current state / next action |
