@@ -18,6 +18,8 @@ The Empty Mall vending machine is now prepared and authored at `(28, 0, 24)` bes
 
 ## Current Priority and Status
 
+The active Empty Mall waste-bin card records a small indoor open-top bin from 3DAssets.dev, downloaded to `.asset_work/mall_waste_bin/waste_bin_source.glb`. Its planned 0.88m placement is beside the vending cabinet at `(30.2, 0, 24)`, completing the waiting composition. Preparation and production placement remain next; this download does not increase the four-model placed count. Content remains the priority because no measured performance issue or specific new editing/code obstacle warrants an unrelated maintenance task.
+
 | Priority | Role | Status | Current state / next action |
 | --- | --- | --- | --- |
 | P0 | Modular old-house interior | VERIFIED | Floor/wall material tuning, restrained ceiling inset panel, Kenney `desk.glb` visual child, and the verified low-cost dressing batch are assigned to the real Endless House kit slots; collision roots and 4 m / 3.2 m builder contract remain unchanged. Quaternius Ultimate House Interior was re-reviewed as a CC0 123-model candidate, but no specific missing slot justified importing the pack. Verified by startup, builder smoke, and player-eye-level capture. |
