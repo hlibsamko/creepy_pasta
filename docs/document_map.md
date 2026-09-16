@@ -13,6 +13,7 @@ Read `docs/workflow.md` when the task reaches testing/release or if a change cou
 
 ## Read Only When Relevant
 
+- `docs/asset_pipeline_plan.md` — current bounded plan for the recurring asset, optimization, and readability work; read on every `continue-godot-cleanup` run. Its user-approved priorities supersede the older cleanup queue until the roadmap is reconciled.
 - `docs/architecture.md` — scene-tree layers, stable runtime paths, code boundaries, and imported-asset conventions.
 - `docs/asset_inventory.md` — downloaded model wrappers and exact production placements.
 
