@@ -10,6 +10,8 @@ The role statuses below are historical gameplay/visual results, not proof that a
 
 Dreamcore locker preparation and placement are complete: four parts from poly.alchemist's author-provided pack form one open 2.7m locker beside the entry. Exact wrapper, placement and recipe are recorded in its card and `docs/asset_inventory.md`. This counts as one new unique model, not four parts or the entire downloaded pack.
 
+The active Dreamcore projector card now records a directly downloaded ceiling-mounted projector from 3DAssets.dev. Its source remains inside `.asset_work/dreamcore_classroom_projector/`; the planned oversized assembly hangs above the empty-chair composition, meeting the existing ceiling underside. Preparation/material consolidation and production placement are next. A downloaded source is not a third completed model.
+
 Status values: `NEEDED`, `RESEARCHING`, `SELECTED`, `DOWNLOADED`, `IMPORTED`, `PLACED`, `VERIFIED`, `TEMPORARY`, `DEFERRED`, `REJECTED`.
 
 ## Current Priority and Status

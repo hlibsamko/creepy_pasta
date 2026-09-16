@@ -8,7 +8,7 @@
   "queue": [
     {"id": "poolrooms_painted_bench", "level": "poolrooms", "role": "worn bench near the entry", "card": "tasks/poolrooms_painted_bench.json", "status": "done_unverified"},
     {"id": "dreamcore_school_locker", "level": "dreamcore", "role": "oversized school locker", "card": "tasks/dreamcore_school_locker.json", "status": "done_unverified"},
-    {"id": "dreamcore_classroom_projector", "level": "dreamcore", "role": "classroom projector", "status": "queued"},
+    {"id": "dreamcore_classroom_projector", "level": "dreamcore", "role": "classroom projector", "card": "tasks/dreamcore_classroom_projector.json", "status": "active_downloaded"},
     {"id": "mall_vending_machine", "level": "empty_mall", "role": "vending machine in a waiting composition", "status": "queued"},
     {"id": "mall_waste_bin", "level": "empty_mall", "role": "waste bin beside the waiting area", "status": "queued"},
     {"id": "hotel_suitcase", "level": "endless_hotel", "role": "suitcase beside existing lobby dressing", "status": "queued"},
