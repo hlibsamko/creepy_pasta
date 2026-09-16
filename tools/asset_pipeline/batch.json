@@ -1,13 +1,13 @@
 {
   "id": "interior_furnishing_2026_09",
   "target_unique_models": 8,
-  "active_task": "dreamcore_school_locker",
-  "completed_content_tasks": 1,
+  "active_task": "dreamcore_classroom_projector",
+  "completed_content_tasks": 2,
   "completed_performance_tasks": 0,
   "completed_readability_tasks": 0,
   "queue": [
     {"id": "poolrooms_painted_bench", "level": "poolrooms", "role": "worn bench near the entry", "card": "tasks/poolrooms_painted_bench.json", "status": "done_unverified"},
-    {"id": "dreamcore_school_locker", "level": "dreamcore", "role": "oversized school locker", "card": "tasks/dreamcore_school_locker.json", "status": "active_downloaded"},
+    {"id": "dreamcore_school_locker", "level": "dreamcore", "role": "oversized school locker", "card": "tasks/dreamcore_school_locker.json", "status": "done_unverified"},
     {"id": "dreamcore_classroom_projector", "level": "dreamcore", "role": "classroom projector", "status": "queued"},
     {"id": "mall_vending_machine", "level": "empty_mall", "role": "vending machine in a waiting composition", "status": "queued"},
     {"id": "mall_waste_bin", "level": "empty_mall", "role": "waste bin beside the waiting area", "status": "queued"},

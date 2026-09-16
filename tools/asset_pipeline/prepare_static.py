@@ -30,6 +30,13 @@ def prepare(recipe_path):
     bpy.ops.import_scene.gltf(filepath=str(source))
     objects = list(bpy.context.scene.objects)
     meshes = [obj for obj in objects if obj.type == "MESH"]
+    selected_names = recipe.get("source_meshes")
+    if selected_names:
+        by_name = {obj.name: obj for obj in meshes}
+        missing = set(selected_names) - by_name.keys()
+        if missing:
+            raise ValueError(f"Requested source parts are missing: {sorted(missing)}")
+        meshes = [by_name[name] for name in selected_names]
     if not meshes or any(obj.type == "ARMATURE" for obj in objects) or any(obj.data.shape_keys for obj in meshes):
         raise ValueError("This recipe requires a static model with at least one mesh")
 
@@ -38,10 +45,11 @@ def prepare(recipe_path):
     corners = [obj.matrix_world @ Vector(corner) for obj in meshes for corner in obj.bound_box]
     low = Vector(tuple(min(point[axis] for point in corners) for axis in range(3)))
     high = Vector(tuple(max(point[axis] for point in corners) for axis in range(3)))
-    width = high.x - low.x
-    if width <= 0:
-        raise ValueError("Cannot normalize a zero-width object")
-    scale = float(recipe["target_width_m"]) / width
+    dimension = high.z - low.z if "target_height_m" in recipe else high.x - low.x
+    if dimension <= 0:
+        raise ValueError("Cannot normalize a zero-size object")
+    target_size = recipe.get("target_height_m", recipe.get("target_width_m"))
+    scale = float(target_size) / dimension
     pivot = Vector(((low.x + high.x) / 2, (low.y + high.y) / 2, low.z))
     target = int(recipe["target_triangles"])
     triangles = sum(max(0, len(face.vertices) - 2) for obj in meshes for face in obj.data.polygons)

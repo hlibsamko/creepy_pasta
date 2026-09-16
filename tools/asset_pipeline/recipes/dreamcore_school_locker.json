@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "profile": "furniture_web",
+  "source": ".asset_work/dreamcore_school_locker/lockers_and_storage_pack.glb",
+  "source_meshes": ["Locker_1", "Locker_2", "Locker_3", "Locker_22"],
+  "output": "assets/third_party/poly_alchemist/school_locker/school_locker_web.glb",
+  "mesh_name": "SchoolLockerPart",
+  "target_height_m": 2.7,
+  "max_texture_size": 1024,
+  "image_format": "JPEG",
+  "jpeg_quality": 90,
+  "target_triangles": 6000,
+  "decimate_if_above_target": true,
+  "geometry_note": "Extract only the tall open locker assembly, preserving body, supports and door as separate editable parts. Normalize its ground pivot and height; do not export the surrounding storage pack."
+}

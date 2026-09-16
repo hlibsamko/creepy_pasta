@@ -8,6 +8,10 @@ This ledger answers one practical question: where is each downloaded visual actu
 | --- | --- | --- | --- | --- |
 | Poly Haven Painted Wooden Bench, Kirill Sannikov | `scenes/props/poolrooms_painted_bench.tscn` | `scenes/branches/poolrooms/poolrooms_gallery.tscn`: `Environment/Props/PoolroomsPaintedBench`, position `(9, 0.06, 3)` beside the entry | Blender 5.1.1, self-contained GLB, textures capped at 512px, width 1.6m; the already small geometry was retained. Recipe/card: `tools/asset_pipeline/`. Source: https://polyhaven.com/a/painted_wooden_bench | Placed in scene; Godot import, visual, collision and performance QA not run |
 
+The new package also includes poly.alchemist's open school locker from https://polyalchemist.itch.io/lockers-and-storage-rack-pack-1. Wrapper: `scenes/props/dreamcore_school_locker.tscn`; production placement: `scenes/branches/dreamcore/dreamcore_schoolhouse.tscn`, `Environment/Props/DreamcoreSchoolLocker`, position `(12, 0, 3.3)`, yaw `90°`. Blender 5.1.1 extracted only four named assembly parts from the source pack and normalized height to 2.7m with a ground pivot. Recipe: `tools/asset_pipeline/recipes/dreamcore_school_locker.json`. Collision is a separate sibling of `Visuals`. Godot import, visual, collision and performance QA were not run.
+
+The downloaded locker pack was removed after processing and authored placement; the final GLB, source URL and recipe remain available for recovery.
+
 ## Earlier placements
 
 | Asset/pack | Wrapper | Production placement | Status | Next action |

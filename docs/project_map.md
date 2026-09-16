@@ -70,6 +70,7 @@ Account/Google deployment is deliberately outside this queue until online-friend
 - The dense House sideboard keeps collision and surface/floor props in `house_low_sideboard.tscn`, while its editor-only wall cluster is isolated in `house_sideboard_wall_dressing.tscn` and instanced at the stable visual path `Visuals/WallDressing`.
 - Imported furniture is isolated behind project-owned scenes in `scenes/props/`. Four higher-detail Poly Haven models are visibly placed in House Survey, Dreamcore, Empty Mall, and Endless Hotel and recorded in `docs/asset_inventory.md`.
 - The new asset package adds a Blender-prepared worn bench at `PoolroomsGallery/Environment/Props/PoolroomsPaintedBench`; its collision is outside `Visuals`. This is an authored placement, not a claim of completed game QA.
+- The second package model is a 2.7m open locker at `DreamcoreSchoolhouse/Environment/Props/DreamcoreSchoolLocker`. Its project-owned wrapper separates `Visuals` and `LockerCollision`; the recipe exports only this assembly, not the source storage pack. QA remains unperformed.
 
 ## Model integration ledger
 
