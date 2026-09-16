@@ -6,11 +6,14 @@ This ledger answers one practical question: where is each downloaded visual actu
 
 | Asset | Wrapper | Authored production placement | Preparation | Acceptance |
 | --- | --- | --- | --- | --- |
+| 3D Assets ceiling-mounted classroom projector | `scenes/props/dreamcore_classroom_projector.tscn` | `scenes/branches/dreamcore/dreamcore_schoolhouse.tscn`: `Environment/Props/DreamcoreClassroomProjector`, position `(24, 4.3, 24)`, yaw `180°`, above empty chairs | Blender 5.1.1, height 0.78m, centered bottom pivot, cosmetic trim mapped to housing/dark materials; glass lens and individual parts retained. Recipe: `tools/asset_pipeline/recipes/dreamcore_classroom_projector.json`. Source: https://3dassets.dev/assets/university-lecture-hall-and-campus-ceiling-projector-m-3875de72 | Authored placement only; Godot import, visual and performance QA not run. Visual-only suspended prop, no collision or light |
 | Poly Haven Painted Wooden Bench, Kirill Sannikov | `scenes/props/poolrooms_painted_bench.tscn` | `scenes/branches/poolrooms/poolrooms_gallery.tscn`: `Environment/Props/PoolroomsPaintedBench`, position `(9, 0.06, 3)` beside the entry | Blender 5.1.1, self-contained GLB, textures capped at 512px, width 1.6m; the already small geometry was retained. Recipe/card: `tools/asset_pipeline/`. Source: https://polyhaven.com/a/painted_wooden_bench | Placed in scene; Godot import, visual, collision and performance QA not run |
 
 The new package also includes poly.alchemist's open school locker from https://polyalchemist.itch.io/lockers-and-storage-rack-pack-1. Wrapper: `scenes/props/dreamcore_school_locker.tscn`; production placement: `scenes/branches/dreamcore/dreamcore_schoolhouse.tscn`, `Environment/Props/DreamcoreSchoolLocker`, position `(12, 0, 3.3)`, yaw `90°`. Blender 5.1.1 extracted only four named assembly parts from the source pack and normalized height to 2.7m with a ground pivot. Recipe: `tools/asset_pipeline/recipes/dreamcore_school_locker.json`. Collision is a separate sibling of `Visuals`. Godot import, visual, collision and performance QA were not run.
 
 The downloaded locker pack was removed after processing and authored placement; the final GLB, source URL and recipe remain available for recovery.
+
+The owned downloaded projector source was also removed after preparation and authored placement, freeing 45,792 bytes. The final production GLB, recipe and recorded CDN URL remain; recovery is by re-downloading and rerunning the recipe, subject to future source availability.
 
 ## Earlier placements
 

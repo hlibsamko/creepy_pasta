@@ -74,4 +74,6 @@ Account/Google deployment is deliberately outside this queue until online-friend
 
 ## Model integration ledger
 
+The third bounded-package model is a suspended classroom projector at `DreamcoreSchoolhouse/Environment/Props/DreamcoreClassroomProjector`. Its `scenes/props/dreamcore_classroom_projector.tscn` wrapper contains only `Visuals`, with no collision, dynamic light or gameplay dependency. The Blender recipe retains separate mesh parts and the glass lens. Authored placement is not completed game QA.
+
 The detailed ledger lives in `docs/asset_inventory.md`. A model status progresses through `selected -> downloaded -> wrapped -> production`. Only `production` means the request has been fulfilled.

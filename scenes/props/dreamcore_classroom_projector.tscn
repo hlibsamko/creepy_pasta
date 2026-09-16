@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/three_d_assets/classroom_projector/classroom_projector_web.glb" id="1_projector"]
+
+[node name="DreamcoreClassroomProjector" type="Node3D"]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="ClassroomProjectorModel" parent="Visuals" instance=ExtResource("1_projector")]

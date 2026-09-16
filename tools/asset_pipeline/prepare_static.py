@@ -40,6 +40,16 @@ def prepare(recipe_path):
     if not meshes or any(obj.type == "ARMATURE" for obj in objects) or any(obj.data.shape_keys for obj in meshes):
         raise ValueError("This recipe requires a static model with at least one mesh")
 
+    # Explicit cosmetic remaps only; never infer that glass or gameplay cues match.
+    material_remap = recipe.get("material_remap", {})
+    for source_name, target_name in material_remap.items():
+        if bpy.data.materials.get(source_name) is None or bpy.data.materials.get(target_name) is None:
+            raise ValueError(f"Requested material remap is missing: {source_name} -> {target_name}")
+    for obj in meshes:
+        for slot in obj.material_slots:
+            if slot.material and slot.material.name in material_remap:
+                slot.material = bpy.data.materials[material_remap[slot.material.name]]
+
     # Bounds are used to perform the requested scale/pivot transformation,
     # not recorded as acceptance evidence or before/after measurements.
     corners = [obj.matrix_world @ Vector(corner) for obj in meshes for corner in obj.bound_box]

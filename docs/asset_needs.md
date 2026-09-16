@@ -4,13 +4,13 @@ This is the **live visual-integration status file** for the current mission. Upd
 
 ## Active bounded package — 2026-09-16
 
-Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package targets eight new unique external models; prior placements do not count. Two are now prepared and authored in production scenes: the Poolrooms painted bench and the Dreamcore school locker. The next task is the Dreamcore classroom projector. Visual acceptance, Godot import QA and performance measurements remain unperformed.
+Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package targets eight new unique external models; prior placements do not count. Three are now prepared and authored in production scenes: the Poolrooms painted bench, Dreamcore school locker and Dreamcore classroom projector. The next task is the Empty Mall vending machine. Visual acceptance, Godot import QA and performance measurements remain unperformed.
 
 The role statuses below are historical gameplay/visual results, not proof that a requested external model was integrated. A verified primitive fallback does not close an external-model task. Task cards separately track content placement, visual acceptance and performance.
 
 Dreamcore locker preparation and placement are complete: four parts from poly.alchemist's author-provided pack form one open 2.7m locker beside the entry. Exact wrapper, placement and recipe are recorded in its card and `docs/asset_inventory.md`. This counts as one new unique model, not four parts or the entire downloaded pack.
 
-The active Dreamcore projector card now records a directly downloaded ceiling-mounted projector from 3DAssets.dev. Its source remains inside `.asset_work/dreamcore_classroom_projector/`; the planned oversized assembly hangs above the empty-chair composition, meeting the existing ceiling underside. Preparation/material consolidation and production placement are next. A downloaded source is not a third completed model.
+The Dreamcore projector is now prepared and authored above the empty-chair composition, at `(24, 4.3, 24)`. Its 0.78m assembly meets the existing ceiling underside. The recipe simplifies cosmetic trim to the housing/dark materials while retaining the glass lens and individual parts. No collision or dynamic light added; QA and performance remain unperformed.
 
 Status values: `NEEDED`, `RESEARCHING`, `SELECTED`, `DOWNLOADED`, `IMPORTED`, `PLACED`, `VERIFIED`, `TEMPORARY`, `DEFERRED`, `REJECTED`.
 

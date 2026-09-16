@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "profile": "static_small",
+  "source": ".asset_work/dreamcore_classroom_projector/classroom_projector_source.glb",
+  "output": "assets/third_party/three_d_assets/classroom_projector/classroom_projector_web.glb",
+  "mesh_name": "ClassroomProjectorPart",
+  "target_height_m": 0.78,
+  "material_remap": {"metal": "carcass", "safety": "dark"},
+  "material_note": "Simplify non-interactive mount trim to the light housing and dark vent materials. Preserve the translucent glass lens separately, all geometry and individual parts. This is not a claim of fewer draw calls or improved FPS.",
+  "max_texture_size": 512,
+  "image_format": "JPEG",
+  "jpeg_quality": 90,
+  "target_triangles": 2000,
+  "decimate_if_above_target": true,
+  "geometry_note": "The publisher lists small static geometry; conditional reduction leaves an already small silhouette unchanged. Scale the whole mount/body assembly to 0.78m and normalize its bottom pivot for suspended placement."
+}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
 [ext_resource type="PackedScene" path="res://scenes/branches/dreamcore/kit/dreamcore_floor_tile.tscn" id="2_floor"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/polyhaven_cassette_player_visual.tscn" id="10_radio"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_plant_visual.tscn" id="11_plant"]
 [ext_resource type="PackedScene" path="res://scenes/props/dreamcore_school_locker.tscn" id="12_locker"]
+[ext_resource type="PackedScene" path="res://scenes/props/dreamcore_classroom_projector.tscn" id="13_projector"]
 
 [sub_resource type="Environment" id="Environment_dreamcore"]
 background_mode = 1
@@ -97,3 +98,7 @@ position = Vector3(12, 0, 3.3)
 rotation_degrees = Vector3(0, 90, 0)
 
 [node name="Notes" type="Node3D" parent="."]
+
+[node name="DreamcoreClassroomProjector" parent="Environment/Props" instance=ExtResource("13_projector")]
+position = Vector3(24, 4.3, 24)
+rotation_degrees = Vector3(0, 180, 0)
