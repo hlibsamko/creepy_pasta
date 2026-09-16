@@ -74,6 +74,37 @@ const MONSTERS := {
 }
 
 
+const NOTE_GATED_MONSTERS := {
+	"res://scenes/wrong_copy_room.tscn": [
+		{
+			"source_id": "Monsters/OpeningListener",
+			"notes_required": 1,
+			"entry_id": "listener",
+			"fact_index": 2,
+		},
+	],
+	"res://scenes/copied_door_room.tscn": [],
+	"res://scenes/backrooms/backrooms.tscn": [
+		{
+			"source_id": "BackroomsBuilder/GeneratedBackrooms/Monsters/GeneratedChaser1",
+			"notes_required": 1,
+			"entry_id": "listener",
+			"fact_index": 2,
+		},
+		{
+			"source_id": "BackroomsBuilder/GeneratedBackrooms/Monsters/GeneratedAmbushChaser2",
+			"notes_required": 2,
+			"entry_id": "listener",
+			"fact_index": 2,
+		},
+	],
+	"res://scenes/endless_house/house_survey.tscn": [],
+	"res://scenes/endless_house/unlit_evidence_chamber.tscn": [],
+	"res://scenes/corridor.tscn": [],
+	"res://scenes/final_watcher_room.tscn": [],
+}
+
+
 static func pressure_requirement(scene_path: String) -> int:
 	return int(PRESSURE_REQUIREMENTS.get(scene_path, 0))
 
@@ -92,3 +123,7 @@ static func breakers(scene_path: String) -> Dictionary:
 
 static func monsters(scene_path: String) -> Dictionary:
 	return MONSTERS.get(scene_path, {})
+
+
+static func note_gated_monsters(scene_path: String) -> Array:
+	return NOTE_GATED_MONSTERS.get(scene_path, [])

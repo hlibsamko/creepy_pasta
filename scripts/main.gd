@@ -213,35 +213,6 @@ const SESSION_CLIENT_DISCOVERIES := {
 		},
 	],
 }
-const SESSION_NOTE_GATED_MONSTERS := {
-	"res://scenes/wrong_copy_room.tscn": [
-		{
-			"source_id": "Monsters/OpeningListener",
-			"notes_required": 1,
-			"entry_id": "listener",
-			"fact_index": 2,
-		},
-	],
-	"res://scenes/copied_door_room.tscn": [],
-	"res://scenes/backrooms/backrooms.tscn": [
-		{
-			"source_id": "BackroomsBuilder/GeneratedBackrooms/Monsters/GeneratedChaser1",
-			"notes_required": 1,
-			"entry_id": "listener",
-			"fact_index": 2,
-		},
-		{
-			"source_id": "BackroomsBuilder/GeneratedBackrooms/Monsters/GeneratedAmbushChaser2",
-			"notes_required": 2,
-			"entry_id": "listener",
-			"fact_index": 2,
-		},
-	],
-	"res://scenes/endless_house/house_survey.tscn": [],
-	"res://scenes/endless_house/unlit_evidence_chamber.tscn": [],
-	"res://scenes/corridor.tscn": [],
-	"res://scenes/final_watcher_room.tscn": [],
-}
 
 #endregion
 
@@ -1860,7 +1831,7 @@ func _server_collect_online_session_note(
 
 
 func _update_online_note_gated_monsters(state: Dictionary) -> void:
-	var definitions: Array = SESSION_NOTE_GATED_MONSTERS.get(str(state["level_path"]), [])
+	var definitions := LEVEL_MECHANICS_CATALOG.note_gated_monsters(str(state["level_path"]))
 	var activation_states: Dictionary = state["monster_activation_states"]
 	var collected_count := int(state["session_collected_notes"])
 	for definition: Dictionary in definitions:
