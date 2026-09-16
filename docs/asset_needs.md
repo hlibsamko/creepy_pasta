@@ -8,6 +8,8 @@ Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. Eigh
 
 The role statuses below are historical gameplay/visual results, not proof that a requested external model was integrated. A verified primitive fallback does not close an external-model task. Task cards separately track content placement, visual acceptance and performance.
 
+Dreamcore locker sourcing has progressed: the author-provided GLB from poly.alchemist's locker/storage pack is downloaded inside `.asset_work/dreamcore_school_locker/`. Its card records the named single-locker assembly and a 2.7m placement target beside the entry. Preparation and production placement are the next step; this download does not count as a second completed model.
+
 Status values: `NEEDED`, `RESEARCHING`, `SELECTED`, `DOWNLOADED`, `IMPORTED`, `PLACED`, `VERIFIED`, `TEMPORARY`, `DEFERRED`, `REJECTED`.
 
 ## Current Priority and Status
