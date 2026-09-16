@@ -1,15 +1,15 @@
 {
   "id": "interior_furnishing_2026_09",
   "target_unique_models": 8,
-  "active_task": "mall_vending_machine",
-  "completed_content_tasks": 3,
+  "active_task": "mall_waste_bin",
+  "completed_content_tasks": 4,
   "completed_performance_tasks": 0,
   "completed_readability_tasks": 0,
   "queue": [
     {"id": "poolrooms_painted_bench", "level": "poolrooms", "role": "worn bench near the entry", "card": "tasks/poolrooms_painted_bench.json", "status": "done_unverified"},
     {"id": "dreamcore_school_locker", "level": "dreamcore", "role": "oversized school locker", "card": "tasks/dreamcore_school_locker.json", "status": "done_unverified"},
     {"id": "dreamcore_classroom_projector", "level": "dreamcore", "role": "classroom projector", "card": "tasks/dreamcore_classroom_projector.json", "status": "done_unverified"},
-    {"id": "mall_vending_machine", "level": "empty_mall", "role": "vending machine in a waiting composition", "card": "tasks/mall_vending_machine.json", "status": "active_downloaded"},
+    {"id": "mall_vending_machine", "level": "empty_mall", "role": "vending machine in a waiting composition", "card": "tasks/mall_vending_machine.json", "status": "done_unverified"},
     {"id": "mall_waste_bin", "level": "empty_mall", "role": "waste bin beside the waiting area", "status": "queued"},
     {"id": "hotel_suitcase", "level": "endless_hotel", "role": "suitcase beside existing lobby dressing", "status": "queued"},
     {"id": "house_floor_lamp", "level": "house_survey", "role": "floor lamp beside the sideboard", "status": "queued"},

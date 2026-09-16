@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "profile": "furniture_web",
+  "source": ".asset_work/mall_vending_machine/VendingMachine_LowPoly_Pack/VendingMachine.glb",
+  "output": "assets/third_party/valentin_laffitte/vending_machine/vending_machine_web.glb",
+  "mesh_name": "VendingMachinePart",
+  "target_height_m": 2.1,
+  "material_remap": {
+    "Material.013": "Material",
+    "Material.007": "Material.009",
+    "Material.008": "Material.009",
+    "Material.010": "Material.009",
+    "Material.005": "Material.012",
+    "Material.006": "Material.012",
+    "Material.022": "Material.012",
+    "Material.023": "Material.012"
+  },
+  "material_note": "Consolidate cosmetic near-red and near-gray/white solid colors. Preserve the five textured controls/product surfaces and their UVs. Eight retained material identities are an explicit exception to the initial three-material target; do not erase printed details to claim budget compliance. Surface/draw-call and FPS acceptance remain unmeasured.",
+  "max_texture_size": 1024,
+  "image_format": "JPEG",
+  "jpeg_quality": 90,
+  "target_triangles": 6000,
+  "decimate_if_above_target": true,
+  "geometry_note": "Preserve separate static parts, controls, shelves and rear geometry. Normalize full cabinet height and centered ground pivot. Wrapper rotates source -X facing toward project -Z."
+}

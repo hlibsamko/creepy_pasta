@@ -27,6 +27,9 @@ def prepare(recipe_path):
     # This script only owns its freshly created, isolated factory-startup scene.
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
+    # Remove factory materials too, so source names such as "Material" stay stable.
+    for material in list(bpy.data.materials):
+        bpy.data.materials.remove(material)
     bpy.ops.import_scene.gltf(filepath=str(source))
     objects = list(bpy.context.scene.objects)
     meshes = [obj for obj in objects if obj.type == "MESH"]

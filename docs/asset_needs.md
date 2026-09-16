@@ -4,7 +4,7 @@ This is the **live visual-integration status file** for the current mission. Upd
 
 ## Active bounded package — 2026-09-16
 
-Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package targets eight new unique external models; prior placements do not count. Three are now prepared and authored in production scenes: the Poolrooms painted bench, Dreamcore school locker and Dreamcore classroom projector. The next task is the Empty Mall vending machine. Visual acceptance, Godot import QA and performance measurements remain unperformed.
+Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package targets eight new unique external models; prior placements do not count. Four are now prepared and authored in production scenes: the Poolrooms painted bench, Dreamcore school locker, Dreamcore classroom projector and Empty Mall vending machine. The next task is the Empty Mall waste bin. Visual acceptance, Godot import QA and performance measurements remain unperformed.
 
 The role statuses below are historical gameplay/visual results, not proof that a requested external model was integrated. A verified primitive fallback does not close an external-model task. Task cards separately track content placement, visual acceptance and performance.
 
@@ -14,7 +14,7 @@ The Dreamcore projector is now prepared and authored above the empty-chair compo
 
 Status values: `NEEDED`, `RESEARCHING`, `SELECTED`, `DOWNLOADED`, `IMPORTED`, `PLACED`, `VERIFIED`, `TEMPORARY`, `DEFERRED`, `REJECTED`.
 
-The active Empty Mall vending-machine card records Valentin Laffitte's red retro cabinet, downloaded into `.asset_work/mall_vending_machine/`. Only the GLB was extracted from the author's archive. The planned production placement is `(28, 0, 24)` beside WaitingChair; preparation and placement remain next. The package still counts three authored models, not four.
+The Empty Mall vending machine is now prepared and authored at `(28, 0, 24)` beside WaitingChair. Its 2.1m wrapper has separate visual/collision containers. The recipe consolidates cosmetic color materials but retains five textured control/product surfaces: an explicit eight-material-identity exception to the initial target three. The proportional footprint is approximately 1.5m wide rather than the initial 1.3m target; the card records that change. Neither visual nor performance acceptance is claimed.
 
 ## Current Priority and Status
 

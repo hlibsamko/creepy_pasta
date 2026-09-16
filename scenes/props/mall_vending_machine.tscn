@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/valentin_laffitte/vending_machine/vending_machine_web.glb" id="1_vending"]
+
+[sub_resource type="BoxShape3D" id="VendingCollision"]
+size = Vector3(1.5, 2.1, 0.74)
+
+[node name="MallVendingMachine" type="Node3D"]
+
+[node name="Visuals" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="VendingMachineModel" parent="Visuals" instance=ExtResource("1_vending")]
+
+[node name="VendingCollision" type="StaticBody3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="VendingCollision"]
+position = Vector3(0, 1.05, 0)
+shape = SubResource("VendingCollision")

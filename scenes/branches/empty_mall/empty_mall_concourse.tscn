@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
 [ext_resource type="PackedScene" path="res://scenes/branches/empty_mall/kit/mall_floor_tile.tscn" id="2_floor"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_plant_visual.tscn" id="8_plant"]
 [ext_resource type="PackedScene" path="res://scenes/props/polyhaven_green_chair_visual.tscn" id="9_chair"]
+[ext_resource type="PackedScene" path="res://scenes/props/mall_vending_machine.tscn" id="10_vending"]
 
 [sub_resource type="Environment" id="Environment_mall"]
 background_mode = 1
@@ -82,5 +83,8 @@ position = Vector3(48, 2.8, 4)
 light_color = Color(1, 0.56, 0.26, 1)
 light_energy = 1.8
 omni_range = 10.0
+
+[node name="MallVendingMachine" parent="Environment/Props" instance=ExtResource("10_vending")]
+position = Vector3(28, 0, 24)
 
 [node name="Notes" type="Node3D" parent="."]
