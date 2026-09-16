@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/three_d_assets/waste_bin/waste_bin_web.glb" id="1_bin"]
+
+[sub_resource type="BoxShape3D" id="WasteBinCollision"]
+size = Vector3(0.65, 0.88, 0.65)
+
+[node name="MallWasteBin" type="Node3D"]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="WasteBinModel" parent="Visuals" instance=ExtResource("1_bin")]
+
+[node name="WasteBinCollision" type="StaticBody3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="WasteBinCollision"]
+position = Vector3(0, 0.44, 0)
+shape = SubResource("WasteBinCollision")

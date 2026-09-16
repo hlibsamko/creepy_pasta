@@ -74,6 +74,8 @@ Account/Google deployment is deliberately outside this queue until online-friend
 
 ## Model integration ledger
 
+The fifth bounded-package model is `EmptyMallConcourse/Environment/Props/MallWasteBin`, completing the WaitingChair/vending-cabinet composition. `scenes/props/mall_waste_bin.tscn` separates its open-top imported `Visuals` from simple `WasteBinCollision`. The static recipe preserves the cavity and liner, normalizes height to 0.88m and shares metal material with the cosmetic strip. No stable gameplay/RPC paths changed; QA remains unperformed.
+
 The fourth package model is `EmptyMallConcourse/Environment/Props/MallVendingMachine`, beside WaitingChair. Its wrapper separates `Visuals` (source-facing correction) and `VendingCollision` (approximate box). Cosmetic color materials are consolidated by recipe; textured control/product surfaces remain, with an explicit material-budget exception recorded in the card. No gameplay/RPC contracts changed; QA remains unperformed.
 
 The third bounded-package model is a suspended classroom projector at `DreamcoreSchoolhouse/Environment/Props/DreamcoreClassroomProjector`. Its `scenes/props/dreamcore_classroom_projector.tscn` wrapper contains only `Visuals`, with no collision, dynamic light or gameplay dependency. The Blender recipe retains separate mesh parts and the glass lens. Authored placement is not completed game QA.

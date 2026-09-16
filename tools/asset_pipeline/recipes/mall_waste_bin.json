@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "profile": "static_small",
+  "source": ".asset_work/mall_waste_bin/waste_bin_source.glb",
+  "output": "assets/third_party/three_d_assets/waste_bin/waste_bin_web.glb",
+  "mesh_name": "WasteBinPart",
+  "target_height_m": 0.88,
+  "material_remap": {"accent": "metal"},
+  "material_note": "Use the existing metal material for the cosmetic label strip; keep the dark body and bright liner rim distinct. No gameplay color cues are involved. Retain the three separate source parts; do not claim reduced draw calls from sharing materials.",
+  "max_texture_size": 512,
+  "image_format": "JPEG",
+  "jpeg_quality": 90,
+  "target_triangles": 1500,
+  "decimate_if_above_target": true,
+  "geometry_note": "Preserve open top, real cavity, liner rim and all back faces. Normalize complete height and centered ground pivot. The publisher describes already small geometry; conditional reduction leaves small silhouettes unchanged."
+}
