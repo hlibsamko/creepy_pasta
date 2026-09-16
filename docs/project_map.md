@@ -14,7 +14,7 @@ This is the short operational map for editing the game. It describes intended ow
 | Automated fixtures | `tests/{smoke,visual,fixtures}/{scenes,scripts}` | Production must not reference this tree. |
 | Manual QA UI/tools | `devtools/qa/` | Injected behind one setting and removable without touching production scenes. |
 
-Both export presets exclude `tests/`, `devtools/`, `addons/godot_mcp/`, and `tools/`. Editor automation and internal QA resources must not be shipped in client or dedicated-server packages.
+All export presets exclude `tests/`, `addons/godot_mcp/`, and `tools/`. The clean `Web` and `Linux Dedicated Server` presets also exclude `devtools/`; the private `Web QA` preset intentionally includes the temporary QA tools. Editor automation must not be shipped in any package, and internal QA tools must not be shipped in public client or dedicated-server packages.
 
 ## Canonical level scene tree
 

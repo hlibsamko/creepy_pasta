@@ -6,13 +6,13 @@ This is the short operational source of truth for current work. Historical visua
 
 **ACTIVE — private QA feedback and editor-first iteration.**
 
-Current question: does the main-menu diorama feel better when furniture `Sprite3D` billboarding is explicitly disabled? Keep this experiment reversible and collect human feedback before changing the projection approach.
+Current question: does the main-menu diorama feel better with fixed-orientation furniture cards? Four furniture `Sprite3D` nodes have been replaced with `MeshInstance3D`/`QuadMesh` cards in `scenes/ui/menu_diorama.tscn`, using `shaders/menu_fixed_sprite.gdshader` without camera-facing rotation. Keep this experiment reversible and collect human feedback before further projection changes.
 
 ## Current Production State
 
 - Godot is pinned to official 4.7.2 stable through `tools/engine/`.
 - Private Web builds use `Web QA`; its collapsible test menu is enabled by default and production Web builds exclude it.
-- Campaign identity, titles, QA labels, scene lookup, and order live in `scripts/level_catalog.gd`.
+- Campaign identity, titles, QA labels, scene lookup, order, and authoritative exit positions live in `scripts/level_catalog.gd`; pressure-plate, breaker, and authoritative monster data live in `scripts/level_mechanics_catalog.gd`.
 - Authored levels expose `Environment/Architecture/{Floors,Walls,Ceilings,Openings}`, plus `Props` and `Lighting`.
 - Generated layouts expose the same architecture categories below `GeneratedBackrooms`.
 - Automated fixtures live under `tests/`; human-only QA tooling lives under `devtools/qa`.
