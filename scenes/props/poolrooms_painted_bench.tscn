@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/polyhaven/painted_wooden_bench/painted_wooden_bench_web.glb" id="1_bench"]
+
+[sub_resource type="BoxShape3D" id="BenchCollision"]
+size = Vector3(1.6, 1.22, 0.68)
+
+[node name="PoolroomsPaintedBench" type="Node3D"]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="PaintedBenchModel" parent="Visuals" instance=ExtResource("1_bench")]
+
+[node name="BenchCollision" type="StaticBody3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="BenchCollision"]
+position = Vector3(0, 0.61, 0)
+shape = SubResource("BenchCollision")

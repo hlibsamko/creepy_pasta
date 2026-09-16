@@ -4,9 +4,11 @@ This is the short operational source of truth for current work. Historical visua
 
 ## Current Focus — ONE TASK ONLY
 
-**ACTIVE — private QA feedback and editor-first iteration.**
+**ACTIVE — bounded asset production, optimization, and editor readability.**
 
-Current question: does the main-menu diorama feel better with fixed-orientation furniture cards? Four furniture `Sprite3D` nodes have been replaced with `MeshInstance3D`/`QuadMesh` cards in `scenes/ui/menu_diorama.tscn`, using `shaders/menu_fixed_sprite.gdshader` without camera-facing rotation. Keep this experiment reversible and collect human feedback before further projection changes.
+Follow `docs/asset_pipeline_plan.md`. The first package contains eight new external static models, tracked in `tools/asset_pipeline/batch.json`; continue the active card instead of inventing another cleanup task. First placement: the worn bench beside the Poolrooms entry, prepared with Blender 5.1.1 and 512px textures. Model/game QA has not been requested and remains unperformed.
+
+The fixed-orientation main-menu furniture experiment remains awaiting human feedback. Keep it reversible; do not make it the recurring task's main priority.
 
 ## Current Production State
 
@@ -21,9 +23,9 @@ Current question: does the main-menu diorama feel better with fixed-orientation 
 
 ## Near-Term Queue
 
-1. Evaluate the fixed-orientation menu furniture in the running game; keep it if the rug/furniture relationship reads better, otherwise revert only that experiment.
-2. Move remaining path-keyed per-level mechanic data out of `main.gd` only when touching the corresponding mechanic. Do not change the network snapshot format casually.
-3. Split more sideboard dressing only if the current wall-dressing extraction is still inconvenient in the editor.
+1. Continue the eight-model package and its active card using the asset pipeline plan.
+2. Allocate three of five completed tasks to content, one to an evidenced performance problem and one to a concrete readability problem; use content when those problems are absent.
+3. Preserve the pending menu experiment and request-specific checks separately from asset production.
 4. Restore account/Google routes only when online-friends testing becomes the explicit priority.
 
 ## Change Rules

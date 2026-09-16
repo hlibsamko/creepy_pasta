@@ -2,6 +2,8 @@
 .godot/
 /android/
 /build/
+/.asset_work/*
+!/.asset_work/.gdignore
 
 # Account-service runtime data and local secrets
 .env

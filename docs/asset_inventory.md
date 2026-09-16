@@ -2,6 +2,14 @@
 
 This ledger answers one practical question: where is each downloaded visual actually visible in the game?
 
+## New bounded package — 2026-09-16
+
+| Asset | Wrapper | Authored production placement | Preparation | Acceptance |
+| --- | --- | --- | --- | --- |
+| Poly Haven Painted Wooden Bench, Kirill Sannikov | `scenes/props/poolrooms_painted_bench.tscn` | `scenes/branches/poolrooms/poolrooms_gallery.tscn`: `Environment/Props/PoolroomsPaintedBench`, position `(9, 0.06, 3)` beside the entry | Blender 5.1.1, self-contained GLB, textures capped at 512px, width 1.6m; the already small geometry was retained. Recipe/card: `tools/asset_pipeline/`. Source: https://polyhaven.com/a/painted_wooden_bench | Placed in scene; Godot import, visual, collision and performance QA not run |
+
+## Earlier placements
+
 | Asset/pack | Wrapper | Production placement | Status | Next action |
 | --- | --- | --- | --- | --- |
 | Kenney bear | `scenes/props/kenney_bear_visual.tscn` | Dreamcore Schoolhouse: `Environment/Props/OversizedBear` | production | Replace only when a more distinctive dreamcore hero prop is integrated. |

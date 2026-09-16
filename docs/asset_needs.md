@@ -2,6 +2,12 @@
 
 This is the **live visual-integration status file** for the current mission. Update it whenever an external asset is researched, selected, downloaded, imported, placed, verified, or rejected.
 
+## Active bounded package — 2026-09-16
+
+Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. Eight new unique external models are queued; prior placements do not count toward this package. The active task is the school locker for Dreamcore. The Poolrooms painted bench has been prepared and placed in the authored production scene; visual acceptance, Godot import QA and performance measurements remain unperformed.
+
+The role statuses below are historical gameplay/visual results, not proof that a requested external model was integrated. A verified primitive fallback does not close an external-model task. Task cards separately track content placement, visual acceptance and performance.
+
 Status values: `NEEDED`, `RESEARCHING`, `SELECTED`, `DOWNLOADED`, `IMPORTED`, `PLACED`, `VERIFIED`, `TEMPORARY`, `DEFERRED`, `REJECTED`.
 
 ## Current Priority and Status
@@ -66,12 +72,11 @@ Useful support assets:
 - Separate materials and sensible pivots are more important than high polygon count.
 - Creature rigs should include named bones and root motion only when it can be disabled.
 - Use wrapper `Node3D` scenes to correct scale, source rotation, pivot/origin, and forward axis instead of changing gameplay transforms.
-- Avoid assets whose identity depends on copyrighted characters, logos, or branded props.
 - Web target: use practical texture sizes, inspect compression, avoid excessive transparency/unique materials, and do not import a huge unused collection into `res://` merely because it came in one pack.
 
 ## Free Candidates To Review
 
-The source list below is preserved from the project notes. **Re-verify the live page, current download availability, and license at the time of selection/download.**
+The source list below is preserved from the project notes. Re-check current download availability and technical suitability at selection time. Historical license descriptions do not filter candidates; follow the user's sourcing instructions.
 
 Official pages were previously rechecked on 2026-07-29:
 
@@ -94,7 +99,7 @@ When an asset moves beyond `RESEARCHING`, update this file and `docs/asset_credi
 
 - role/status;
 - exact asset name and author;
-- source URL and current license;
+- source URL;
 - downloaded source/archive path if retained;
 - final `res://` path and wrapper scene;
 - import settings/texture reductions if important;

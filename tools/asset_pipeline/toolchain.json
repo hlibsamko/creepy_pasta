@@ -1,0 +1,10 @@
+{
+  "blender_executable": "D:/Soft/Blender 5.1/blender.exe",
+  "blender_version": "5.1.1",
+  "blender_mode": "background_factory_startup",
+  "blender_mcp": "not_callable_in_current_session",
+  "godot_mcp_bridge": "offline_at_initial_setup",
+  "work_directory": ".asset_work",
+  "validation_policy": "explicit_only",
+  "notes": "Use the existing installation. Processing is performed in an isolated Blender process, never in the user's live scene. No model QA or performance measurements are authorized."
+}

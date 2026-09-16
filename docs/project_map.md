@@ -11,6 +11,8 @@ This is the short operational map for editing the game. It describes intended ow
 | Reusable production pieces | `scenes/common/`, level-local `kit/` folders | Keep collision/gameplay at the wrapper root and imported visuals below `Visuals`. |
 | Shared production code | `scripts/` | Names describe gameplay responsibility, not the experiment that created them. |
 | Imported source assets | `assets/third_party/<source_or_pack>/` | Every selected model receives a project-owned wrapper and a recorded production placement. |
+| Temporary model downloads | `.asset_work/<asset_id>/` | Inside the project; ignored by Godot, Git and every export preset. Clean only owned temporary files after successful preparation and placement. |
+| Asset preparation recipes | `tools/asset_pipeline/` | Toolchain, bounded batch and task cards; production has no dependency on this tree. |
 | Automated fixtures | `tests/{smoke,visual,fixtures}/{scenes,scripts}` | Production must not reference this tree. |
 | Manual QA UI/tools | `devtools/qa/` | Injected behind one setting and removable without touching production scenes. |
 
@@ -47,6 +49,8 @@ LevelName
 
 ## Current maintenance queue
 
+The current recurring mission is the eight-model package in `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. Its content/optimization/readability allocation takes precedence over the older optional cleanup items below.
+
 1. Evaluate the fixed-orientation main-menu furniture experiment during ordinary QA play.
 2. Move remaining path-keyed mechanic definitions from `main.gd` into catalog-owned data only in small mechanic-specific changes; keep the current network snapshot compatible.
 3. Use the pinned Godot MCP for inspection when the editor bridge is running; filesystem edits remain the fallback when it is offline.
@@ -65,6 +69,7 @@ Account/Google deployment is deliberately outside this queue until online-friend
 - Authored rooms and branch studies expose `Environment/Architecture/{Floors,Walls,Ceilings,Openings}`, `Environment/Props`, and `Environment/Lighting`; generated layouts expose the same categories below `GeneratedBackrooms`.
 - The dense House sideboard keeps collision and surface/floor props in `house_low_sideboard.tscn`, while its editor-only wall cluster is isolated in `house_sideboard_wall_dressing.tscn` and instanced at the stable visual path `Visuals/WallDressing`.
 - Imported furniture is isolated behind project-owned scenes in `scenes/props/`. Four higher-detail Poly Haven models are visibly placed in House Survey, Dreamcore, Empty Mall, and Endless Hotel and recorded in `docs/asset_inventory.md`.
+- The new asset package adds a Blender-prepared worn bench at `PoolroomsGallery/Environment/Props/PoolroomsPaintedBench`; its collision is outside `Visuals`. This is an authored placement, not a claim of completed game QA.
 
 ## Model integration ledger
 

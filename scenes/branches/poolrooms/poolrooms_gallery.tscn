@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
 [ext_resource type="PackedScene" path="res://scenes/branches/poolrooms/kit/poolrooms_floor_tile.tscn" id="2_floor"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_bathroom_sink_visual.tscn" id="8_sink"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_shower_visual.tscn" id="9_shower"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_doorway_visual.tscn" id="10_doorway"]
+[ext_resource type="PackedScene" path="res://scenes/props/poolrooms_painted_bench.tscn" id="11_painted_bench"]
 
 [sub_resource type="Environment" id="Environment_poolrooms"]
 background_mode = 1
@@ -101,6 +102,9 @@ omni_range = 7.0
 
 [node name="Sink" parent="Environment/Props" instance=ExtResource("8_sink")]
 transform = Transform3D(1.45, 0, 0, 0, 1.45, 0, 0, 0, 1.45, 8, 0.12, 20)
+
+[node name="PoolroomsPaintedBench" parent="Environment/Props" instance=ExtResource("11_painted_bench")]
+position = Vector3(9, 0.06, 3)
 
 [node name="Shower" parent="Environment/Props" instance=ExtResource("9_shower")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 40, 0.12, 20)

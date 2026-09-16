@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "profile": "furniture_web",
+  "source": ".asset_work/poolrooms_painted_bench/painted_wooden_bench_1k.gltf",
+  "output": "assets/third_party/polyhaven/painted_wooden_bench/painted_wooden_bench_web.glb",
+  "mesh_name": "PaintedBenchMesh",
+  "target_width_m": 1.6,
+  "max_texture_size": 512,
+  "image_format": "JPEG",
+  "jpeg_quality": 90,
+  "target_triangles": 2000,
+  "decimate_if_above_target": true,
+  "geometry_note": "The source page lists 630 triangles. Do not simplify an already small silhouette merely to show a reduction. This pilot optimizes texture resolution and packages a self-contained GLB."
+}

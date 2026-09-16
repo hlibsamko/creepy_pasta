@@ -1,0 +1,19 @@
+{
+  "id": "interior_furnishing_2026_09",
+  "target_unique_models": 8,
+  "active_task": "dreamcore_school_locker",
+  "completed_content_tasks": 1,
+  "completed_performance_tasks": 0,
+  "completed_readability_tasks": 0,
+  "queue": [
+    {"id": "poolrooms_painted_bench", "level": "poolrooms", "role": "worn bench near the entry", "card": "tasks/poolrooms_painted_bench.json", "status": "done_unverified"},
+    {"id": "dreamcore_school_locker", "level": "dreamcore", "role": "oversized school locker", "status": "queued"},
+    {"id": "dreamcore_classroom_projector", "level": "dreamcore", "role": "classroom projector", "status": "queued"},
+    {"id": "mall_vending_machine", "level": "empty_mall", "role": "vending machine in a waiting composition", "status": "queued"},
+    {"id": "mall_waste_bin", "level": "empty_mall", "role": "waste bin beside the waiting area", "status": "queued"},
+    {"id": "hotel_suitcase", "level": "endless_hotel", "role": "suitcase beside existing lobby dressing", "status": "queued"},
+    {"id": "house_floor_lamp", "level": "house_survey", "role": "floor lamp beside the sideboard", "status": "queued"},
+    {"id": "house_bookshelf", "level": "house_survey", "role": "worn bookshelf composition", "status": "queued"}
+  ],
+  "completion_rule": "Do not count existing assets or multiple placements as new unique models. Stop automation and report after this bounded package; leave unperformed validation explicit."
+}
