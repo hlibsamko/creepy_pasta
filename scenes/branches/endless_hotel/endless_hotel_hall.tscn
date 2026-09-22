@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
 [ext_resource type="PackedScene" path="res://scenes/branches/endless_hotel/kit/hotel_floor_tile.tscn" id="2_floor"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
 [ext_resource type="PackedScene" path="res://scenes/props/kenney_doorway_visual.tscn" id="8_door"]
 [ext_resource type="PackedScene" path="res://scenes/props/polyhaven_cassette_player_visual.tscn" id="9_radio"]
+[ext_resource type="PackedScene" path="res://scenes/props/hotel_vintage_suitcase.tscn" id="10_suitcase"]
 
 [sub_resource type="Environment" id="Environment_hotel"]
 background_mode = 1
@@ -64,4 +65,7 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 28, 0, 3.2)
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 36, 0, 11.2)
 [node name="NightRadio" parent="Environment/Props" instance=ExtResource("9_radio")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 8, 0.2, 25)
+[node name="HotelVintageSuitcase" parent="Environment/Props" instance=ExtResource("10_suitcase")]
+position = Vector3(10, 0, 24)
+rotation_degrees = Vector3(0, 25, 0)
 [node name="Notes" type="Node3D" parent="."]

@@ -67,6 +67,9 @@ def prepare(recipe_path):
     target = int(recipe["target_triangles"])
     triangles = sum(max(0, len(face.vertices) - 2) for obj in meshes for face in obj.data.polygons)
     source_worlds = [obj.matrix_world.copy() for obj in meshes]
+    mesh_names = recipe.get("mesh_names")
+    if mesh_names and len(mesh_names) != len(meshes):
+        raise ValueError("mesh_names must match the selected source part count")
 
     # Keep individual source parts; detach while preserving their world transform.
     for index, obj in enumerate(meshes):
@@ -77,7 +80,7 @@ def prepare(recipe_path):
         for vertex in obj.data.vertices:
             vertex.co = (world @ vertex.co - pivot) * scale
         obj.matrix_world = Matrix.Identity(4)
-        obj.name = recipe["mesh_name"] if len(meshes) == 1 else f'{recipe["mesh_name"]}{index + 1}'
+        obj.name = mesh_names[index] if mesh_names else (recipe["mesh_name"] if len(meshes) == 1 else f'{recipe["mesh_name"]}{index + 1}')
         obj.data.name = obj.name
         obj.data.update()
 

@@ -4,7 +4,9 @@ This is the **live visual-integration status file** for the current mission. Upd
 
 ## Active bounded package — 2026-09-16
 
-Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package targets eight new unique external models; prior placements do not count. Five are now prepared and authored in production scenes: the Poolrooms painted bench, Dreamcore school locker, Dreamcore classroom projector, Empty Mall vending machine and waste bin. The next task is the Endless Hotel suitcase. Visual acceptance, Godot import QA and performance measurements remain unperformed.
+Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package targets eight new unique external models; prior placements do not count. Six are now prepared and authored in production scenes: the Poolrooms painted bench, Dreamcore school locker, Dreamcore classroom projector, Empty Mall vending machine and waste bin, and Endless Hotel vintage suitcase. The next task is the House Survey floor lamp. Visual acceptance, Godot import QA and performance measurements remain unperformed.
+
+The hotel suitcase uses one of two Poly Haven variants, with named body, clasps, handle and lid. It sits beside NightRadio at `(10, 0, 24)` in `EndlessHotelHall`. The source's small details were preserved, textures capped at 512px, and the Blender exporter emitted a sampler warning; the visual result has not been evaluated.
 
 The role statuses below are historical gameplay/visual results, not proof that a requested external model was integrated. A verified primitive fallback does not close an external-model task. Task cards separately track content placement, visual acceptance and performance.
 

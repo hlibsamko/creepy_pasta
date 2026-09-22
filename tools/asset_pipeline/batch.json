@@ -1,8 +1,8 @@
 {
   "id": "interior_furnishing_2026_09",
   "target_unique_models": 8,
-  "active_task": "hotel_suitcase",
-  "completed_content_tasks": 5,
+  "active_task": "house_floor_lamp",
+  "completed_content_tasks": 6,
   "completed_performance_tasks": 0,
   "completed_readability_tasks": 0,
   "queue": [
@@ -11,7 +11,7 @@
     {"id": "dreamcore_classroom_projector", "level": "dreamcore", "role": "classroom projector", "card": "tasks/dreamcore_classroom_projector.json", "status": "done_unverified"},
     {"id": "mall_vending_machine", "level": "empty_mall", "role": "vending machine in a waiting composition", "card": "tasks/mall_vending_machine.json", "status": "done_unverified"},
     {"id": "mall_waste_bin", "level": "empty_mall", "role": "waste bin beside the waiting area", "card": "tasks/mall_waste_bin.json", "status": "done_unverified"},
-    {"id": "hotel_suitcase", "level": "endless_hotel", "role": "suitcase beside existing lobby dressing", "status": "queued"},
+    {"id": "hotel_suitcase", "level": "endless_hotel", "role": "suitcase beside existing lobby dressing", "card": "tasks/hotel_suitcase.json", "status": "done_unverified"},
     {"id": "house_floor_lamp", "level": "house_survey", "role": "floor lamp beside the sideboard", "status": "queued"},
     {"id": "house_bookshelf", "level": "house_survey", "role": "worn bookshelf composition", "status": "queued"}
   ],

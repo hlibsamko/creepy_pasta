@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/polyhaven/vintage_suitcase/vintage_suitcase_web.glb" id="1_suitcase"]
+
+[sub_resource type="BoxShape3D" id="SuitcaseCollision"]
+size = Vector3(0.84, 0.68, 0.35)
+
+[node name="HotelVintageSuitcase" type="Node3D"]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="VintageSuitcaseModel" parent="Visuals" instance=ExtResource("1_suitcase")]
+
+[node name="SuitcaseCollision" type="StaticBody3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="SuitcaseCollision"]
+position = Vector3(0, 0.34, 0)
+shape = SubResource("SuitcaseCollision")
