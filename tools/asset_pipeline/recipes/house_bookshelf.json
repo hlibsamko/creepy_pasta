@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "profile": "furniture_web",
+  "source": ".asset_work/house_bookshelf/wooden_bookshelf_worn_1k.gltf",
+  "output": "assets/third_party/polyhaven/wooden_bookshelf_worn/wooden_bookshelf_worn_web.glb",
+  "mesh_name": "WornBookshelfModel",
+  "target_height_m": 2.1,
+  "max_texture_size": 512,
+  "image_format": "JPEG",
+  "jpeg_quality": 90,
+  "target_triangles": 12000,
+  "decimate_if_above_target": false,
+  "geometry_note": "Keep the approximately 10k-triangle open-shelf source intact; normalize the height and ground pivot, halve the 1K image maps and embed them in the production GLB."
+}

@@ -4,7 +4,9 @@ This is the **live visual-integration status file** for the current mission. Upd
 
 ## Active bounded package — 2026-09-16
 
-Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package targets eight new unique external models; prior placements do not count. Seven are now prepared and authored in production scenes: the Poolrooms painted bench, Dreamcore school locker, Dreamcore classroom projector, Empty Mall vending machine and waste bin, Endless Hotel vintage suitcase, and House Survey floor lamp. The next task is the House Survey bookshelf. Visual acceptance, Godot import QA and performance measurements remain unperformed.
+Follow `docs/asset_pipeline_plan.md` and `tools/asset_pipeline/batch.json`. The bounded package of eight new unique external models has been prepared and authored in production scenes: the Poolrooms painted bench, Dreamcore school locker, Dreamcore classroom projector, Empty Mall vending machine and waste bin, Endless Hotel vintage suitcase, and House Survey floor lamp and bookshelf. Visual acceptance, Godot import QA and performance measurements remain unperformed; the package is content-complete, not game-verified.
+
+The worn House Survey bookshelf is a separate project-owned prop at `(8, 0, 30.9)` along the south corridor wall. Its approximately 10k-triangle source was preserved, normalized to 2.1m and given 512px textures. Blender emitted a texture sampler warning; the final appearance is unevaluated.
 
 The House Survey floor lamp is a dark-wood/brass standing model beside the sideboard, at `(18.1, 0, 27.1)` in its own authored `Environment/Props` container. The 1.74m static recipe requests a strong geometry reduction from a very dense source and caps textures at 512px; output appearance and final geometry have not been evaluated. Blender emitted a texture sampler warning. There is no dynamic light.
 

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/polyhaven/wooden_bookshelf_worn/wooden_bookshelf_worn_web.glb" id="1_bookshelf"]
+
+[sub_resource type="BoxShape3D" id="BookshelfCollision"]
+size = Vector3(1.45, 2.1, 0.65)
+
+[node name="HouseWornBookshelf" type="Node3D"]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="WornBookshelfModel" parent="Visuals" instance=ExtResource("1_bookshelf")]
+
+[node name="BookshelfCollision" type="StaticBody3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="BookshelfCollision"]
+position = Vector3(0, 1.05, 0)
+shape = SubResource("BookshelfCollision")

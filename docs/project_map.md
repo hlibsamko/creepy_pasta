@@ -74,6 +74,8 @@ Account/Google deployment is deliberately outside this queue until online-friend
 
 ## Model integration ledger
 
+The eighth package model is `HouseSurvey/Environment/Props/HouseWornBookshelf`. Its wrapper `scenes/props/house_worn_bookshelf.tscn` separates a weathered imported bookshelf from approximate collision; the authored prop sits by the south corridor wall and leaves the generated builder and gameplay roots intact. The recipe preserves its modest source geometry and caps textures at 512px. Import, visual, collision and performance QA remain unperformed. This closes the bounded eight-model content package, not game verification.
+
 The seventh package model is `HouseSurvey/Environment/Props/HouseFloorLamp`. `scenes/props/house_wood_brass_floor_lamp.tscn` separates its imported visual from an approximate collision box, while the authored Environment remains outside the generated house layout and gameplay roots. The recipe reduces the source's dense static geometry at an 18k-triangle budget and normalizes height to 1.74m. Godot import, visual, collision and performance QA remain unperformed.
 
 The sixth package model is `EndlessHotelHall/Environment/Props/HotelVintageSuitcase`. Its wrapper separates the imported four named visual parts from an approximate `SuitcaseCollision` box. The preparation recipe exports one suitcase from a two-variant source, preserving clasps and handle. Game QA remains unperformed.
