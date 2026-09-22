@@ -74,6 +74,8 @@ Account/Google deployment is deliberately outside this queue until online-friend
 
 ## Model integration ledger
 
+The seventh package model is `HouseSurvey/Environment/Props/HouseFloorLamp`. `scenes/props/house_wood_brass_floor_lamp.tscn` separates its imported visual from an approximate collision box, while the authored Environment remains outside the generated house layout and gameplay roots. The recipe reduces the source's dense static geometry at an 18k-triangle budget and normalizes height to 1.74m. Godot import, visual, collision and performance QA remain unperformed.
+
 The sixth package model is `EndlessHotelHall/Environment/Props/HotelVintageSuitcase`. Its wrapper separates the imported four named visual parts from an approximate `SuitcaseCollision` box. The preparation recipe exports one suitcase from a two-variant source, preserving clasps and handle. Game QA remains unperformed.
 
 The fifth bounded-package model is `EmptyMallConcourse/Environment/Props/MallWasteBin`, completing the WaitingChair/vending-cabinet composition. `scenes/props/mall_waste_bin.tscn` separates its open-top imported `Visuals` from simple `WasteBinCollision`. The static recipe preserves the cavity and liner, normalizes height to 0.88m and shares metal material with the cosmetic strip. No stable gameplay/RPC paths changed; QA remains unperformed.

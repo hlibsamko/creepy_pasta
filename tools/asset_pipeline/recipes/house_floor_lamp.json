@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "profile": "furniture_web",
+  "source": ".asset_work/house_floor_lamp/wood_brass_floor_lamp_source.glb",
+  "output": "assets/third_party/furnimesh/wood_brass_floor_lamp/wood_brass_floor_lamp_web.glb",
+  "mesh_name": "WoodBrassFloorLampModel",
+  "target_height_m": 1.74,
+  "max_texture_size": 512,
+  "image_format": "JPEG",
+  "jpeg_quality": 90,
+  "target_triangles": 18000,
+  "decimate_if_above_target": true,
+  "geometry_note": "A high-density single-material source; reduce static geometry to an 18k-triangle budget while preserving its tall wood column, curved brass arm and bell shade. Ground pivot and 1.74m height are owned by this recipe."
+}

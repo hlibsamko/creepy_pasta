@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/backrooms_builder.gd" id="1_builder"]
 [ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_floor_tile.tscn" id="2_floor"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_ceiling_lamp.tscn" id="5_light"]
 [ext_resource type="PackedScene" path="res://scenes/endless_house/kit/house_low_sideboard.tscn" id="6_sideboard"]
 [ext_resource type="Script" path="res://scripts/evidence_profile.gd" id="7_evidence"]
+[ext_resource type="PackedScene" path="res://scenes/props/house_wood_brass_floor_lamp.tscn" id="8_floor_lamp"]
 
 [sub_resource type="Environment" id="Environment_house"]
 background_mode = 1
@@ -29,6 +30,13 @@ journal_entry_id = "house"
 journal_fact_index = 3
 
 [node name="HouseSurvey" type="Node3D"]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Props" type="Node3D" parent="Environment"]
+
+[node name="HouseFloorLamp" parent="Environment/Props" instance=ExtResource("8_floor_lamp")]
+position = Vector3(18.1, 0, 27.1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_house")

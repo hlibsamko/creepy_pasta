@@ -1,8 +1,8 @@
 {
   "id": "interior_furnishing_2026_09",
   "target_unique_models": 8,
-  "active_task": "house_floor_lamp",
-  "completed_content_tasks": 6,
+  "active_task": "house_bookshelf",
+  "completed_content_tasks": 7,
   "completed_performance_tasks": 0,
   "completed_readability_tasks": 0,
   "queue": [
@@ -12,7 +12,7 @@
     {"id": "mall_vending_machine", "level": "empty_mall", "role": "vending machine in a waiting composition", "card": "tasks/mall_vending_machine.json", "status": "done_unverified"},
     {"id": "mall_waste_bin", "level": "empty_mall", "role": "waste bin beside the waiting area", "card": "tasks/mall_waste_bin.json", "status": "done_unverified"},
     {"id": "hotel_suitcase", "level": "endless_hotel", "role": "suitcase beside existing lobby dressing", "card": "tasks/hotel_suitcase.json", "status": "done_unverified"},
-    {"id": "house_floor_lamp", "level": "house_survey", "role": "floor lamp beside the sideboard", "status": "queued"},
+    {"id": "house_floor_lamp", "level": "house_survey", "role": "floor lamp beside the sideboard", "card": "tasks/house_floor_lamp.json", "status": "done_unverified"},
     {"id": "house_bookshelf", "level": "house_survey", "role": "worn bookshelf composition", "status": "queued"}
   ],
   "completion_rule": "Do not count existing assets or multiple placements as new unique models. Stop automation and report after this bounded package; leave unperformed validation explicit."
